@@ -8,19 +8,113 @@ datasource db {
 }
 
 model User {
-  id  Int @id @default(autoincrement())
-  username  String    @db.VarChar(32)     @unique
-  firstname String?   @db.VarChar(50)
-  lastname  String?   @db.VarChar(50)
-  password  String    @db.Char(60)
-  email     String    @db.VarChar(120)    @unique
-  role      Role      @default(USER)
-  public    Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id         Int        @id @default(autoincrement())
+  username   String     @db.VarChar(32)     @unique
+  firstname  String?    @db.VarChar(50)
+  lastname   String?    @db.VarChar(50)
+  password   String     @db.Char(60)
+  email      String     @db.VarChar(120)    @unique
+  role       Role       @default(USER)
+  locations  Location[]
+  plants     Plant[]
+  photos     Photo[]
+  public     Boolean    @default(true)
+  status     UserStatus @default(UNVERIFIED)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
 }
 
 enum Role {
   USER
   ADMIN
+}
+
+enum UserStatus {
+  UNVERIFIED
+  VERIFIED
+  BANNED
+}
+
+model Session {
+  id          String   @id
+  sid         String   @unique
+  data        String
+  expiresAt   DateTime
+}
+
+model Location {
+  id          Int        @id @default(autoincrement())
+  name        String
+  picture     String
+  light       Light
+  public      Boolean    @default(true)
+  plants      Plant[]
+  owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+enum Light {
+  FULLSUN
+  PARTIALSUN
+  SHADE
+}
+
+model Plant {
+  id          Int        @id @default(autoincrement())
+  specie      Specie?     @relation(fields: [specieId], references: [id])
+  specieId    Int?
+  customName  String?
+  description String?
+  condition   Condition?
+  waterFreq   Int?
+  waterLast   DateTime?
+  fertFreq    Int?
+  fertLast    DateTime?
+  fertType    String?
+  potType     String?
+  potSize     String?
+  soil        String?
+  photos      Photo[]
+  public      Boolean    @default(true)
+  location    Location   @relation(fields: [locationId], references: [id])
+  locationId  Int
+  owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+// On the line -> Holding on to life -> I guess It's fine -> Looking dapper -> Prime example of its specie
+enum Condition {
+  BAD
+  POOR
+  GOOD
+  VERYGOOD
+  EXCELLENT
+}
+
+model Photo {
+  id          Int        @id @default(autoincrement())
+  public      Boolean    @default(true)
+  description String?
+  references  Int        @default(1)
+  plant       Plant      @relation(fields: [plantId], references: [id])
+  plantId     Int
+  owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Specie {
+  id          Int        @id @default(autoincrement()) 
+  genus       String
+  name        String
+  commonName  String?
+  care        Json?
+  plants      Plant[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
