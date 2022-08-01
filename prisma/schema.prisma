@@ -110,7 +110,7 @@ model Photo {
 
 model Specie {
   id          Int        @id @default(autoincrement()) 
-  genus       String
+  family      String
   name        String
   commonName  String?
   care        Json?

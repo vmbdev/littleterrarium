@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import UserRoutes from './user.js';
-import LocationRoutes from './location.js';
+import userRoutes from './user.js';
+import locationRoutes from './location.js';
 
 const router = Router();
 
-router.use('/user', UserRoutes);
-router.use('/location', LocationRoutes);
+router.use('/user', userRoutes);
+router.use('/location', locationRoutes);
 
 export default router;

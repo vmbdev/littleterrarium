@@ -10,7 +10,7 @@ const compare = (password, hash) => {
 }
 
 const check = (password) => {
-  if (password.length < passwordConfig.length) return { valid: false, reason: 'PASSWD_TOO_SHORT' }
+  if (password.length < passwordConfig.length) return { valid: false, error: 'PASSWD_TOO_SHORT' }
 
   const arrPasswd = [...password];
   let hasUppercase = !passwordConfig.requireUppercase;
@@ -27,7 +27,7 @@ const check = (password) => {
   }
 
   if (hasUppercase && hasNumber && hasNonAlphanumeric) return { valid: true, msg: 'PASSWD_VALID' }
-  else return { valid: false, reason: 'PASSWD_INVALID', comp: { hasUppercase, hasNumber, hasNonAlphanumeric }}
+  else return { valid: false, error: 'PASSWD_INVALID', comp: { hasUppercase, hasNumber, hasNonAlphanumeric }}
 }
 
 const requirements = () => {

@@ -22,19 +22,22 @@ const hashFile = async (filePath) => {
   else throw new Error(`files.hash is not a valid algorithm. Valid algorithms: ${hashes}`);
 }
 
-// TODO check if file exists before moving
+// TODO: check if file exists before moving
 const saveFile = async (filePath) => {
   const hash = await hashFile(filePath);
   const ext = await getImageExt(filePath);
-  const dir = await createDirectories(hash);
-
-  const fullPath = path.join(dir, `image.${ext}`);
+  const destination = await createDirectories(hash);
+  const filename = `image.${ext}`;
+  const fullPath = path.join(destination, filename);
   await rename(filePath, fullPath);
   
-  return fullPath;
+  return ({
+    destination,
+    filename,
+    path: `${destination}/${filename}`
+  });
 }
 
-// TODO check if something fails
 const createDirectories = async (hash) => {
   let counter = 0;
   let newPath = '';

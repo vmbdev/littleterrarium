@@ -44,6 +44,7 @@ prisma/migrations
 littleterrarium.config.js
 /public
 /temp
+/utils/res/*.csv
 
 # for now
 /src

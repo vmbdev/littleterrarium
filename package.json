@@ -8,7 +8,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "server": "nodemon -w ./api -w littleterrarium.config.js ./api/server.js"
+    "server": "nodemon -w ./api -w littleterrarium.config.js ./api/server.js",
+    "db-species": "node ./utils/create_species.js"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +39,7 @@
     "@angular/cli": "~14.0.4",
     "@angular/compiler-cli": "^14.0.0",
     "@types/jasmine": "~4.0.0",
+    "csv-parse": "^5.3.0",
     "jasmine-core": "~4.1.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

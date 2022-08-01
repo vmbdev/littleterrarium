@@ -5,45 +5,20 @@ const isEmail = (email) => {
   return (email.match(/^\S+@\S+\.\S+$/i) !== null);
 }
 
-// body.user, body.password
-const signin = async (req, res) => {
-  const { username, password } = req.body;
-  if (username && password) {
-    const signinToken = isEmail(username) ? 'email' : 'username';
-    const user = await prisma.user.findUnique({
-      where: { [signinToken]: username },
-      select: { password: true, id: true, role: true }
-    });
-
-    if (user) {
-      const passwdCorrect = await Password.compare(password, user.password);
-      if (passwdCorrect) {
-        req.session.signedIn = true;
-        req.session.role = user.role;
-        req.session.userId = user.id;
-        res.send({ msg: 'USER_SIGNED' });
-      }
-      else res.status(400).send({ error: 'USER_PASSWD_INVALID' });
-    }
-    else res.status(400).send({ error: 'USER_NOT_FOUND' })
-  }
-};
-
-const logout = (req, res) => {
-  req.session.destroy(() => { res.send({ msg: 'USER_LOGGED_OUT' })});
-};
-
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   const requiredFields = ['username', 'password', 'email'];
   const optionalFields = ['firstname', 'lastname'];
   const data = {};
 
   for (const field of requiredFields) {
     // if a mandatory field isn't received, return with error
-    if (!req.body[field]) return res.status(400).send({ error: 'MISSING_FIELD', field });
+    if (!req.body[field]) return next({ error: 'MISSING_FIELD', code: 400, data: { field } });
 
-    if ((field === 'password') && (Password.check(req.body.password).valid)) {
-      data[field] = await Password.hash(req.body.password);
+    else if (field === 'password') {
+      const passwdCheck = Password.check(req.body.password);
+
+      if (passwdCheck.valid) data['password'] = await Password.hash(req.body.password);
+      else return next({ code: 400, error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
     }
     else data[field] = req.body[field];
   }
@@ -53,78 +28,137 @@ const register = async (req, res) => {
   }
 
   prisma.user.create({ data })
-  .then(() => { res.send({ msg: 'USER_CREATED' }) })
-  .catch((error) => { res.status(400).send({ error: 'USER_FIELD', field: error.meta.target }) });
+    .then(() => { res.send({ msg: 'USER_CREATED' }) })
+    .catch((error) => { next({ error: 'USER_FIELD', code: 400, data: { field: error.meta.target } }) });
 }
 
-const find = (req, res) => {
+const find = (req, res, next) => {
   const id = Number.parseInt(req.params.id);
+
   prisma.user.findUnique({ where: { id }})
-  .then((user) => {
-    if (user) {
-      if (user.public || (req.session.userId === id) || (req.session.role === 'ADMIN')) {
-        delete user.password;
-        res.send(user);
+    .then((user) => {
+      if (user) {
+        // FIXME: manage this with auth middleware
+        if (user.public || (req.session.userId === id) || (req.session.role === 'ADMIN')) {
+          delete user.password;
+          res.send(user);
+        }
+        else next({ error: 'USER_PRIVATE', code: 403 });
       }
-      else res.send({ error: 'USER_PRIVATE' });
-    }
-    else res.status(400).send({ error: 'USER_NOT_FOUND' });
-  });
+      else next({ error: 'USER_NOT_FOUND', code: 400 });
+    });
 }
 
-const modify = async (req, res) => {
+const modify = async (req, res, next) => {
   const userId = req.body.userId ? req.body.userId : req.session.userId;
-
   const fields = ['username', 'password', 'email', 'firstname', 'lastname', 'role'];
   const data = {};
+
   for (const reqField of Object.keys(req.body)) {
     if (fields.includes(reqField)) {
-      if ((reqField === 'email') && !isEmail(req.body.email)) return res.status(400).send({ error: 'USER_EMAIL_INVALID' });
-      else if (reqField === 'password') data['password'] = await Password.hash(req.body.password);
-      else if (reqField === 'role') {
-        if (Session.isAuthorised(req.session)) data['role'] = req.body.role;
-        else return res.status(403).send({ error: 'UNAUTHORISED'});
+      switch (reqField) {
+        case 'email': {
+          if (!isEmail(req.body.email)) return next({ error: 'USER_EMAIL_INVALID', code: 400 });
+          break;
+        }
+        case 'password': {
+          const passwdCheck = Password.check(req.body.password);
+  
+          if (passwdCheck.valid) data['password'] = await Password.hash(req.body.password);
+          else return next({ code: 400, error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
+          break;
+        }
+        case 'role': {
+          if (Session.isAuthorised(req.session)) data['role'] = req.body.role;
+          else return next({ code: 403 });
+          break;
+        }
+        default: {
+          data[reqField] = req.body[reqField];
+        }
       }
-      else data[reqField] = req.body[reqField];
     }
   }
   
   prisma.user.update({ where: { id: Number.parseInt(userId) }, data })
-  .then(() => res.send({ msg: 'USER_UPDATED' }))
-  .catch((error) => { res.status(400).send({ error: 'USER_FIELD', field: error.meta.target }) });
+    .then(() => { 
+      res.send({ msg: 'USER_UPDATED' })
+    })
+    .catch((error) => {
+      next({ error: 'USER_FIELD', code: 400, data: { field: error.meta.target } })
+    });
 }
 
-const restore = (req, res) => {
+const remove = (req, res, next) => {
 
 }
 
-const verify = (req, res) => {
+const signin = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  if (username && password) {
+    // did the user logged in with the username or with the password?
+    const signinToken = isEmail(username) ? 'email' : 'username';
+    const user = await prisma.user.findUnique({
+      where: { [signinToken]: username },
+      select: { password: true, id: true, role: true }
+    });
+
+    if (user) {
+      const passwdCorrect = await Password.compare(password, user.password);
+  
+      if (passwdCorrect) {
+        req.session.signedIn = true;
+        req.session.role = user.role;
+        req.session.userId = user.id;
+        res.send({ msg: 'USER_SIGNED' });
+      }
+      else next({ error: 'USER_PASSWD_INVALID', code: 403 });
+    }
+    else next({ error: 'USER_NOT_FOUND', code: 400 })
+  }
+};
+
+const logout = (req, res, next) => {
+  req.session.destroy(() => {
+    res.send({ msg: 'USER_LOGGED_OUT' })
+  });
+};
+
+
+const restore = (req, res, next) => {
 
 }
 
-const checkPassword = (req, res) => {
+const verify = (req, res, next) => {
+
+}
+
+const checkPassword = (req, res, next) => {
   const pcheck = Password.check(req.params.password);
   if (pcheck.valid) res.send({ msg: 'PASSWD_VALID' });
   else {
-    res.status(400).send({
+    next({
       error: pcheck.reason,
-      ...(pcheck.reason === 'PASSWD_INVALID') && { comp: pcheck.comp }
+      code: 400,
+      data: { comp: pcheck.reason === 'PASSWD_INVALID' ? pcheck.comp : null }
     });
   }
 }
 
-const passwordRequirements = (req, res) => {
+const passwordRequirements = (req, res, next) => {
   res.send(Password.requirements());
 }
 
 export default {
-  signin,
-  logout,
   register,
   find,
+  modify,
+  remove,
+  signin,
+  logout,
+  restore,
+  verify,
   checkPassword,
   passwordRequirements,
-  modify,
-  restore,
-  verify
 };

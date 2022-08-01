@@ -2,8 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
 import { PrismaSessionStore } from '@quixo3/prisma-session-store';
-import ApiRoutes from './routes/api.js';
+import apiRoutes from './routes/api.js';
 import prisma from './prismainstance.js';
+import errorHandling from './middlewares/errorhandling.js';
 import { server } from '../littleterrarium.config.js';
 
 const app = express();
@@ -28,8 +29,8 @@ app.use(
     )
   })
 );
-
-app.use('/api', ApiRoutes);
+app.use('/api', apiRoutes);
+app.use(errorHandling);
 
 app.listen(port, () => {
   console.log(`Little Terrarium server started on ${port}`);
