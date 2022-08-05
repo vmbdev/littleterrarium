@@ -7,19 +7,27 @@
 import FileSystem from '../helpers/filesystem.js';
 
 const image = async (req, res, next) => {
-  try {
-    const publicFile = await FileSystem.saveFile(req.file.path);
-    req.file.destination = publicFile.destination;
-    req.file.filename = publicFile.filename;
-    req.file.path =publicFile.path;
-  } catch (e) {
-    if ((e.error) && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error, code: 400 });
-    else return next({ code: 500 });
+  if (req.file) {
+    try {
+      const publicFile = await FileSystem.saveFile(req.file.path);
+      req.file.destination = publicFile.destination;
+      req.file.filename = publicFile.filename;
+      req.file.path = publicFile.path;
+    } catch (e) {
+      if ((e.error) && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
+      else return next({ code: 500 });
+    }
   }
+
+  next();
+}
+
+const gallery = async (req, res, next) => {
 
   next();
 }
 
 export default {
   image,
+  gallery
 };

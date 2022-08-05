@@ -1,4 +1,5 @@
 import prisma from '../prismainstance.js';
+import { Role } from '@prisma/client';
 import Password from '../helpers/password.js';
 
 const isEmail = (email) => {
@@ -7,86 +8,85 @@ const isEmail = (email) => {
 
 const register = async (req, res, next) => {
   const requiredFields = ['username', 'password', 'email'];
-  const optionalFields = ['firstname', 'lastname'];
+  const optionalFields = ['firstname', 'lastname', 'public'];
   const data = {};
 
   for (const field of requiredFields) {
     // if a mandatory field isn't received, return with error
-    if (!req.body[field]) return next({ error: 'MISSING_FIELD', code: 400, data: { field } });
+    if (!req.body[field]) return next({ error: 'MISSING_FIELD', data: { field } });
 
     else if (field === 'password') {
       const passwdCheck = Password.check(req.body.password);
 
       if (passwdCheck.valid) data['password'] = await Password.hash(req.body.password);
-      else return next({ code: 400, error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
+      else return next({ error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
     }
     else data[field] = req.body[field];
   }
   
+  // check through the optinal fields and add them if they're present
   for (const field of optionalFields) {
-    if (req.body[field]) data[field] = req.body[field];
+    if (req.body[field]) {
+      if (field === 'public') data.public = (req.body.public === 'true');
+      else data[field] = req.body[field];
+    }
   }
 
-  prisma.user.create({ data })
-    .then(() => { res.send({ msg: 'USER_CREATED' }) })
-    .catch((error) => { next({ error: 'USER_FIELD', code: 400, data: { field: error.meta.target } }) });
+  try {
+    await prisma.user.create({ data });
+    res.send({ msg: 'USER_CREATED' });
+  } catch (err) {
+    if (err.code === 'P2002') next({ error: 'USER_FIELD', data: { field: err.meta.target } })
+    else next({ code: 500 });
+  }
 }
 
-const find = (req, res, next) => {
+const find = async (req, res, next) => {
   const id = Number.parseInt(req.params.id);
 
-  prisma.user.findUnique({ where: { id }})
-    .then((user) => {
-      if (user) {
-        // FIXME: manage this with auth middleware
-        if (user.public || (req.session.userId === id) || (req.session.role === 'ADMIN')) {
-          delete user.password;
-          res.send(user);
-        }
-        else next({ error: 'USER_PRIVATE', code: 403 });
-      }
-      else next({ error: 'USER_NOT_FOUND', code: 400 });
-    });
+  const user = await prisma.user.findUnique({ where: { id }});
+  if (user) {
+    // FIXME: manage this through auth middleware
+    if (user.public || (req.auth.userId === id) || (req.session.role === Role.ADMIN)) {
+      delete user.password;
+      res.send(user);
+    }
+    else next({ error: 'USER_PRIVATE', code: 403 });
+  }
+  else next({ error: 'USER_NOT_FOUND' });
 }
 
 const modify = async (req, res, next) => {
-  const userId = req.body.userId ? req.body.userId : req.session.userId;
   const fields = ['username', 'password', 'email', 'firstname', 'lastname', 'role'];
   const data = {};
 
-  for (const reqField of Object.keys(req.body)) {
-    if (fields.includes(reqField)) {
-      switch (reqField) {
-        case 'email': {
-          if (!isEmail(req.body.email)) return next({ error: 'USER_EMAIL_INVALID', code: 400 });
-          break;
-        }
-        case 'password': {
-          const passwdCheck = Password.check(req.body.password);
-  
-          if (passwdCheck.valid) data['password'] = await Password.hash(req.body.password);
-          else return next({ code: 400, error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
-          break;
-        }
-        case 'role': {
-          if (Session.isAuthorised(req.session)) data['role'] = req.body.role;
-          else return next({ code: 403 });
-          break;
-        }
-        default: {
-          data[reqField] = req.body[reqField];
-        }
+  for (const requestedField of Object.keys(req.body)) {
+    if (fields.includes(requestedField)) {
+      if ((requestedField === 'email') && !isEmail(req.body.email)) return next({ error: 'USER_EMAIL_INVALID' });
+
+      else if (requestedField === 'password') {
+        const passwdCheck = Password.check(req.body.password);
+        
+        if (passwdCheck.valid) data.password = await Password.hash(req.body.password);
+        else return next({ error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
       }
+
+      else if (requestedField === 'role') {
+        if ((req.session.role === Role.ADMIN) && Role.hasOwnProperty(req.body.role)) data.role = req.body.role;
+        else return next({ code: 403 });
+      }
+
+      else data[requestedField] = req.body[requestedField];
     }
   }
-  
-  prisma.user.update({ where: { id: Number.parseInt(userId) }, data })
-    .then(() => { 
-      res.send({ msg: 'USER_UPDATED' })
-    })
-    .catch((error) => {
-      next({ error: 'USER_FIELD', code: 400, data: { field: error.meta.target } })
-    });
+
+  try {
+    await prisma.user.update({ where: { id: req.auth.userId }, data })
+    res.send({ msg: 'USER_UPDATED' })
+  } catch (err) {
+    if (err.code === 'P2002') next({ error: 'USER_FIELD', data: { field: err.meta.target } })
+    else next({ code: 500 });
+  }
 }
 
 const remove = (req, res, next) => {
@@ -115,7 +115,7 @@ const signin = async (req, res, next) => {
       }
       else next({ error: 'USER_PASSWD_INVALID', code: 403 });
     }
-    else next({ error: 'USER_NOT_FOUND', code: 400 })
+    else next({ error: 'USER_NOT_FOUND' })
   }
 };
 
@@ -136,13 +136,12 @@ const verify = (req, res, next) => {
 
 const checkPassword = (req, res, next) => {
   const pcheck = Password.check(req.params.password);
+
   if (pcheck.valid) res.send({ msg: 'PASSWD_VALID' });
   else {
-    next({
-      error: pcheck.reason,
-      code: 400,
-      data: { comp: pcheck.reason === 'PASSWD_INVALID' ? pcheck.comp : null }
-    });
+    let data = {};
+    if (pcheck.error === 'PASSWD_INVALID') data.comp = pcheck.comp;
+    next({ error: pcheck.error, data });
   }
 }
 

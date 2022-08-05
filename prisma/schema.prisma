@@ -45,7 +45,7 @@ model Session {
 model Location {
   id          Int        @id @default(autoincrement())
   name        String
-  picture     String
+  picture     String?
   light       Light
   public      Boolean    @default(true)
   plants      Plant[]
@@ -74,7 +74,7 @@ model Plant {
   fertLast    DateTime?
   fertType    String?
   potType     String?
-  potSize     String?
+  potSize     Int?
   soil        String?
   photos      Photo[]
   public      Boolean    @default(true)
@@ -97,9 +97,11 @@ enum Condition {
 
 model Photo {
   id          Int        @id @default(autoincrement())
-  public      Boolean    @default(true)
+  image       String
+  hash        String
   description String?
   references  Int        @default(1)
+  public      Boolean    @default(true)
   plant       Plant      @relation(fields: [plantId], references: [id])
   plantId     Int
   owner       User       @relation(fields: [ownerId], references: [id])

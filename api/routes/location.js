@@ -1,15 +1,16 @@
 import { Router } from 'express';
-import Location from '../controllers/location.js';
-import Uploader from '../middlewares/uploader.js';
-import Auth from '../middlewares/auth.js';
-import Disk from '../middlewares/disk.js';
+import location from '../controllers/location.js';
+import multerUploader from '../middlewares/uploader.js';
+import auth from '../middlewares/auth.js';
+import disk from '../middlewares/disk.js';
 
 const router = Router();
-const uploader = Uploader();
+const uploader = multerUploader();
 
-router.get('/:id', Auth.self, Location.find);
-router.post('/', Auth.self, uploader.single('picture'), Disk.image, Location.create);
-router.put('/', Auth.self, uploader.single('picture'), Location.modify);
-router.delete('/:id', Auth.self, Location.remove);
+router.post('/', auth.self, uploader.single('picture'), disk.image, location.create);
+router.get('/', auth.self, location.find);
+router.get('/:id', auth.self, location.findOne);
+router.put('/', auth.self, uploader.single('picture'), disk.image, location.modify);
+router.delete('/:id', auth.self, location.remove);
 
 export default router;

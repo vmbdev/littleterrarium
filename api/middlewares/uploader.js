@@ -3,7 +3,7 @@ import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // store temporarily before we hash it and move it to /public
-const Uploader = () => {
+const uploader = () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
 
@@ -20,4 +20,4 @@ const Uploader = () => {
   });
 }
 
-export default Uploader;
+export default uploader;

@@ -5,10 +5,11 @@ const defaultMessages = {
 
 const errorHandling = (err, req, res, next) => {
   const errorMsg = err.error ? err.error : defaultMessages[err.code];
-
-  res.status(err.code).send({
+  const data = (err.data && Object.keys(err.data).length > 0) ? err.data : undefined
+  const code = err.code ? err.code : 400;
+  res.status(code).send({
     error: errorMsg,
-    data: err.data
+    data
   });
 }
 

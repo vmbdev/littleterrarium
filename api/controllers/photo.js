@@ -1,8 +1,12 @@
+const create = (req, res) => {
+
+}
+
 const find = (req, res) => {
 
 }
 
-const create = (req, res) => {
+const findOne = (req, res) => {
 
 }
 
@@ -14,4 +18,10 @@ const remove = (req, res) => {
 
 }
 
-export default { find, create, modify, remove };
+export default {
+  create,
+  find,
+  findOne,
+  modify,
+  remove
+};

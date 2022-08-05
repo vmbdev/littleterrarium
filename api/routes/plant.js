@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import Plant from '../controllers/plant.js';
+import auth from '../middlewares/auth.js';
+import plant from '../controllers/plant.js';
 
 const router = Router();
 
-router.get('/find', Plant.find);
-router.post('/create', Plant.create);
-router.post('/modify', Plant.modify);
-router.delete('/remove', Plant.remove);
+router.post('/', auth.self, plant.create);
+router.get('/', auth.self, plant.find);
+router.get('/location/:locationId', auth.self, plant.find);
+router.get('/:id?', auth.self, plant.findOne);
+router.put('/', auth.self, auth.check('location', 'locationId'), plant.modify);
+router.delete('/:id', auth.self, plant.remove);
 
 export default router;
