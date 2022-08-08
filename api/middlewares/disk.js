@@ -1,18 +1,27 @@
 /**
  * Get the files uploaded through multer and handles them.
  * At the moment, it hashes the file, creates a folder with it and moves
- * the file there. Then, it modifies req.file for the next middleware to know.
+ * the file there. Then, it creates req.disk for the next middleware to know.
  */
 
 import FileSystem from '../helpers/filesystem.js';
 
+const processFile = async (file) => {
+  const diskFile = await FileSystem.saveFile(file.path);
+
+  diskFile.fieldname = file.fieldname;
+  diskFile.mimetype = file.mimetype;
+  diskFile.size = file.size;
+
+  return diskFile;
+}
+
 const image = async (req, res, next) => {
+  req.disk = {};
+
   if (req.file) {
     try {
-      const publicFile = await FileSystem.saveFile(req.file.path);
-      req.file.destination = publicFile.destination;
-      req.file.filename = publicFile.filename;
-      req.file.path = publicFile.path;
+      req.disk.file = await processFile(req.file);
     } catch (e) {
       if ((e.error) && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
       else return next({ code: 500 });
@@ -23,7 +32,20 @@ const image = async (req, res, next) => {
 }
 
 const gallery = async (req, res, next) => {
+  req.disk = {};
+  req.disk.files = [];
 
+  if (req.files) {
+    for (const file of req.files) {
+      try {
+        const diskFile = await processFile(file);
+        req.disk.files.push(diskFile);
+      } catch (e) {
+        if ((e.error) && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
+        else return next({ code: 500 });
+      }
+    }
+  }
   next();
 }
 

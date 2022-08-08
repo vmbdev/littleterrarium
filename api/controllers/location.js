@@ -6,7 +6,7 @@ const create = async (req, res, next) => {
   const requiredFields = ['name', 'light'];
   
   // public is not really optional, but it has a default value
-  // we don't include 'picture' as it's managed through req.file
+  // we don't include 'picture' as it's managed through req.disk
   const optionalFields = ['public'];
 
   // check through the mandatory fields
@@ -28,7 +28,7 @@ const create = async (req, res, next) => {
   }
 
   // if picture
-  if (req.file) data['picture'] = req.file.path;
+  if (req.disk) data['picture'] = req.disk.file.path; 
 
   data.ownerId = req.auth.userId;
   try {

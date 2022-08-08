@@ -67,9 +67,9 @@ const findOne = async (req, res, next) => {
 }
 
 const modify = async (req, res, next) => {
-  if (!req.params.id) return next({ error: 'SPECIE_ID_MISSING' });
+  if (!req.body.id) return next({ error: 'SPECIE_ID_MISSING' });
 
-  const id = Number.parseInt(req.params.id);
+  const id = Number.parseInt(req.body.id);
   if (!id) return next({ error: 'SPECIE_NOT_VALID' });
 
   const data = {};
@@ -90,8 +90,7 @@ const modify = async (req, res, next) => {
 
   try {
     await prisma.specie.update({ where: { id }, data });
-
-    if (count === 1) res.send({ msg: 'SPECIE_UPDATED' });
+    res.send({ msg: 'SPECIE_UPDATED' });
   } catch (err) {
     next({ error: 'SPECIE_NOT_VALID' });
   }

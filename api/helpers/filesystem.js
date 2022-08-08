@@ -1,8 +1,8 @@
 import { createHash } from 'node:crypto';
-import { mkdir, rename, readFile } from 'node:fs/promises';
+import { mkdir, rename, readFile, unlink } from 'node:fs/promises';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {readChunk} from 'read-chunk';
+import { readChunk } from 'read-chunk';
 import imageType, { minimumBytes } from 'image-type';
 import { files } from '../../littleterrarium.config.js';
 
@@ -29,12 +29,14 @@ const saveFile = async (filePath) => {
   const destination = await createDirectories(hash);
   const filename = `image.${ext}`;
   const fullPath = path.join(destination, filename);
+
   await rename(filePath, fullPath);
   
   return ({
     destination,
     filename,
-    path: `${destination}/${filename}`
+    hash,
+    path: `${destination}/${filename}`,
   });
 }
 
@@ -52,6 +54,11 @@ const createDirectories = async (hash) => {
   return newDir;
 }
 
+// TODO: remove trailing directories
+const removeFile = (filePath) => {
+  return unlink(filePath);
+}
+
 const getImageExt = async (filePath) => {
   const buffer = await readChunk(filePath, { length: minimumBytes });
   const imgInfo = await imageType(buffer);
@@ -65,5 +72,6 @@ export default {
   hashFile,
   saveFile,
   createDirectories,
+  removeFile,
   getImageExt
 };

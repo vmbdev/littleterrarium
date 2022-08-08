@@ -95,19 +95,31 @@ enum Condition {
   EXCELLENT
 }
 
+model Hash {
+  id          Int        @id @default(autoincrement())
+  hash        String     @unique
+  references  Int        @default(1)
+  photos      Photo[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
 model Photo {
   id          Int        @id @default(autoincrement())
   image       String
-  hash        String
   description String?
-  references  Int        @default(1)
   public      Boolean    @default(true)
+  takenAt     DateTime   @default(now())
+  hash        Hash       @relation(fields: [hashId], references: [id])
+  hashId      Int
   plant       Plant      @relation(fields: [plantId], references: [id])
   plantId     Int
   owner       User       @relation(fields: [ownerId], references: [id])
   ownerId     Int
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  @@unique([id, ownerId])
 }
 
 model Specie {
