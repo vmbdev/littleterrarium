@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import auth from '../middlewares/auth.js';
 import User from '../controllers/user.js';
+import parser from '../middlewares/parser.js';
 
 const router = Router();
 
 router.post('/', User.register);
-router.get('/:id', User.find);
+router.get('/:username', User.find);
+router.get('/id/:id', parser.integers({ id: true }), User.find);
 router.put('/', auth.self, User.modify);
 router.delete('/:id', auth.admin, User.remove);
 router.post('/signin', User.signin);

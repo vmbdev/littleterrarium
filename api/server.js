@@ -5,6 +5,7 @@ import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import apiRoutes from './routes/api.js';
 import prisma from './prismainstance.js';
 import errorHandling from './middlewares/errorhandling.js';
+import { generateAuth } from './middlewares/auth.js';
 import { server } from '../littleterrarium.config.js';
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(
     )
   })
 );
+app.use('/*', generateAuth);
 app.use('/api', apiRoutes);
 app.use(errorHandling);
 

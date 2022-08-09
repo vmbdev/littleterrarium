@@ -3,15 +3,12 @@ import filesystem from '../helpers/filesystem.js';
 
 const create = (req, res, next) => {
   if (req.disk.files.length === 0) return next({ error: 'PHOTO_NOT_FOUND' });
-  if (!req.body.plantId) return next({ error: 'PHOTO_PLANT_MISSING' });
 
   const data = {};
   const optionalFields = ['description', 'public'];
 
   data.ownerId = req.auth.userId;
-  data.plantId = Number.parseInt(req.body.plantId)
-
-  if (!data.plantId) return next({ error: 'PHOTO_PLANT_INVALID' });
+  data.plantId = req.body.plantId;
 
   for (const field of optionalFields) {
     if (req.body[field]) {
@@ -39,19 +36,14 @@ const create = (req, res, next) => {
   });
 
   prisma.$transaction(ops);
-
   res.send({ msg: 'PHOTOS_CREATED' });
 }
 
 const find = async (req, res, next) => {
   const conditions = {};
+
+  if (req.params.plantId) conditions.plantId = req.params.plantId;
   conditions.ownerId = req.auth.userId;
-
-  if (req.params.plantId) {
-    conditions.plantId = Number.parseInt(req.params.plantId);
-
-    if (!conditions.plantId) return next({ error: 'PHOTO_INVALID_PLANT' });
-  }
 
   const photos = await prisma.photo.findMany({ where: conditions });
 
@@ -60,17 +52,11 @@ const find = async (req, res, next) => {
 }
 
 const findOne = async (req, res, next) => {
-  if (!req.params.id)return next({ error: 'PHOTO_ID_MISSING' });
-
-  const id = Number.parseInt(req.params.id);
-
-  if (!id) return next({ error: 'PHOTO_ID_INVALID' });
-
   try {
     const photo = await prisma.photo.findUniqueOrThrow({
       where: { 
         id_ownerId: {
-          id,
+          id: req.params.id,
           ownerId: req.auth.userId
         }
       }
@@ -86,16 +72,11 @@ const modify = async (req, res, next) => {
 }
 
 const remove = async (req, res, next) => {
-  if (!req.params.id) return next({ error: 'PHOTO_ID_MISSING' });
-  const id = Number.parseInt(req.params.id)
-
-  if (!id) return next({ error: 'PHOTO_ID_INVALID' });
-
   try {
     const { hashId, image } = await prisma.photo.delete({
       where: {
         id_ownerId: {
-          id,
+          id: req.params.id,
           ownerId: req.auth.userId
         }
       }

@@ -42,14 +42,29 @@ const register = async (req, res, next) => {
 }
 
 const find = async (req, res, next) => {
-  const id = Number.parseInt(req.params.id);
+  const conditions = {};
 
-  const user = await prisma.user.findUnique({ where: { id }});
+  if (req.params.id) conditions.id = req.params.id;
+  else if (req.params.username) conditions.username = req.params.username;
+  else return next({ error: 'USER_INVALID' });
+
+  const user = await prisma.user.findUnique({
+    where: conditions,
+    select: {
+      id: true,
+      username: true,
+      firstname: true,
+      lastname: true,
+      role: true,
+      public: true,
+      createdAt: true,
+    }
+  });
+
   if (user) {
     // FIXME: manage this through auth middleware
-    if (user.public || (req.auth.userId === id) || (req.session.role === Role.ADMIN)) {
-      delete user.password;
-      res.send(user);
+    if (user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
+      res.send({ user });
     }
     else next({ error: 'USER_PRIVATE', code: 403 });
   }
@@ -62,7 +77,9 @@ const modify = async (req, res, next) => {
 
   for (const requestedField of Object.keys(req.body)) {
     if (fields.includes(requestedField)) {
-      if ((requestedField === 'email') && !isEmail(req.body.email)) return next({ error: 'USER_EMAIL_INVALID' });
+      if ((requestedField === 'email') && !isEmail(req.body.email)) {
+        return next({ error: 'USER_FIELD', data: { field: 'email' } });
+      }
 
       else if (requestedField === 'password') {
         const passwdCheck = Password.check(req.body.password);
@@ -113,7 +130,7 @@ const signin = async (req, res, next) => {
         req.session.userId = user.id;
         res.send({ msg: 'USER_SIGNED' });
       }
-      else next({ error: 'USER_PASSWD_INVALID', code: 403 });
+      else next({ error: 'USER_PASSWD_INCORRECT', code: 403 });
     }
     else next({ error: 'USER_NOT_FOUND' })
   }
