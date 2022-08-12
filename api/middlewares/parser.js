@@ -1,6 +1,10 @@
-// TODO: somehow run it alongside multer or remove req.files, or make a script that removes /temp files
+export const generateParser = (req, res, next) => {
+  req.parser = {};
 
-const integers = (list) => {
+  next();
+}
+
+export const integers = (list) => {
   return (req, res, next) => {
     for (const field in list) {
       let place = (
@@ -9,8 +13,9 @@ const integers = (list) => {
         : null
       );
       if (place) {
-        place[field] = Number.parseInt(place[field]);
-        if (!place[field]) return next({ error: 'INVALID_VALUE', data: { field } })
+        // avoid muitating params or body
+        req.parser[field] = Number.parseInt(place[field]);
+        if (!req.parser[field]) return next({ error: 'INVALID_VALUE', data: { field } })
       }
       else if (list[field]) return next({ error: 'MISSING_VALUE', data: { field } });
     }
@@ -20,5 +25,6 @@ const integers = (list) => {
 }
 
 export default {
+  generateParser,
   integers,
 }

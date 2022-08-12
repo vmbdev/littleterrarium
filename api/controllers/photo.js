@@ -5,10 +5,10 @@ const create = (req, res, next) => {
   if (req.disk.files.length === 0) return next({ error: 'PHOTO_NOT_FOUND' });
 
   const data = {};
-  const optionalFields = ['description', 'public'];
+  const optionalFields = ['description', 'public', 'takenAt'];
 
   data.ownerId = req.auth.userId;
-  data.plantId = req.body.plantId;
+  data.plantId = req.parser.plantId;
 
   for (const field of optionalFields) {
     if (req.body[field]) {
@@ -42,10 +42,19 @@ const create = (req, res, next) => {
 const find = async (req, res, next) => {
   const conditions = {};
 
-  if (req.params.plantId) conditions.plantId = req.params.plantId;
+  if (req.parser.plantId) conditions.plantId = req.parser.plantId;
   conditions.ownerId = req.auth.userId;
 
-  const photos = await prisma.photo.findMany({ where: conditions });
+  const photos = await prisma.photo.findMany({
+    where: conditions,
+    select: {
+      id: true,
+      image: true,
+      description: true,
+      public: true,
+      takenAt: true
+    }
+  });
 
   if (photos.length > 0) res.send(photos);
   else next({ error: 'PHOTO_NOT_FOUND' });
@@ -56,9 +65,16 @@ const findOne = async (req, res, next) => {
     const photo = await prisma.photo.findUniqueOrThrow({
       where: { 
         id_ownerId: {
-          id: req.params.id,
+          id: req.parser.id,
           ownerId: req.auth.userId
         }
+      },
+      select: {
+        id: true,
+        image: true,
+        description: true,
+        public: true,
+        takenAt: true
       }
     });
     res.send(photo);
@@ -67,8 +83,32 @@ const findOne = async (req, res, next) => {
   }
 }
 
+// let's be conservative here:
+// user can only update the description and the takenAt date
 const modify = async (req, res, next) => {
-  const fields = [''];
+  const data = {};
+  const fields = ['description', 'takenAt', 'public'];
+
+  for (const field of fields) {
+    if (field === 'takenAt') data.takenAt = new Date(req.body.takenAt);
+    else if (field === 'public') data.public = (req.body.public === 'true');
+    else data[field] = req.body[field];
+  }
+
+  try {
+    await prisma.photo.update({
+      where: {
+        id_ownerId: {
+          id: req.parser.id,
+          ownerId: req.auth.userId
+        }
+      },
+      data,
+    });
+    res.send({ msg: 'PHOTO_UPDATED' });
+  } catch (err) {
+    next({ error: 'PHOTO_NOT_FOUND' });
+  }
 }
 
 const remove = async (req, res, next) => {
@@ -76,7 +116,7 @@ const remove = async (req, res, next) => {
     const { hashId, image } = await prisma.photo.delete({
       where: {
         id_ownerId: {
-          id: req.params.id,
+          id: req.parser.id,
           ownerId: req.auth.userId
         }
       }
@@ -85,16 +125,19 @@ const remove = async (req, res, next) => {
     // no need to check for ownerId as we checked above
     // yeah, we update and sometimes we delete
     // it's still possibly less operations than check and update/check and delete
-    const { references } = await prisma.hash.update({ where: { id: hashId }, data: { references: { decrement: 1 } } });
+    const { references } = await prisma.hash.update({
+      where: { id: hashId },
+      data: { references: { decrement: 1 } }
+    });
 
     if (references === 0) {
       await prisma.hash.delete({ where: { id: hashId } });
       await filesystem.removeFile(image);
     }
 
-    res.send({ msg: 'PLANT_REMOVED' });
-  } catch(err) {
-    next({ error: 'PLANT_NOT_FOUND' });
+    res.send({ msg: 'PHOTO_REMOVED' });
+  } catch (err) {
+    next({ error: 'PHOTO_NOT_FOUND' });
   }
 }
 

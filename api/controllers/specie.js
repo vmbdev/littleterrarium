@@ -52,12 +52,7 @@ const find = async (req, res, next) => {
 }
 
 const findOne = async (req, res, next) => {
-  if (!req.params.id) return next({ error: 'SPECIE_ID_MISSING' });
-
-  const id = Number.parseInt(req.params.id);
-  if (!id) return next({ error: 'SPECIE_NOT_VALID' });
-
-  const plant = await prisma.specie.findUnique({ where: { id } });
+  const plant = await prisma.specie.findUnique({ where: { id: req.parser.id } });
   if (plant) {
     delete plant.updatedAt;
     delete plant.createdAt;
@@ -67,11 +62,6 @@ const findOne = async (req, res, next) => {
 }
 
 const modify = async (req, res, next) => {
-  if (!req.body.id) return next({ error: 'SPECIE_ID_MISSING' });
-
-  const id = Number.parseInt(req.body.id);
-  if (!id) return next({ error: 'SPECIE_NOT_VALID' });
-
   const data = {};
   const fields = ['family', 'name', 'commonName', 'care'];
 
@@ -89,7 +79,7 @@ const modify = async (req, res, next) => {
   }
 
   try {
-    await prisma.specie.update({ where: { id }, data });
+    await prisma.specie.update({ where: { id: req.parser.id }, data });
     res.send({ msg: 'SPECIE_UPDATED' });
   } catch (err) {
     next({ error: 'SPECIE_NOT_VALID' });
@@ -97,11 +87,8 @@ const modify = async (req, res, next) => {
 }
 
 const remove = async (req, res, next) => {
-  const id = Number.parseInt(req.params.id);
-  if (!id) return next({ error: 'SPECIE_NOT_VALID' });
-
   try {
-    await prisma.specie.delete({ where: { id } });
+    await prisma.specie.delete({ where: { id: req.parser.id } });
     res.send({ msg: 'SPECIE_REMOVED' });
   } catch (err) {
     next({ error: 'SPECIE_NOT_VALID' });

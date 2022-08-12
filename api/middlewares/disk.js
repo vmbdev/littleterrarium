@@ -16,14 +16,14 @@ const processFile = async (file) => {
   return diskFile;
 }
 
-const image = async (req, res, next) => {
+export const image = async (req, res, next) => {
   req.disk = {};
 
   if (req.file) {
     try {
       req.disk.file = await processFile(req.file);
     } catch (e) {
-      if ((e.error) && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
+      if (e.error && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
       else return next({ code: 500 });
     }
   }
@@ -31,7 +31,7 @@ const image = async (req, res, next) => {
   next();
 }
 
-const gallery = async (req, res, next) => {
+export const gallery = async (req, res, next) => {
   req.disk = {};
   req.disk.files = [];
 
@@ -41,11 +41,12 @@ const gallery = async (req, res, next) => {
         const diskFile = await processFile(file);
         req.disk.files.push(diskFile);
       } catch (e) {
-        if ((e.error) && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
+        if (e.error && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
         else return next({ code: 500 });
       }
     }
   }
+
   next();
 }
 

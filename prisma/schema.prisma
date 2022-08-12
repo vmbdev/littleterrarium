@@ -119,6 +119,8 @@ model Photo {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
+  // lot of operations crossed with hash, this combined unique key
+  // helps reducing the amount of queries needed
   @@unique([id, ownerId])
 }
 

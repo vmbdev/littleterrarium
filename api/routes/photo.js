@@ -24,7 +24,7 @@ router.get('/plant/:plantId',
   photo.find
 );
 router.get('/:id', auth.self, parser.integers({ id: true }), photo.findOne);
-router.put('/', auth.self, auth.check('plant', 'plantId'), uploader.array('photos'), disk.image, photo.modify);
+router.put('/', auth.self, parser.integers({ id: true }), photo.modify);
 router.delete('/:id', auth.self, parser.integers({ id: true }), photo.remove);
 
 export default router;

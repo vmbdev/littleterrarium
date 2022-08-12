@@ -44,7 +44,7 @@ const register = async (req, res, next) => {
 const find = async (req, res, next) => {
   const conditions = {};
 
-  if (req.params.id) conditions.id = req.params.id;
+  if (req.parser.id) conditions.id = req.parser.id;
   else if (req.params.username) conditions.username = req.params.username;
   else return next({ error: 'USER_INVALID' });
 

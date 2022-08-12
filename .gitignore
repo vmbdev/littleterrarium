@@ -39,12 +39,13 @@ testem.log
 .DS_Store
 Thumbs.db
 
-.env
 prisma/migrations
 littleterrarium.config.js
 /public
 /temp
-/utils/res/*.csv
+/utils/res
 
 # for now
+.env
 /src
+/*/tests

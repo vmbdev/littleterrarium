@@ -45,20 +45,16 @@ const find = async (req, res, next) => {
 }
 
 const findOne = async (req, res, next) => {
-  const id = Number.parseInt(req.params.id);
-  if (!id) return next({ error: 'LOCATION_NOT_VALID' });
+  const item = await prisma.location.findFirst({
+    where: { id: req.parser.id, ownerId: req.auth.userId },
+    include: { plants: true }  
+  });
 
-  const item = await prisma.location.findFirst({ where: { id, ownerId: req.auth.userId }});
   if (item) res.send({ item });
   else next({ error: 'LOCATION_NOT_FOUND', code: 404 });
 }
 
 const modify = async (req, res, next) => {
-  if (!req.body.id) return next({ error: 'LOCATION_UNDEFINED' });
-
-  const id = Number.parseInt(req.body.id);
-  if (!id) return next({ error: 'LOCATION_NOT_VALID' });
-
   const fields = ['name', 'picture', 'light', 'public'];
   const data = {};
 
@@ -70,15 +66,18 @@ const modify = async (req, res, next) => {
   }
 
   // req.auth.userId is authorised by auth middleware
-  const { count } = await prisma.location.updateMany({ where: { id, ownerId: req.auth.userId }, data });
+  const { count } = await prisma.location.updateMany({
+    where: {
+      id: req.parser.id,
+      ownerId: req.auth.userId
+    },
+    data
+  });
   if (count === 1) res.send({ msg: 'LOCATION_UPDATED' });
   else next({ error: 'LOCATION_NOT_VALID' });
 }
 
 const remove = async (req, res, next) => {
-  const id = Number.parseInt(req.params.id);
-  if (!id) return next({ error: 'LOCATION_NOT_VALID' });
-
   const { count } = await prisma.location.deleteMany({ where: { id, ownerId: req.auth.userId } });
   if (count === 1) res.send({ msg: 'LOCATION_REMOVED' });
   else next({ error: 'LOCATION_NOT_VALID' });
