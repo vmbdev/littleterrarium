@@ -1,4 +1,5 @@
 const defaultMessages = {
+  401: 'UNAUTHENTICATED',
   403: 'UNAUTHORISED',
   500: 'SERVER_ERROR',
 }
@@ -10,7 +11,7 @@ const errorHandling = (err, req, res, next) => {
   const code = err.code ? err.code : 400;
 
   res.status(code).send({
-    error: errorMsg,
+    msg: errorMsg,
     data
   });
 }

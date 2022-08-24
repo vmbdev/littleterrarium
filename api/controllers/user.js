@@ -44,8 +44,39 @@ const register = async (req, res, next) => {
 const find = async (req, res, next) => {
   const conditions = {};
 
+  if (req.params.username) conditions.username = req.params.username;
+  else {
+    if (req.session.signedIn) conditions.id = req.auth.userId;
+    else return next({ code: 401 });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: conditions,
+    select: {
+      id: true,
+      username: true,
+      firstname: true,
+      lastname: true,
+      role: true,
+      public: true,
+      createdAt: true,
+    }
+  });
+
+  if (user) {
+    // FIXME: manage this through auth middleware ?
+    if (user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
+      res.send(user);
+    }
+    else next({ error: 'USER_PRIVATE', code: 403 });
+  }
+  else next({ error: 'USER_NOT_FOUND' });
+}
+
+const findById = async (req, res, next) => {
+  const conditions = {};
+
   if (req.parser.id) conditions.id = req.parser.id;
-  else if (req.params.username) conditions.username = req.params.username;
   else return next({ error: 'USER_INVALID' });
 
   const user = await prisma.user.findUnique({
@@ -62,9 +93,9 @@ const find = async (req, res, next) => {
   });
 
   if (user) {
-    // FIXME: manage this through auth middleware
+    // FIXME: manage this through auth middleware ?
     if (user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
-      res.send({ user });
+      res.send(user);
     }
     else next({ error: 'USER_PRIVATE', code: 403 });
   }
@@ -130,9 +161,10 @@ const signin = async (req, res, next) => {
         req.session.userId = user.id;
         res.send({ msg: 'USER_SIGNED' });
       }
-      else next({ error: 'USER_PASSWD_INCORRECT', code: 403 });
+      else next({ error: 'USER_DATA_INCORRECT', code: 403 });
     }
-    else next({ error: 'USER_NOT_FOUND' })
+    // we never give information on whether the user exists or not here
+    else next({ error: 'USER_DATA_INCORRECT', code: 403 })
   }
 };
 
@@ -169,6 +201,7 @@ const passwordRequirements = (req, res, next) => {
 export default {
   register,
   find,
+  findById,
   modify,
   remove,
   signin,

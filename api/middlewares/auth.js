@@ -13,7 +13,7 @@ export const generateAuth = (req, res, next) => {
 
 // only allow if it's signed in, and if the data modifying is his/her or if he/she's an admin
 export const self = (req, res, next) => {
-  if (!req.session.signedIn) return next({ error: 'UNAUTHENTICATED', code: 401 });
+  if (!req.session.signedIn) return next({ code: 401 });
   else if ((req.auth.userId !== req.session.userId) && (req.session.role !== Role.ADMIN)) {
     return next({ code: 403 });
   }

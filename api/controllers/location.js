@@ -28,7 +28,7 @@ const create = async (req, res, next) => {
   }
 
   // if picture
-  if (req.disk) data['picture'] = req.disk.file.path; 
+  if (req.disk) data['picture'] = `${req.protocol}://${req.get('host')}/${req.disk.file.path}`;
 
   data.ownerId = req.auth.userId;
   try {
@@ -40,15 +40,20 @@ const create = async (req, res, next) => {
 }
 
 const find = async (req, res, next) => {
-  const locations = await prisma.location.findMany({ where: { ownerId: req.auth.userId }});
+  const query = { where: { ownerId: req.auth.userId } }
+
+  if (req.query.plants) query.include = { plants: true };
+
+  const locations = await prisma.location.findMany(query);
   res.send(locations);
 }
 
 const findOne = async (req, res, next) => {
-  const item = await prisma.location.findFirst({
-    where: { id: req.parser.id, ownerId: req.auth.userId },
-    include: { plants: true }  
-  });
+  const query = { where: { id: req.parser.id, ownerId: req.auth.userId } };
+
+  if (req.query.plants) query.include = { plants: true };
+
+  const item = await prisma.location.findFirst(query);
 
   if (item) res.send({ item });
   else next({ error: 'LOCATION_NOT_FOUND', code: 404 });

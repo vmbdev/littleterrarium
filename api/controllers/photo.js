@@ -19,7 +19,9 @@ const create = (req, res, next) => {
 
   const ops = req.disk.files.map((file) => {
     const currentData = { ...data };
-    currentData.image = file.path;
+
+    // TODO: check this
+    currentData.image = `${req.protocol}://${req.get('host')}/${file.path}`;
 
     // on both update or insert, we always create the picture
     return prisma.hash.upsert({
