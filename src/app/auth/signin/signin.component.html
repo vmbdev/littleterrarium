@@ -1,0 +1,18 @@
+<form #signinForm="ngForm" (ngSubmit)="onSubmit(signinForm)" class="form" novalidate>
+  <input type="text"
+    name="username"
+    placeholder="User name or email"
+    [ngClass]="{ 'form__error': controls.usernameEmpty }"
+    required
+    ngModel
+  >
+  <input type="password"
+    name="password"
+    placeholder="Password"
+    [ngClass]="{ 'form__error': controls.passwordEmpty }"
+    required
+    ngModel
+  >
+  <input type="submit" [disabled]="!signinForm.valid">
+  <div class="signin__error">{{ this.controls.httpError }}</div>
+</form>

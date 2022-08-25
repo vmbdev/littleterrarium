@@ -22,6 +22,7 @@ export const image = async (req, res, next) => {
   if (req.file) {
     try {
       req.disk.file = await processFile(req.file);
+      req.disk.file.url = `${req.protocol}://${req.get('host')}/${req.disk.file.path}`;
     } catch (e) {
       if (e.error && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
       else return next({ code: 500 });
@@ -39,6 +40,7 @@ export const gallery = async (req, res, next) => {
     for (const file of req.files) {
       try {
         const diskFile = await processFile(file);
+        diskFile.url = `${req.protocol}://${req.get('host')}/${diskFile.path}`;
         req.disk.files.push(diskFile);
       } catch (e) {
         if (e.error && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });

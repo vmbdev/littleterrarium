@@ -12,7 +12,7 @@ router.post('/',
     specieId: false,
     waterFreq: false,
     fertFreq: false,
-    potType: false,
+    potSize: false,
   }),
   plant.create
 );
@@ -27,7 +27,7 @@ router.put('/',
     specieId: false,
     waterFreq: false,
     fertFreq: false,
-    potType: false,
+    potSize: false,
   }),
   auth.check('location', 'locationId'),
   plant.modify

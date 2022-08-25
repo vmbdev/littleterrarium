@@ -21,7 +21,7 @@ const create = (req, res, next) => {
     const currentData = { ...data };
 
     // TODO: check this
-    currentData.image = `${req.protocol}://${req.get('host')}/${file.path}`;
+    currentData.image = file.url;
 
     // on both update or insert, we always create the picture
     return prisma.hash.upsert({

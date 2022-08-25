@@ -49,7 +49,7 @@ model Location {
   light       Light
   public      Boolean    @default(true)
   plants      Plant[]
-  owner       User       @relation(fields: [ownerId], references: [id])
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -62,8 +62,8 @@ enum Light {
 }
 
 model Plant {
-  id          Int        @id @default(autoincrement())
-  specie      Specie?     @relation(fields: [specieId], references: [id])
+  id          Int         @id @default(autoincrement())
+  specie      Specie?     @relation(fields: [specieId], references: [id], onDelete: SetNull)
   specieId    Int?
   customName  String?
   description String?
@@ -78,9 +78,9 @@ model Plant {
   soil        String?
   photos      Photo[]
   public      Boolean    @default(true)
-  location    Location   @relation(fields: [locationId], references: [id])
+  location    Location   @relation(fields: [locationId], references: [id], onDelete: Cascade)
   locationId  Int
-  owner       User       @relation(fields: [ownerId], references: [id])
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -110,11 +110,11 @@ model Photo {
   description String?
   public      Boolean    @default(true)
   takenAt     DateTime   @default(now())
-  hash        Hash       @relation(fields: [hashId], references: [id])
+  hash        Hash       @relation(fields: [hashId], references: [id], onDelete: Cascade)
   hashId      Int
-  plant       Plant      @relation(fields: [plantId], references: [id])
+  plant       Plant      @relation(fields: [plantId], references: [id], onDelete: Cascade)
   plantId     Int
-  owner       User       @relation(fields: [ownerId], references: [id])
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId     Int
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

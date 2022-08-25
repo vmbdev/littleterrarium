@@ -28,7 +28,7 @@ const create = async (req, res, next) => {
   }
 
   // if picture
-  if (req.disk) data['picture'] = `${req.protocol}://${req.get('host')}/${req.disk.file.path}`;
+  if (req.disk) data['picture'] = req.disk.file.url;
 
   data.ownerId = req.auth.userId;
   try {
@@ -40,9 +40,25 @@ const create = async (req, res, next) => {
 }
 
 const find = async (req, res, next) => {
-  const query = { where: { ownerId: req.auth.userId } }
+  const query = {
+    where: { ownerId: req.auth.userId },
+    select: { id: true, name: true, picture: true }
+  }
 
-  if (req.query.plants) query.include = { plants: true };
+  if (req.query.plants) {
+    const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
+    query.select.plants = {
+      take: limit ? limit : undefined,
+      select: {
+        specieId: true,
+        customName: true,
+        photos: {
+          take: 1,
+          select: { image: true }
+        }
+      }
+    };
+  }
 
   const locations = await prisma.location.findMany(query);
   res.send(locations);

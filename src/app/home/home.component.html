@@ -1,0 +1,7 @@
+<ng-container *ngIf="signedIn; else notSignedIn">
+  <location-list></location-list>
+</ng-container>
+
+<ng-template #notSignedIn>
+  nope
+</ng-template>

@@ -1,0 +1,13 @@
+<div class="location-list">
+  <div
+    *ngFor="let location of list"
+    [ngStyle]="{ 'background-image': 'url(' + location.picture + ')' }"
+    (click)="onLocationClick(location.id)"
+    class="location-item"
+  >
+    <a routerLink="/location/{{ location.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
+      <!-- <img class="location-item__picture" *ngIf="location.picture" [src]="location.picture | safeUrl"> -->
+      {{ location.name }}
+    </a>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+.location-list {
+  display: grid;
+  grid-template-columns: 250px 250px;
+  gap: 15px;
+}
+
+.location-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+  min-width: 250px;
+  background-size: cover;
+
+  &__picture {
+    object-fit: fill;
+  }
+}

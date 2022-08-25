@@ -26,32 +26,38 @@ const hashFile = async (filePath) => {
 const saveFile = async (filePath) => {
   const hash = await hashFile(filePath);
   const ext = await getImageExt(filePath);
-  const [localDestination, relDestination] = await createDirectories(hash);
-  const filename = `image.${ext}`;
-  const fullPath = path.join(localDestination, filename);
+  const { newDir, newFile, relativeDir } = await createDirectories(hash);
+  const filename = `${newFile}.${ext}`;
+  const fullPath = path.join(newDir, filename);
 
   await rename(filePath, fullPath);
   
   return ({
-    destination: localDestination,
+    destination: newDir,
     filename,
     hash,
-    path: `${relDestination}/${filename}`,
+    path: `${relativeDir}${filename}`,
   });
 }
 
 const createDirectories = async (hash) => {
   let counter = 0;
   let newPath = '';
-  while (counter + 2 < files.folder.division * 2) {
+  while (counter + 1 < files.folder.division * 2) {
     newPath += hash.slice(counter, counter + 2) + '/';
     counter += 2;
   }
-  newPath += hash.slice(counter);
+
+  const newFile = hash.slice(counter);
   const newDir = path.join(__dirname, '../../', files.folder.public, newPath);
+  const relativeDir = `${files.folder.public}/${newPath}`
   await mkdir(newDir, { recursive: true });
 
-  return [newDir, `${files.folder.public}/${newPath}`];
+  return {
+    newDir,
+    newFile,
+    relativeDir
+  };
 }
 
 // TODO: remove trailing directories
