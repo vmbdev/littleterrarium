@@ -48,8 +48,9 @@ const find = async (req, res, next) => {
   if (req.query.plants) {
     const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
     query.select.plants = {
-      take: limit ? limit : undefined,
+      take: limit > 0? limit : undefined,
       select: {
+        id: true,
         specieId: true,
         customName: true,
         photos: {
@@ -65,13 +66,30 @@ const find = async (req, res, next) => {
 }
 
 const findOne = async (req, res, next) => {
-  const query = { where: { id: req.parser.id, ownerId: req.auth.userId } };
+  const query = {
+    where: { id: req.parser.id, ownerId: req.auth.userId },
+    select: { id: true, name: true, picture: true, light: true, public: true }
+   };
 
-  if (req.query.plants) query.include = { plants: true };
+  if (req.query.plants) {
+    const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
+    query.select.plants = {
+      take: limit > 0 ? limit : undefined,
+      select: {
+        id: true,
+        specieId: true,
+        customName: true,
+        photos: {
+          take: 1,
+          select: { image: true }
+        }
+      }
+    };
+  }
 
-  const item = await prisma.location.findFirst(query);
+  const location = await prisma.location.findFirst(query);
 
-  if (item) res.send({ item });
+  if (location) res.send(location);
   else next({ error: 'LOCATION_NOT_FOUND', code: 404 });
 }
 

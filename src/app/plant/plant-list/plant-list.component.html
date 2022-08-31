@@ -1,0 +1,9 @@
+<div class="plant-list">
+  <div class="plant-list__plant" *ngFor="let plant of list">
+    <a routerLink="/plant/{{ plant.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
+      <picturebox [image]="plant.photos?.at(0)?.image" [contentBelow]="true">
+        {{ plant.customName }}
+      </picturebox>
+    </a>
+  </div>
+</div>

@@ -17,9 +17,8 @@ const processFile = async (file) => {
 }
 
 export const image = async (req, res, next) => {
-  req.disk = {};
-
   if (req.file) {
+    req.disk = {};
     try {
       req.disk.file = await processFile(req.file);
       req.disk.file.url = `${req.protocol}://${req.get('host')}/${req.disk.file.path}`;
@@ -33,10 +32,9 @@ export const image = async (req, res, next) => {
 }
 
 export const gallery = async (req, res, next) => {
-  req.disk = {};
-  req.disk.files = [];
-
   if (req.files) {
+    req.disk = {};
+    req.disk.files = [];
     for (const file of req.files) {
       try {
         const diskFile = await processFile(file);

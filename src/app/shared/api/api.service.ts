@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { catchError, map, Observable, of, throwError } from 'rxjs';
 
-import { User, Location } from '@prisma/client';
+import { User, Location, Plant } from 'src/app/intefaces';
 import { endpoint } from 'src/config';
 
 @Injectable({
@@ -29,5 +29,27 @@ export class ApiService {
     const url = `location?plants=${(plants ? 'true' : 'false')}&limit=${(limit ? limit : 3)}`;
 
     return this.http.get<Location[]>(endpoint(url), { withCredentials: true });
+  }
+
+  getLocation(id: number, plants?: boolean, limit?: number): Observable<Location> {
+    const url = `location/${id}?plants=${plants ? 'true' : 'false'}&limit=${limit ? limit : 0}`;
+
+    return this.http.get<Location>(endpoint(url), { withCredentials: true }).pipe(
+      map(data => data),
+      catchError((HttpError: HttpErrorResponse) => {
+        if (HttpError.error.msg) return throwError(() => { return { msg: HttpError.error.msg, code: HttpError.status } })
+        else return throwError(() => undefined);
+      })
+    );
+  }
+
+  getPlant(id: number): Observable<Plant> {
+    return this.http.get<Plant>(endpoint(`plant/${id}`), { withCredentials: true }).pipe(
+      map(data => data),
+      catchError((HttpError: HttpErrorResponse) => {
+        if (HttpError.error.msg) return throwError(() => { return { msg: HttpError.error.msg, code: HttpError.status } })
+        else return throwError(() => undefined);
+      })
+    );
   }
 }

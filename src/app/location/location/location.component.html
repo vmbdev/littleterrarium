@@ -1,0 +1,17 @@
+<div class="location" *ngIf="location; else invalidId">
+  <div class="location__horizontal">
+    <div class="location__picturebox">
+      <img class="location__picture" [src]="location.picture">
+    </div>
+    <div class="location__info">
+      <div class="location__name">{{ location.name }}</div>
+      <div class="location__light">(light) {{ location.light }}</div>
+      <div class="location__visibility">{{ location.public ? 'public' : 'private'}}</div>
+    </div>
+  </div>
+  <plant-list *ngIf="location.plants" [list]="location.plants"></plant-list>
+</div>
+
+<ng-template #invalidId>
+  Location invalid or not found
+</ng-template>

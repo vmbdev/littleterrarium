@@ -112,7 +112,8 @@ const findOne = async (req, res, next) => {
           description: true,
           public: true,
           takenAt: true
-        }
+        },
+        orderBy: { takenAt: 'asc' }
       },
       specie: {
         select: { 

@@ -1,0 +1,25 @@
+<div *ngIf="isValidId" class="plant">
+  <p *ngIf="plant.specie">{{ plant.specie.name }}</p>
+  <p *ngIf="plant.specie?.commonName">{{ plant.specie?.commonName }}</p>
+  <p *ngIf="plant.customName">{{ plant.customName }}</p>
+  <p *ngIf="plant.description">{{ plant.description }}</p>
+  <p *ngIf="plant.condition">{{ plant.condition }}</p>
+  <p *ngIf="plant.waterFreq">{{ plant.waterFreq }}</p>
+  <p *ngIf="plant.waterLast">{{ plant.waterLast }}</p>
+  <p *ngIf="plant.fertFreq">{{ plant.fertFreq }}</p>
+  <p *ngIf="plant.fertLast">{{ plant.fertLast }}</p>
+  <p *ngIf="plant.description">{{ plant.description }}</p>
+  <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
+  <p *ngIf="plant.potType">{{ plant.potType }}</p>
+  <p *ngIf="plant.potSize">{{ plant.potSize }}</p>
+  <p *ngIf="plant.soil">{{ plant.soil }}</p>
+  <p *ngIf="plant.public">{{ plant.public }}</p>
+
+  <div *ngIf="plant.photos" class="plant__gallery">
+    <a *ngFor="let photo of plant.photos" routerLink="/photo/{{ photo.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
+      <picturebox [image]="photo.image" [contentBelow]="true">
+        {{ photo.takenAt | date }}
+      </picturebox>
+    </a>
+  </div>
+</div>

@@ -1,11 +1,21 @@
 .mainnav {
-  
-  &__left {
-    border: 1px solid black;
-    padding: 15px;
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  padding: 15px;
+
+  &__left, &__right {
     display: flex;
     flex-direction: row;
     gap: 10px;
+  }
+
+  &__left {
+    flex: 1;
+  }
+
+  &__right {
+
   }
 
   &__item {

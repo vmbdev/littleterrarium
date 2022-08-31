@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiService } from './api/api.service';
-import { UserboxComponent } from './userbox/userbox.component';
 import { SafeUrlPipe } from './safeurl/safeurl.pipe';
+import { PictureboxComponent } from './picturebox/picturebox.component';
 
 @NgModule({
   declarations: [
-    UserboxComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
+    PictureboxComponent
   ],
   imports: [
     CommonModule
@@ -16,8 +16,8 @@ import { SafeUrlPipe } from './safeurl/safeurl.pipe';
     ApiService
   ],
   exports: [
-    UserboxComponent,
-    SafeUrlPipe
+    SafeUrlPipe,
+    PictureboxComponent
   ]
 })
 export class SharedModule { }

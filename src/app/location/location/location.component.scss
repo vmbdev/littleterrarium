@@ -1,0 +1,17 @@
+.location {
+
+  &__horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 35px;
+  }
+
+  &__picturebox {
+    width: 400px;
+  }
+
+  &__picture {
+    max-width: 100%;
+    height: auto;
+  }
+}

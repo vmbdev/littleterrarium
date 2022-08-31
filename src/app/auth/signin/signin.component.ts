@@ -22,9 +22,8 @@ export class SigninComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.authService.isSignedIn().subscribe((signedIn) => {
+    const signedIn = this.authService.signedIn$.value;
       if (signedIn) this.router.navigate(['/']);
-    });
   }
 
   resetControls() {

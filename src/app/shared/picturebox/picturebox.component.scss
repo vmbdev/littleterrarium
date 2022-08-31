@@ -1,0 +1,23 @@
+@use 'src/styles/variables.scss' as var;
+
+.picturebox {
+  background-size: cover;
+  background-position: center;
+  height: var.$pictureBoxSize;
+  width: var.$pictureBoxSize;
+
+  &__content {
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var.$pictureBoxSize;
+    width: 100%;
+  }
+
+  &__contentbelow {
+    text-align: center;
+    color: white;
+    text-decoration: none;
+  }
+}

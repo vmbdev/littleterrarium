@@ -1,0 +1,6 @@
+<div class="userbox" *ngIf="authService.signedIn$ | async; else notSignedIn">
+  <a routerLink="/logout" routerLinkActive="active" ariaCurrentWhenActive="page">Hi {{ user?.username }}</a>
+</div>
+<ng-template #notSignedIn>
+  <a routerLink="/signin" routerLinkActive="active" ariaCurrentWhenActive="page">Sign in</a>
+</ng-template>

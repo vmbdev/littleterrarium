@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
-import { User, Location } from '@prisma/client';
 import { AuthService } from '../auth/auth/auth.service';
 
 @Component({
@@ -9,11 +7,9 @@ import { AuthService } from '../auth/auth/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  signedIn: boolean = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(public authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.isSignedIn().subscribe((signedIn) => { this.signedIn = signedIn });
   }
 }

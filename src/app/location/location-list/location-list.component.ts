@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Location, Light } from '@prisma/client';
+import { Location, Light } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
