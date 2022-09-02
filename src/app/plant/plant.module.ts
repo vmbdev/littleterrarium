@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 
 import { PlantListComponent } from './plant-list/plant-list.component';
 import { PlantComponent } from './plant/plant.component';
+import { PhotoModule } from '../photo/photo.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { PlantComponent } from './plant/plant.component';
     CommonModule,
     FormsModule,
     RouterModule,
-    SharedModule
+    SharedModule,
+    PhotoModule
   ],
   exports: [
     PlantListComponent

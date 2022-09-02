@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 
-import { User, Location, Plant } from 'src/app/intefaces';
+import { User, Location, Plant, Photo, BaseItem } from 'src/app/intefaces';
 import { endpoint } from 'src/config';
 
 @Injectable({
@@ -31,6 +31,19 @@ export class ApiService {
     return this.http.get<Location[]>(endpoint(url), { withCredentials: true });
   }
 
+  getModel(model: BaseItem, id: number, path: string, query?: any): Observable<any> {
+    let queryPath = '';
+    if (query) queryPath = Object.keys(query).map((k, v) => [k, v].join('=')).join('&');
+
+    return this.http.get<typeof model>(endpoint(`${path}/${id}${queryPath ? `?${queryPath}` : null}`), { withCredentials: true }).pipe(
+      map(data => data),
+      catchError((HttpError: HttpErrorResponse) => {
+        if (HttpError.error.msg) return throwError(() => { return { msg: HttpError.error.msg, code: HttpError.status } })
+        else return throwError(() => undefined);
+      })
+    );
+  }
+
   getLocation(id: number, plants?: boolean, limit?: number): Observable<Location> {
     const url = `location/${id}?plants=${plants ? 'true' : 'false'}&limit=${limit ? limit : 0}`;
 
@@ -52,4 +65,15 @@ export class ApiService {
       })
     );
   }
+
+  getPhoto(id: number): Observable<Photo> {
+    return this.http.get<Photo>(endpoint(`photo/${id}`), { withCredentials: true }).pipe(
+      map(data => data),
+      catchError((HttpError: HttpErrorResponse) => {
+        if (HttpError.error.msg) return throwError(() => { return { msg: HttpError.error.msg, code: HttpError.status } })
+        else return throwError(() => undefined);
+      })
+    );
+  }
 }
+ 

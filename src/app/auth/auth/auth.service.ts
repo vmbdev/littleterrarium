@@ -16,10 +16,6 @@ export class AuthService {
     });
   }
 
-  isSignedIn(): boolean {
-    return this.signedIn$.value;
-  }
-
   signIn(username: string, password: string): Observable<any> {
     return this.apiService.signIn(username, password).pipe(
       map(res => {

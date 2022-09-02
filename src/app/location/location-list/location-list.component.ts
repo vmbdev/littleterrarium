@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Location, Light } from 'src/app/intefaces';
+import { Component, OnInit } from '@angular/core';
+import { Location } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
@@ -12,16 +11,11 @@ export class LocationListComponent implements OnInit {
   list!: Location[];
 
   constructor(
-    private apiService: ApiService,
-    private router: Router
+    private apiService: ApiService
   ) { }
 
   ngOnInit(): void {
     this.apiService.getLocationList().subscribe((list) => { this.list = list });
-  }
-
-  onLocationClick(location: number): void {
-    this.router.navigate(['/location', location]);
   }
 
 }

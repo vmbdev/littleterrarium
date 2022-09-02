@@ -1,1 +1,12 @@
-<p>photo works!</p>
+<div *ngIf="photo" class="photo">
+  <div class="photo__image">
+    <a [href]="photo.image" target="_blank">
+      <img [src]="photo.image">
+    </a>
+  </div>
+  <div class="photo__info">
+    <p>Description: {{ photo.description }}</p>
+    <p>Visibility: {{ (photo.public) ? 'Public' : 'Private' }}</p>
+    <p>Photo taken on {{ photo.takenAt | date }}</p>
+  </div>
+</div>

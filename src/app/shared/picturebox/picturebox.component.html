@@ -1,4 +1,4 @@
-<div class="picturebox" [ngStyle]="{ 'background-image': 'url(' + image + ')' }">
+<div class="picturebox" [ngStyle]="{ 'background-image': image ? 'url(' + image + ')' : null }">
   <div *ngIf="!contentBelow" [ngClass]="{ 'picturebox__content': !contentBelow }">
     <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>

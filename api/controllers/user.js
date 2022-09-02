@@ -149,7 +149,7 @@ const signin = async (req, res, next) => {
     const signinToken = isEmail(username) ? 'email' : 'username';
     const user = await prisma.user.findUnique({
       where: { [signinToken]: username },
-      select: { password: true, id: true, role: true }
+      // select: { password: true, id: true, role: true }
     });
 
     if (user) {
@@ -159,7 +159,8 @@ const signin = async (req, res, next) => {
         req.session.signedIn = true;
         req.session.role = user.role;
         req.session.userId = user.id;
-        res.send({ msg: 'USER_SIGNED' });
+        delete user.password;
+        res.send(user);
       }
       else next({ error: 'USER_DATA_INCORRECT', code: 403 });
     }

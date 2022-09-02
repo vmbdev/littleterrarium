@@ -10,30 +10,36 @@ import {
   Location as PrismaLocation,
   Plant as PrismaPlant,
   Specie as PrismaSpecie,
-  Photo,
+  Photo as PrismaPhoto,
   Role,
   UserStatus,
   Light,
   Condition,
 } from "@prisma/client";
 
-export interface Location extends PrismaLocation {
+export interface BaseItem { }
+
+export interface Location extends BaseItem, PrismaLocation {
   plants?: Plant[],
 }
 
-export interface Plant extends PrismaPlant {
+export interface Plant extends BaseItem, PrismaPlant {
   photos?: Photo[],
   specie?: Specie
 }
 
-export interface User extends PrismaUser {
+export interface User extends BaseItem, PrismaUser {
   locations?: Location[],
   plants?: Plant[],
   photos?: Photo[]
 }
 
-export interface Specie extends PrismaSpecie {
+export interface Specie extends BaseItem, PrismaSpecie {
   plants?: Plant[]
 }
 
-export { Photo, Role, UserStatus, Light, Condition }
+export interface Photo extends BaseItem, PrismaPhoto {
+
+}
+
+export { Role, UserStatus, Light, Condition }

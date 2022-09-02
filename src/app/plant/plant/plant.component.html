@@ -3,15 +3,15 @@
   <p *ngIf="plant.specie?.commonName">{{ plant.specie?.commonName }}</p>
   <p *ngIf="plant.customName">{{ plant.customName }}</p>
   <p *ngIf="plant.description">{{ plant.description }}</p>
-  <p *ngIf="plant.condition">{{ plant.condition }}</p>
+  <p *ngIf="plant.condition">{{ getConditionDesc(plant.condition) }}</p>
   <p *ngIf="plant.waterFreq">{{ plant.waterFreq }}</p>
-  <p *ngIf="plant.waterLast">{{ plant.waterLast }}</p>
+  <p *ngIf="plant.waterLast">{{ plant.waterLast | date }}</p>
   <p *ngIf="plant.fertFreq">{{ plant.fertFreq }}</p>
-  <p *ngIf="plant.fertLast">{{ plant.fertLast }}</p>
+  <p *ngIf="plant.fertLast">{{ plant.fertLast | date }}</p>
   <p *ngIf="plant.description">{{ plant.description }}</p>
   <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
   <p *ngIf="plant.potType">{{ plant.potType }}</p>
-  <p *ngIf="plant.potSize">{{ plant.potSize }}</p>
+  <p *ngIf="plant.potSize">{{ plant.potSize | unit:'in' }}</p>
   <p *ngIf="plant.soil">{{ plant.soil }}</p>
   <p *ngIf="plant.public">{{ plant.public }}</p>
 

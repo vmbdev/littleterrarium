@@ -1,6 +1,8 @@
 import { Light } from '@prisma/client';
 import prisma from '../prismainstance.js';
 
+// FIXME: if several users upload the same picture and one deletes it, there's no way to know if it's the last copy
+
 const create = async (req, res, next) => {
   const data = {};
   const requiredFields = ['name', 'light'];
