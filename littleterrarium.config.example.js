@@ -10,7 +10,7 @@ export const server = {
 export const files = {
   hash: 'sha1',
   folder: {
-    division: 4,
+    division: 3,
     temp: 'temp',
     public: 'public'
   }

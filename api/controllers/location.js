@@ -13,9 +13,11 @@ const create = async (req, res, next) => {
 
   // check through the mandatory fields
   for (const field of requiredFields) {
-    if (!req.body[field]) return next({ error: 'MISSING_FIELD', field });
+    if (!req.body[field]) {
+      return next({ error: 'MISSING_FIELD', data: { field } });
+    }
     else if ((field === 'light') && !Light.hasOwnProperty(req.body[field])) {
-      return next({ error: 'INCORRECT_FIELD', field, values: Object.values(Light) });
+      return next({ error: 'INCORRECT_FIELD', data: { field, values: Object.values(Light) } });
     }
 
     data[field] = req.body[field];
@@ -30,12 +32,12 @@ const create = async (req, res, next) => {
   }
 
   // if picture
-  if (req.disk) data['picture'] = req.disk.file.url;
+  if (req.disk) data.picture = req.disk.file.url;
 
   data.ownerId = req.auth.userId;
   try {
-    await prisma.location.create({ data });
-    res.send({ msg: 'LOCATION_CREATED' });
+    const newLocation = await prisma.location.create({ data });
+    res.send({ msg: 'LOCATION_CREATED', location: newLocation });
   } catch (err) {
     next({ code: 500 });
   }
@@ -105,6 +107,9 @@ const modify = async (req, res, next) => {
       else data[requestedField] = req.body[requestedField];
     }
   }
+
+  // if picture
+  if (req.disk) data.picture = req.disk.file.url;
 
   // req.auth.userId is authorised by auth middleware
   const { count } = await prisma.location.updateMany({

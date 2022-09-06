@@ -7,11 +7,13 @@ import { SharedModule } from '../shared/shared.module';
 import { PlantListComponent } from './plant-list/plant-list.component';
 import { PlantComponent } from './plant/plant.component';
 import { PhotoModule } from '../photo/photo.module';
+import { PlantAddEditComponent } from './plant-add-edit/plant-add-edit.component';
 
 @NgModule({
   declarations: [
     PlantListComponent,
-    PlantComponent
+    PlantComponent,
+    PlantAddEditComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { PhotoModule } from '../photo/photo.module';
     PhotoModule
   ],
   exports: [
-    PlantListComponent
+    PlantListComponent,
+    PlantAddEditComponent
   ]
 })
 export class PlantModule { }

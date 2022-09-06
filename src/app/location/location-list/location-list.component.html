@@ -1,7 +1,7 @@
 <div class="location-list">
-  <a *ngFor="let location of list" routerLink="/location/{{ location.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
-    <picturebox [image]="location.picture">
-      {{ location.name }}
-    </picturebox>
-  </a>
+  <picturebox [add]="true" [link]="['/location','create']"></picturebox>
+
+  <picturebox *ngFor="let location of list" [image]="location.picture" [link]="['/location', location.id]">
+    {{ location.name }}
+  </picturebox>
 </div>

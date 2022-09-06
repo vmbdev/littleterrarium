@@ -13,8 +13,8 @@ import {
   Photo as PrismaPhoto,
   Role,
   UserStatus,
-  Light,
-  Condition,
+  Light as PrismaLight,
+  Condition as PrismaCondition,
 } from "@prisma/client";
 
 export interface BaseItem { }
@@ -42,4 +42,20 @@ export interface Photo extends BaseItem, PrismaPhoto {
 
 }
 
-export { Role, UserStatus, Light, Condition }
+export const Light = {
+  ...PrismaLight,
+  FULLSUN: 'Full sun',
+  PARTIALSUN: 'Partial sun',
+  SHADE: 'Shade',
+}
+
+export const Condition = {
+  ...PrismaCondition,
+  BAD: 'On the line',
+  POOR: 'Holding on to life',
+  GOOD: 'I guess it\'s fine',
+  VERYGOO: 'Looking dapper',
+  EXCELLENT: 'Prime example of its specie',
+}
+
+export { Role, UserStatus }

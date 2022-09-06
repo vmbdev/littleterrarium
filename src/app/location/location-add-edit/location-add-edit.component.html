@@ -1,0 +1,20 @@
+// name, picture, light, public
+<form [formGroup]="locationForm" (ngSubmit)="submit()">
+  <div>
+    <input type="text" formControlName="name">
+  </div>
+  <div>
+    <label>
+      <input type="checkbox" formControlName="public">
+      Public
+    </label>
+  </div>
+  <div>
+    <select formControlName="light">
+      <option *ngFor="let option of lightOptions | keyvalue" [value]="option.key">{{ option.value }}</option>
+    </select>
+  </div>
+  <div>
+    <button type="submit">Create</button>
+  </div>
+</form>

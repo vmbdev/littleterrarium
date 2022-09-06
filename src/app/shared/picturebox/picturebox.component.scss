@@ -1,10 +1,20 @@
 @use 'src/styles/variables.scss' as var;
 
+.picturebox-wrapper {
+  color: white;
+  text-decoration: none;
+}
+
 .picturebox {
   background-size: cover;
   background-position: center;
   height: var.$pictureBoxSize;
   width: var.$pictureBoxSize;
+
+  a {
+    color: white;
+    text-decoration: none;
+  }
 
   &__content {
     background-color: rgba(0, 0, 0, 0.7);
@@ -19,5 +29,9 @@
     text-align: center;
     color: white;
     text-decoration: none;
+  }
+
+  &__add {
+    font-size: 150px;
   }
 }

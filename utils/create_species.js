@@ -9,44 +9,51 @@ import path, { dirname } from 'node:path';
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const insertSpeciesNames = () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
   const file = path.join(__dirname, '/res/species.csv');
   const readline = createInterface({ input: createReadStream(file) });
-  const species = [];
-  
+  let species = [];
+
   readline.on('line', (line) => {
     const parts = line.replace(/['"]+/g, '').split(',');
     let name = `${parts[4]} ${parts[6]}`;
-  
+
     if (parts[7] && parts[8]) name += ` ${parts[7]} ${parts[8]}`;
-  
+
     species.push({
       family: parts[2],
       name
     });
   });
-  
+
   readline.on('close', async () => {
     let bulkCreate;
-    try {
-      bulkCreate = await prisma.specie.createMany({ data: species });
-    } catch(err) {
-      console.log(`Error when inserting the data: ${err}`);
+
+    console.log(`Inserting ${species.length} species in the database...`);
+
+    while (species.length > 0) {
+      const speciesPart = species.splice(0, 1000);
+
+      try {
+        bulkCreate = await prisma.specie.createMany({ data: speciesPart });
+        console.log(`Inserted ${bulkCreate.count} species into the database`);
+      } catch(err) {
+        console.log(`Error when inserting the data: ${err}`);
+      }
     }
-  
-    console.log(`Inserted ${bulkCreate.count} species into the database`);
   });
 }
 
 
 const insertSpeciesCommonNames = () => {
-  const __dirname = dirname(fileURLToPath(import.meta.url));
   const file = path.join(__dirname, '/res/commonnames.csv');
   const readline = createInterface({ input: createReadStream(file) });
-  const species = [];
+  let species = [];
   let lines = 0;
+
+  console.log('Reading list of species common names...');
   readline.on('line', (line) => {
     lines++;
     const parts = line.replace(/['"]+/g, '').split(',');
@@ -58,9 +65,11 @@ const insertSpeciesCommonNames = () => {
       });
     }
   });
-  
+
   readline.on('close', async () => {
     let count = 0;
+
+    console.log(`Inserting ${species.length} species common names in the database...`);
 
     for (const specie of species) {
       try {
@@ -70,7 +79,7 @@ const insertSpeciesCommonNames = () => {
         console.log(err);
       }
     }
-  
+
     console.log(`Inserted ${count} common names (of ${lines} in the file) into the species database`);
   });
 }

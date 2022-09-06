@@ -5,6 +5,7 @@ const defaultMessages = {
 }
 
 // TODO: remove req.files on temp
+// TODO: manage non api errors
 const errorHandling = (err, req, res, next) => {
   const errorMsg = err.error ? err.error : defaultMessages[err.code];
   const data = (err.data && Object.keys(err.data).length > 0) ? err.data : undefined

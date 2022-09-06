@@ -4,7 +4,7 @@ import { Location } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
-  selector: 'app-location',
+  selector: 'location',
   templateUrl: './location.component.html',
   styleUrls: ['./location.component.scss']
 })
@@ -34,5 +34,4 @@ export class LocationComponent implements OnInit {
     }
     else this.isValidId = false;
   }
-
 }

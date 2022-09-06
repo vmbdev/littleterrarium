@@ -3,7 +3,7 @@
   <p *ngIf="plant.specie?.commonName">{{ plant.specie?.commonName }}</p>
   <p *ngIf="plant.customName">{{ plant.customName }}</p>
   <p *ngIf="plant.description">{{ plant.description }}</p>
-  <p *ngIf="plant.condition">{{ getConditionDesc(plant.condition) }}</p>
+  <p *ngIf="plant.condition">{{ plantCondition[plant.condition] }}</p>
   <p *ngIf="plant.waterFreq">{{ plant.waterFreq }}</p>
   <p *ngIf="plant.waterLast">{{ plant.waterLast | date }}</p>
   <p *ngIf="plant.fertFreq">{{ plant.fertFreq }}</p>
@@ -15,11 +15,5 @@
   <p *ngIf="plant.soil">{{ plant.soil }}</p>
   <p *ngIf="plant.public">{{ plant.public }}</p>
 
-  <div *ngIf="plant.photos" class="plant__gallery">
-    <a *ngFor="let photo of plant.photos" routerLink="/photo/{{ photo.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
-      <picturebox [image]="photo.image" [contentBelow]="true">
-        {{ photo.takenAt | date }}
-      </picturebox>
-    </a>
-  </div>
+  <photo-list *ngIf="plant.photos" [list]="plant.photos"></photo-list>
 </div>

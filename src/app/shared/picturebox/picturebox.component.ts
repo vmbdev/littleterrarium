@@ -7,7 +7,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PictureboxComponent implements OnInit {
   @Input() image?: string | null;
-  @Input() contentBelow?: boolean;
+  @Input() contentBelow: boolean = false;
+  @Input() add: boolean = false;
+  @Input() link?: string | any[];
 
   constructor() { }
 

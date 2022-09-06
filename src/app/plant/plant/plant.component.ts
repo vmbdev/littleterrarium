@@ -13,6 +13,7 @@ export class PlantComponent implements OnInit {
   id!: number;
   isValidId: boolean = false;
   plant!: Plant;
+  plantCondition = Condition;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,50 +22,23 @@ export class PlantComponent implements OnInit {
 
   ngOnInit(): void {
     const paramId = this.route.snapshot.paramMap.get('plantId');
+    console.log(paramId);
     this.id = paramId ? +paramId : NaN;
 
     if (this.id) {
       this.apiService.getPlant(this.id).subscribe({
         next: (plant: Plant) => {
+          console.log(plant);
           this.plant = plant;
           this.isValidId = true;
         },
         error: (error) => {
+          console.log(error);
           if (error.msg === 'PLANT_NOT_VALID') this.isValidId = false;
         }
       })
     }
     else this.isValidId = false;
-  }
-
-  //On the line -> Holding on to life -> I guess It's fine -> Looking dapper -> Prime example of its specie
-  getConditionDesc(condition: Condition): string {
-    let val: string;
-
-    switch(condition) {
-      case Condition.BAD: {
-        val = 'On the line';
-        break;
-      }
-      case Condition.POOR: {
-        val = 'Holding on to life';
-        break;
-      }
-      case Condition.GOOD: {
-        val = 'I guess it\'s fine';
-        break;
-      }
-      case Condition.VERYGOOD: {
-        val = 'Looking dapper';
-        break;
-      }
-      case Condition.EXCELLENT: {
-        val = 'Prime example of its specie';
-        break;
-      }
-    }
-
-    return val;
   }
 
 }

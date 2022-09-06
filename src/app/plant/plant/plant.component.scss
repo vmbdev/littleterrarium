@@ -2,9 +2,5 @@
 
 .plant {
 
-  &__gallery {
-    display: grid;
-    grid-gap: 10px;
-    grid-template-columns: repeat(auto-fill, var.$pictureBoxSize);
-  }
+
 }
