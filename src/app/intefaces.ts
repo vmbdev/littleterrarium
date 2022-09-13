@@ -1,5 +1,5 @@
 /**
- * Prisma Client develops the interfaces, yet it doesn't include
+ * Prisma Client creates the interfaces, yet it doesn't include
  * the relations. Here we do it.
  * We also re-export the rest of the data to import everything
  * from here
@@ -17,28 +17,29 @@ import {
   Condition as PrismaCondition,
 } from "@prisma/client";
 
-export interface BaseItem { }
 
-export interface Location extends BaseItem, PrismaLocation {
+export interface Location extends PrismaLocation {
   plants?: Plant[],
+  _count?: any,
+  pictureFile: Blob
 }
 
-export interface Plant extends BaseItem, PrismaPlant {
+export interface Plant extends PrismaPlant {
   photos?: Photo[],
   specie?: Specie
 }
 
-export interface User extends BaseItem, PrismaUser {
+export interface User extends PrismaUser {
   locations?: Location[],
   plants?: Plant[],
   photos?: Photo[]
 }
 
-export interface Specie extends BaseItem, PrismaSpecie {
+export interface Specie extends PrismaSpecie {
   plants?: Plant[]
 }
 
-export interface Photo extends BaseItem, PrismaPhoto {
+export interface Photo extends PrismaPhoto {
 
 }
 

@@ -12,7 +12,9 @@ const create = (req, res, next) => {
 
   for (const field of optionalFields) {
     if (req.body[field]) {
-      if (field === 'public') data.public = (req.body.public === 'true');
+      if (field === 'public') {
+        data.public = ((req.body.public === true) || (req.body.public === 'true'));
+      }
       else data[field] = req.data[field];
     }
   }
@@ -65,7 +67,7 @@ const find = async (req, res, next) => {
 const findOne = async (req, res, next) => {
   try {
     const photo = await prisma.photo.findUniqueOrThrow({
-      where: { 
+      where: {
         id_ownerId: {
           id: req.parser.id,
           ownerId: req.auth.userId
@@ -93,7 +95,9 @@ const modify = async (req, res, next) => {
 
   for (const field of fields) {
     if (field === 'takenAt') data.takenAt = new Date(req.body.takenAt);
-    else if (field === 'public') data.public = (req.body.public === 'true');
+    else if (field === 'public') {
+      data.public = ((req.body.public === true) || (req.body.public === 'true'));
+    }
     else data[field] = req.body[field];
   }
 

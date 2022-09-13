@@ -1,5 +1,9 @@
+@use 'src/styles/theming.scss' as t;
+
 .userbox {
   a {
-    color: white;
+    @include t.themify {
+      color: t.theme(link_color);
+    }
   }
 }

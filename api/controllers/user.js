@@ -23,11 +23,14 @@ const register = async (req, res, next) => {
     }
     else data[field] = req.body[field];
   }
-  
+
   // check through the optinal fields and add them if they're present
   for (const field of optionalFields) {
     if (req.body[field]) {
-      if (field === 'public') data.public = (req.body.public === 'true');
+      // TODO: this may be a middleware (maybe parser?)
+      if (field === 'public') {
+        data.public = ((req.body.public === true) || (req.body.public === 'true'));
+      }
       else data[field] = req.body[field];
     }
   }
@@ -103,7 +106,7 @@ const findById = async (req, res, next) => {
 }
 
 const modify = async (req, res, next) => {
-  const fields = ['username', 'password', 'email', 'firstname', 'lastname', 'role'];
+  const fields = ['username', 'password', 'email', 'firstname', 'lastname', 'role', 'public'];
   const data = {};
 
   for (const requestedField of Object.keys(req.body)) {
@@ -114,7 +117,7 @@ const modify = async (req, res, next) => {
 
       else if (requestedField === 'password') {
         const passwdCheck = Password.check(req.body.password);
-        
+
         if (passwdCheck.valid) data.password = await Password.hash(req.body.password);
         else return next({ error: passwdCheck.error, data: { comp: passwdCheck.comp ? passwdCheck.comp : null } });
       }
@@ -122,6 +125,10 @@ const modify = async (req, res, next) => {
       else if (requestedField === 'role') {
         if ((req.session.role === Role.ADMIN) && Role.hasOwnProperty(req.body.role)) data.role = req.body.role;
         else return next({ code: 403 });
+      }
+
+      else if (requestedField === 'public') {
+        data.public = ((req.body.public === true) || (req.body.public === 'true'));
       }
 
       else data[requestedField] = req.body[requestedField];
@@ -154,7 +161,7 @@ const signin = async (req, res, next) => {
 
     if (user) {
       const passwdCorrect = await Password.compare(password, user.password);
-  
+
       if (passwdCorrect) {
         req.session.signedIn = true;
         req.session.role = user.role;

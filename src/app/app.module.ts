@@ -10,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthInterceptor } from './auth.interceptor';
 import { LayoutModule } from './layout/layout.module';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -19,11 +20,12 @@ import { LayoutModule } from './layout/layout.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    LayoutModule,
     CoreModule,
     SharedModule,
+    LayoutModule,
     HomeModule,
-    AuthModule
+    AuthModule,
+    UserModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

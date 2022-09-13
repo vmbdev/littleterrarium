@@ -1,8 +1,4 @@
-body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: #1B2430;
-  color: white;
-}
+@use 'src/styles/theming.scss' as t;
 
 .form {
   &__error {

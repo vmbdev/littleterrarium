@@ -1,7 +1,10 @@
 @use 'src/styles/variables.scss' as var;
+@use 'src/styles/theming.scss' as t;
 
 .picturebox-wrapper {
-  color: white;
+  @include t.themify {
+    color: t.theme(picturebox_content);
+  }
   text-decoration: none;
 }
 
@@ -17,8 +20,11 @@
   }
 
   &__content {
-    background-color: rgba(0, 0, 0, 0.7);
+    @include t.themify {
+      background-color: t.theme(picturebox_cover);
+    }
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: var.$pictureBoxSize;
@@ -27,11 +33,14 @@
 
   &__contentbelow {
     text-align: center;
-    color: white;
     text-decoration: none;
+    @include t.themify {
+      color: t.theme(main_textcolor);
+    }
   }
 
   &__add {
     font-size: 150px;
+    background-color: black !important;
   }
 }

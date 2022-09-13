@@ -16,7 +16,7 @@ const check = (password) => {
   let hasUppercase = !passwordConfig.requireUppercase;
   let hasNumber = !passwordConfig.requireNumber;
   let hasNonAlphanumeric = !passwordConfig.requireNonAlphanumeric;
-  
+
   while ((arrPasswd.length > 0) || (!hasUppercase && !hasNumber && !hasNonAlphanumeric)) {
     const char = arrPasswd.shift();
 

@@ -16,7 +16,7 @@ const hashFile = async (filePath) => {
     const buffer = await readFile(filePath);
     const sum = createHash(files.hash);
     sum.update(buffer);
-  
+
     return sum.digest('hex');
   }
   else throw new Error(`files.hash is not a valid algorithm. Valid algorithms: ${hashes}`);
@@ -31,7 +31,7 @@ const saveFile = async (filePath) => {
   const fullPath = path.join(newDir, filename);
 
   await rename(filePath, fullPath);
-  
+
   return ({
     destination: newDir,
     filename,

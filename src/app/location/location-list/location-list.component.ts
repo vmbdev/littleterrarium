@@ -15,7 +15,7 @@ export class LocationListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.apiService.getLocationList().subscribe((list) => { this.list = list });
+    this.apiService.getLocationList({ plantCount: true }).subscribe((list) => { this.list = list });
   }
 
 }

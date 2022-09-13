@@ -49,7 +49,7 @@ const create = async (req, res, next) => {
         break;
       }
       case 'public': {
-        data.public = (req.body.public === 'true');
+        data.public = ((req.body.public === true) || (req.body.public === 'true'));
         break;
       }
       default:
@@ -86,7 +86,7 @@ const find = async (req, res, next) => {
         }
       },
       specie: {
-        select: { 
+        select: {
           name: true,
           commonName: true
         }
@@ -116,7 +116,7 @@ const findOne = async (req, res, next) => {
         orderBy: { takenAt: 'asc' }
       },
       specie: {
-        select: { 
+        select: {
           name: true,
           commonName: true
         }
@@ -169,7 +169,7 @@ const modify = async (req, res, next) => {
           break;
         }
         case 'public': {
-          data.public = (req.body.public === 'true');
+          data.public = ((req.body.public === true) || (req.body.public === 'true'));
           break;
         }
         default:

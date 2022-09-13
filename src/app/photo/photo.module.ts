@@ -5,6 +5,7 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
 import { PhotoAddEditComponent } from './photo-add-edit/photo-add-edit.component';
 import { PhotoListComponent } from './photo-list/photo-list.component';
+import { PictureBoxModule } from '../picture-box/picture-box.module';
 
 
 
@@ -17,7 +18,8 @@ import { PhotoListComponent } from './photo-list/photo-list.component';
   imports: [
     CommonModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    PictureBoxModule
   ],
   exports: [
     PhotoComponent,

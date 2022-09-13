@@ -1,4 +1,3 @@
-import { Condition } from "@prisma/client"
 import prisma from "../prismainstance.js";
 
 const create = async (req, res, next) => {

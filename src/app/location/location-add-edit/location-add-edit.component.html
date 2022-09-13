@@ -1,7 +1,11 @@
 // name, picture, light, public
-<form [formGroup]="locationForm" (ngSubmit)="submit()">
+<form [formGroup]="locationForm" (ngSubmit)="submit()" method="post" enctype="multipart/form-data">
   <div>
     <input type="text" formControlName="name">
+  </div>
+  <div>
+    <!-- <input type="file" class="file-uploader__input" id="file-input" (change)="fileChange($event)"> -->
+    <file-uploader [amount]="1" (fileChange)="fileChange($event)"></file-uploader>
   </div>
   <div>
     <label>

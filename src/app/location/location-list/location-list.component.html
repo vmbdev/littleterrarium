@@ -2,6 +2,7 @@
   <picturebox [add]="true" [link]="['/location','create']"></picturebox>
 
   <picturebox *ngFor="let location of list" [image]="location.picture" [link]="['/location', location.id]">
-    {{ location.name }}
+    <div>{{ location.name }}</div>
+    <div>{{ location._count.plants > 0 ? location._count.plants : 'No' }} plants here</div>
   </picturebox>
 </div>

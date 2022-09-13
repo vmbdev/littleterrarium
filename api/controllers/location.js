@@ -6,7 +6,7 @@ import prisma from '../prismainstance.js';
 const create = async (req, res, next) => {
   const data = {};
   const requiredFields = ['name', 'light'];
-  
+
   // public is not really optional, but it has a default value
   // we don't include 'picture' as it's managed through req.disk
   const optionalFields = ['public'];
@@ -26,7 +26,9 @@ const create = async (req, res, next) => {
   // check through the optinal fields and add them if they're present
   for (const field of optionalFields) {
     if (req.body[field]) {
-      if (field === 'public') data.public = (req.body.public === 'true');
+      if (field === 'public') {
+        data.public = ((req.body.public === true) || (req.body.public === 'true'));
+      }
       else data[field] = req.body[field];
     }
   }
@@ -46,23 +48,36 @@ const create = async (req, res, next) => {
 const find = async (req, res, next) => {
   const query = {
     where: { ownerId: req.auth.userId },
-    select: { id: true, name: true, picture: true }
+    orderBy: { createdAt: 'asc' },
   }
 
-  if (req.query.plants) {
-    const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
-    query.select.plants = {
-      take: limit > 0? limit : undefined,
-      select: {
-        id: true,
-        specieId: true,
-        customName: true,
-        photos: {
-          take: 1,
-          select: { image: true }
-        }
+  if (req.query.plantcount) {
+    query.include = {
+      _count: {
+        select: { plants: true }
       }
     };
+  }
+
+  else if (req.query.plants) {
+    const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
+    query.select = {
+      id: true,
+      name: true,
+      picture: true,
+      plants: {
+        take: limit > 0? limit : undefined,
+        select: {
+          id: true,
+          specieId: true,
+          customName: true,
+          photos: {
+            take: 1,
+            select: { image: true }
+          }
+        }
+      }
+    }
   }
 
   const locations = await prisma.location.findMany(query);
@@ -103,7 +118,9 @@ const modify = async (req, res, next) => {
 
   for (const requestedField of Object.keys(req.body)) {
     if (fields.includes(requestedField)) {
-      if (requestedField === 'public') data.public = (req.body.public === 'true');
+      if (requestedField === 'public') {
+        data.public = ((req.body.public === true) || (req.body.public === 'true'));
+      }
       else data[requestedField] = req.body[requestedField];
     }
   }

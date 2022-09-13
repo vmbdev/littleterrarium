@@ -4,14 +4,12 @@ import { RouterModule } from '@angular/router';
 
 import { ApiService } from './api/api.service';
 import { SafeUrlPipe } from './safeurl/safeurl.pipe';
-import { PictureboxComponent } from './picturebox/picturebox.component';
 import { NavigateBackService } from './navigateback/navigateback.service';
 import { UnitPipe } from './unit/unit.pipe';
 import { FloatingButtonComponent } from './floating-button/floating-button.component';
 
 @NgModule({
   declarations: [
-    PictureboxComponent,
     FloatingButtonComponent,
     SafeUrlPipe,
     UnitPipe,
@@ -25,7 +23,6 @@ import { FloatingButtonComponent } from './floating-button/floating-button.compo
     NavigateBackService
   ],
   exports: [
-    PictureboxComponent,
     FloatingButtonComponent,
     SafeUrlPipe,
     UnitPipe,

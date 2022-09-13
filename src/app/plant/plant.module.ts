@@ -8,6 +8,7 @@ import { PlantListComponent } from './plant-list/plant-list.component';
 import { PlantComponent } from './plant/plant.component';
 import { PhotoModule } from '../photo/photo.module';
 import { PlantAddEditComponent } from './plant-add-edit/plant-add-edit.component';
+import { PictureBoxModule } from '../picture-box/picture-box.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { PlantAddEditComponent } from './plant-add-edit/plant-add-edit.component
     FormsModule,
     RouterModule,
     SharedModule,
-    PhotoModule
+    PhotoModule,
+    PictureBoxModule
   ],
   exports: [
     PlantListComponent,

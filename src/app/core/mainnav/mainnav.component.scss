@@ -1,3 +1,5 @@
+@use 'src/styles/theming.scss' as t;
+
 .mainnav {
   display: flex;
   flex-direction: row;
@@ -14,14 +16,12 @@
     flex: 1;
   }
 
-  &__right {
-
-  }
-
   &__item {
     
     a {
-      color: white;
+      @include t.themify {
+        color: t.theme(link_color);;
+      }
       text-decoration: none;
     }
   }

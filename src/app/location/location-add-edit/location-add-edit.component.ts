@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { Location, Light } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
@@ -28,9 +28,10 @@ export class LocationAddEditComponent implements OnInit {
     private api: ApiService
   ) {
     this.locationForm = this.fb.group({
-      name: [''],
-      light: ['FULLSUN'],
-      public: [true]
+      name: ['', Validators.required],
+      light: ['FULLSUN', Validators.required],
+      public: [true, Validators.required],
+      pictureFile: [],
     })
   }
 
@@ -44,13 +45,28 @@ export class LocationAddEditComponent implements OnInit {
       insert = this.api.editLocation(data);
     }
 
-    // TODO: for edit
     if (insert) {
       insert.subscribe({
-        next: (location: Location) => { this.router.navigate([`location/${location.id}`]) },
-        error: (err) => { console.log(err)}
+        next: (res: any) => {
+          if (res.msg === 'LOCATION_CREATED') this.router.navigate([`location/${res.location.id}`]);
+          else if (res.msg === 'LOCATION_UPDATED') this.router.navigate([`location/${data.id}`]);
+        },
+        error: (err) => {
+          if (err.msg === 'IMG_NOT_VALID') console.log('Image not valid');
+          else if (err.msg === 'INCORRECT_FIELD') {
+            console.log(`Incorrect field: ${err.data.field}.`);
+
+            if (err.data.values) console.log(`Possible values: ${err.data.values.join(',')}`);
+          }
+        }
       })
     }
+  }
+
+  fileChange(files: File[]) {
+    this.locationForm.patchValue({
+      pictureFile: files[0]
+    });
   }
 
   ngOnInit(): void {

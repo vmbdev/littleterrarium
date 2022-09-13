@@ -1,0 +1,9 @@
+@use 'src/styles/theming.scss' as t;
+
+.body-wrapper {
+  font-family: 'Montserrat', sans-serif;
+  @include t.themify {
+    background-color: t.theme(main_background);
+    color: t.theme(main_color);
+  }
+}

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { DefaultLayoutComponent } from './layout/default-layout/default-layout.component';
 import { HomeComponent } from './home/home.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { SigninComponent } from './auth/signin/signin.component';
@@ -11,12 +12,18 @@ import { PlantComponent } from './plant/plant/plant.component';
 import { PlantAddEditComponent } from './plant/plant-add-edit/plant-add-edit.component';
 import { PhotoComponent } from './photo/photo/photo.component';
 import { PhotoAddEditComponent } from './photo/photo-add-edit/photo-add-edit.component';
-import { DefaultLayoutComponent } from './layout/default-layout/default-layout.component';
+import { UserRegisterComponent } from './user/user-register/user-register.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'logout', component: LogoutComponent },
+  {
+    path: 'user', component: DefaultLayoutComponent,
+    children: [
+      { path: 'register', component: UserRegisterComponent }
+    ]
+  },
   {
     path: 'location', component: DefaultLayoutComponent,
     children: [

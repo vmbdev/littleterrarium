@@ -7,6 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { PlantModule } from '../plant/plant.module';
 import { LocationAddEditComponent } from './location-add-edit/location-add-edit.component';
 import { LocationComponent } from './location/location.component';
+import { FileUploaderModule } from '../file-uploader/file-uploader.module';
+import { PictureBoxModule } from '../picture-box/picture-box.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { LocationComponent } from './location/location.component';
     RouterModule,
     SharedModule,
     ReactiveFormsModule,
-    PlantModule
+    PlantModule,
+    FileUploaderModule,
+    PictureBoxModule
   ],
   exports: [
     LocationListComponent,
