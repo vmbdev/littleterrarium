@@ -1,24 +1,48 @@
-// name, picture, light, public
 <form [formGroup]="locationForm" (ngSubmit)="submit()" method="post" enctype="multipart/form-data">
-  <div>
-    <input type="text" formControlName="name">
-  </div>
-  <div>
-    <!-- <input type="file" class="file-uploader__input" id="file-input" (change)="fileChange($event)"> -->
-    <file-uploader [amount]="1" (fileChange)="fileChange($event)"></file-uploader>
-  </div>
-  <div>
-    <label>
-      <input type="checkbox" formControlName="public">
-      Public
-    </label>
-  </div>
-  <div>
-    <select formControlName="light">
-      <option *ngFor="let option of lightOptions | keyvalue" [value]="option.key">{{ option.value }}</option>
-    </select>
-  </div>
-  <div>
-    <button type="submit">Create</button>
-  </div>
+  <multiform [form]="locationForm">
+    <page title="Name" control="name">
+      <page-description>
+        <p>The name of a new location where your plants will live. Choose a <b>recognisable name</b>: <i>window, balcony, coffee table</i>...</p>
+        <p><b>Think</b>: when talking to your friends about the plants here, how do you usually call it?</p>
+      </page-description>
+      <div class="form__textinput">
+        <input type="text" formControlName="name">
+      </div>
+      <div *ngIf="control('name')?.errors?.['required'] && (control('name')?.dirty || control('name')?.touched)">Requerido</div>
+    </page>
+
+    <page title="Picture">
+      <page-description>
+        <p>Choose a nice, beautiful picture to showcase your nice, beautiful window/balcony/kitchen drawer/whatever!</p>
+        <p>Or, well, don't. Up to you.</p>
+      </page-description>
+      <file-uploader [amount]="1" (fileChange)="fileChange($event)"></file-uploader>
+    </page>
+
+    <page title="Light" control="light">
+      <page-description>
+        <p>Probably there's nothing as important for a plant than the sunlight (or the lack of).</p>
+        <p>How's the light over here?</p>
+      </page-description>
+
+      <label *ngFor="let option of lightOptions | keyvalue" class="form__radio">
+        <input type="radio" formControlName="light" [value]="option.key">
+        <b>{{ option.value.desc }}</b>: {{ option.value.verbose }}
+      </label>
+    </page>
+
+    <page title="Public visibility">
+      <page-description>
+        <p>When your location is <b>publicly visible</b>, other users will be able to see it when visiting your user profile (given that it's <b>public</b>).</p>
+        <p>
+          <strong>Note</strong> that your plants and pictures have their own privacy settings, so if you don't want to show some of your dying plants or blurry photos
+          you can hide them individually even though your location is public.
+        </p>
+      </page-description>
+      <label class="form__checkbox">
+        <input type="checkbox" formControlName="public">
+        Publicly visible
+      </label>
+    </page>
+  </multiform>
 </form>

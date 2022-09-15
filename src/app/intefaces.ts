@@ -45,9 +45,18 @@ export interface Photo extends PrismaPhoto {
 
 export const Light = {
   ...PrismaLight,
-  FULLSUN: 'Full sun',
-  PARTIALSUN: 'Partial sun',
-  SHADE: 'Shade',
+  FULLSUN: {
+    desc: 'Full sun',
+    verbose: 'Sun shines over the whole day',
+  },
+  PARTIALSUN: {
+    desc: 'Partial sun',
+    verbose: 'Sun is here for a few hours each day',
+  },
+  SHADE: {
+    desc: 'Shade',
+    verbose: 'Sun is not allowed here',
+  },
 }
 
 export const Condition = {

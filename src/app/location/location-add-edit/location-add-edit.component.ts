@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -30,12 +30,43 @@ export class LocationAddEditComponent implements OnInit {
     this.locationForm = this.fb.group({
       name: ['', Validators.required],
       light: ['FULLSUN', Validators.required],
-      public: [true, Validators.required],
+      public: [true],
       pictureFile: [],
     })
   }
 
-  submit() {
+  ngOnInit(): void {
+    const paramId = this.route.snapshot.params['locationId'];
+    this.createNew = !paramId;
+
+    // editing
+    if (!this.createNew && +paramId) {
+      this.id = +paramId;
+      this.api.getLocation(this.id).subscribe({
+        next: (location: Location) => {
+          Object.keys(this.locationForm.value).forEach((key) => {
+            this.locationForm.controls[key].setValue(location[key as keyof Location]);
+          })
+        },
+        error: () => {
+          // FIXME: handle error
+        }
+      })
+    }
+  }
+
+  control(name: string): FormControl {
+    return this.locationForm.get(name) as FormControl;
+  };
+
+  fileChange(files: File[]) {
+    this.locationForm.patchValue({
+      pictureFile: files[0]
+    });
+  }
+
+
+  submit(): void {
     const data: Location = this.locationForm.value;
     let insert: Observable<any> | undefined;
 
@@ -60,35 +91,6 @@ export class LocationAddEditComponent implements OnInit {
           }
         }
       })
-    }
-  }
-
-  fileChange(files: File[]) {
-    this.locationForm.patchValue({
-      pictureFile: files[0]
-    });
-  }
-
-  ngOnInit(): void {
-    const paramId = this.route.snapshot.params['locationId'];
-    this.createNew = !paramId;
-
-    // editing
-    if (!this.createNew) {
-      this.id = +paramId;
-
-      if (this.id) {
-        this.api.getLocation(this.id).subscribe({
-          next: (location: Location) => {
-            Object.keys(this.locationForm.value).forEach((key) => {
-              this.locationForm.controls[key].setValue(location[key as keyof Location]);
-            })
-          },
-          error: () => {
-
-          }
-        })
-      }
     }
   }
 
