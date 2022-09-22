@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 
-import { User, Location, Plant, Photo } from 'src/app/intefaces';
+import { User, Location, Plant, Photo, Specie } from 'src/app/intefaces';
 import { endpoint } from 'src/config';
 
 @Injectable({
@@ -30,19 +30,6 @@ export class ApiService {
   logOut(): Observable<any> {
     return this.http.get<any>(this.endpoint('user/logout'));
   }
-
-  // getModel(model: BaseItem, id: number, path: string, query?: any): Observable<any> {
-  //   let queryPath = '';
-  //   if (query) queryPath = Object.keys(query).map((k, v) => [k, v].join('=')).join('&');
-
-  //   return this.http.get<typeof model>(this.endpoint(`${path}/${id}${queryPath ? `?${queryPath}` : null}`)).pipe(
-  //     map(data => data),
-  //     catchError((HttpError: HttpErrorResponse) => {
-  //       if (HttpError.error.msg) return throwError(() => { return { msg: HttpError.error.msg, code: HttpError.status } })
-  //       else return throwError(() => undefined);
-  //     })
-  //   );
-  // }
 
   /**
    * Location related calls
@@ -85,8 +72,8 @@ export class ApiService {
     form.append('name', location.name);
     form.append('light', location.light);
     form.append('public', location.public.toString());
-    form.append('picture', location.pictureFile);
-    if (location.id) form.append('id', location.id.toString());
+    if (location.pictureFile) form.append('picture', location.pictureFile);
+    if (location.id && update) form.append('id', location.id.toString());
 
     if (update) observable = this.http.put<Location>(this.endpoint('location'), form);
     else observable = this.http.post<Location>(this.endpoint('location'), form);
@@ -110,12 +97,16 @@ export class ApiService {
     )
   }
 
-  createLocation(location: Location): Observable<any> {
+  createLocation(location: Location): Observable<Location> {
     return this.upsertLocation(location);
   }
 
   editLocation(location: Location): Observable<any> {
     return this.upsertLocation(location, true);
+  }
+
+  deleteLocation(id: number): Observable<any> {
+    return this.http.delete<number>(this.endpoint(`location/${id}`));
   }
 
   /**
@@ -132,6 +123,24 @@ export class ApiService {
     );
   }
 
+  createPlant(plant: Plant): Observable<Plant> {
+    return this.http.post<Plant>(this.endpoint('plant'), plant).pipe(
+      map((data: any) => {
+        if (data.msg === 'PLANT_CREATED') return data;
+        else return throwError(() => 'Server error');
+      }),
+      catchError(err => {
+        return throwError(() => (
+          {
+            msg: err.error.msg,
+            data: err.error.data ? err.error.data : undefined,
+            code: err.status.code ? err.status.code : undefined
+          }
+        ));
+      })
+    )
+  }
+
   /**
    * Photo related calls
    */
@@ -144,5 +153,39 @@ export class ApiService {
         else return throwError(() => undefined);
       })
     );
+  }
+
+  createPhoto(photo: Photo): Observable<any> {
+    const form = new FormData();
+
+    form.append('plantId', photo.plantId.toString());
+    form.append('public', photo.public.toString());
+    photo.pictureFiles.forEach((photo) => {
+      form.append('photo', photo);
+    });
+
+    return this.http.post<Photo>(this.endpoint('photo'), form).pipe(
+      map((data: any) => {
+        if (data.msg === 'PHOTOS_CREATED') return data;
+        else return throwError(() => 'Server error');
+      }),
+      catchError(err => {
+        return throwError(() => (
+          {
+            msg: err.error.msg,
+            data: err.error.data ? err.error.data : undefined,
+            code: err.status.code ? err.status.code : undefined
+          }
+        ));
+      })
+    )
+  }
+
+  /**
+   * Specie related calls
+   */
+
+  findSpecie(name: string): Observable<Specie[]> {
+    return this.http.get<Specie[]>(this.endpoint(`specie/name/${name}`));
   }
 }

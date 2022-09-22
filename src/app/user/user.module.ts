@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserRegisterComponent } from './user-register/user-register.component';
-import { MultiFormModule } from '../multiform/multiform.module';
+import { WizardModule } from '../wizard/wizard.module';
 
 
 
@@ -11,7 +11,7 @@ import { MultiFormModule } from '../multiform/multiform.module';
   ],
   imports: [
     CommonModule,
-    MultiFormModule
+    WizardModule
   ],
   exports: [
     UserRegisterComponent

@@ -1,3 +1,42 @@
+@use 'src/styles/variables.scss' as var;
+
+@mixin styledInput($type, $radius: 0) {
+  input[type=#{$type}] {
+    font-size: 14pt;
+    margin-bottom: 25px;
+    opacity: 0;
+
+    +label:before {
+      display: inline-block;
+      position: relative;
+      top: 0.4em;
+      width: 1.5em;
+      height: 1.5em;
+
+      content: '';
+      background-color: map-get(var.$form, input-bg);
+      border: 1px solid darken(map-get(var.$form, input-bg), 25%);
+      border-radius: #{$radius};
+      margin-right: 5px;
+      cursor: pointer;
+      transition: all 250ms ease;
+    }
+
+    &:checked {
+      +label:before {
+        box-shadow: inset 0 0 0 4px map-get(var.$form, input-bg);
+        background-color: map-get(var.$form, input-accent);
+      }
+    }
+
+    &:focus {
+      +label:before {
+        border-color: map-get(var.$form, input-accent);
+      }
+    }
+  }
+}
+
 .form {
   &__textinput {
     width: 100%;
@@ -8,14 +47,27 @@
       height: 40px;
       width: 350px;
       text-align: center;
+      outline: none;
+
+      &::placeholder {
+        font-style: italic;
+        color: lighten(black, 75%)
+      }
     }
   }
 
   &__radio {
     display: block;
-    input {
-      font-size: 14pt;
-      margin-bottom: 25px;
-    }
+
+    @include styledInput('radio', 100%)
+  }
+
+  &__checkbox {
+    @include styledInput('checkbox')
+  }
+
+  &-error input {
+    box-shadow: 0 0 5px var.$error;
+    border: 1px solid var.$error;
   }
 }

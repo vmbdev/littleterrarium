@@ -1,20 +1,28 @@
-import { ChangeDetectorRef, Component, ContentChildren, Input, OnInit, QueryList } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, ContentChildren, Input, OnInit, QueryList } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { WizardHeaderComponent } from '../wizard-header/wizard-header.component';
 import { PageComponent } from '../page/page.component';
 
 @Component({
-  selector: 'multiform',
-  templateUrl: './multiform.component.html',
-  styleUrls: ['./multiform.component.scss']
+  selector: 'wizard',
+  templateUrl: './wizard.component.html',
+  styleUrls: ['./wizard.component.scss']
 })
-export class MultiFormComponent implements OnInit {
-  @ContentChildren(PageComponent) pageList!: QueryList<PageComponent>;
+export class WizardComponent implements OnInit {
+  @ContentChildren(PageComponent, { descendants: true }) pageList!: QueryList<PageComponent>;
+  @ContentChild(WizardHeaderComponent) wizardHeader?: WizardHeaderComponent;
+  // @ContentChild(FormGroup)
   @Input() form?: FormGroup;
+  @Input() start?: number = 0;
   currentIndex: number = 0;
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+  }
+
+  ngAfterContentInit(): void {
+    if (this.start) this.currentIndex = this.start;
   }
 
   ngAfterViewChecked(): void {

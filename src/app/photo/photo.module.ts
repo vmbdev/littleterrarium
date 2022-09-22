@@ -3,27 +3,33 @@ import { CommonModule } from '@angular/common';
 import { PhotoComponent } from './photo/photo.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule } from '@angular/router';
-import { PhotoAddEditComponent } from './photo-add-edit/photo-add-edit.component';
+import { PhotoAddComponent } from './photo-add/photo-add.component';
 import { PhotoListComponent } from './photo-list/photo-list.component';
 import { PictureBoxModule } from '../picture-box/picture-box.module';
+import { WizardModule } from '../wizard/wizard.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FileUploaderModule } from '../file-uploader/file-uploader.module';
 
 
 
 @NgModule({
   declarations: [
     PhotoComponent,
-    PhotoAddEditComponent,
+    PhotoAddComponent,
     PhotoListComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule,
-    PictureBoxModule
+    ReactiveFormsModule,
+    PictureBoxModule,
+    WizardModule,
+    FileUploaderModule
   ],
   exports: [
     PhotoComponent,
-    PhotoAddEditComponent,
+    PhotoAddComponent,
     PhotoListComponent
   ]
 })

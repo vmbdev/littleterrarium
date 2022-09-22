@@ -1,5 +1,5 @@
 <div class="plant-list">
-  <picturebox [add]="true" [link]="['/plant','create']"></picturebox>
+  <picturebox [add]="true" [link]="['/plant','create', locationId]"></picturebox>
   <div class="plant-list__plant" *ngFor="let plant of list">
     <a routerLink="/plant/{{ plant.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
       <picturebox [image]="plant.photos?.at(0)?.image" [contentBelow]="true">

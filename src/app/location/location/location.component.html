@@ -3,13 +3,17 @@
     <div class="location__picturebox">
       <img class="location__picture" [src]="location.picture">
     </div>
+    <div class="location__navigation">
+      <div><a [routerLink]="['/location', 'edit', location.id]" routerLinkActive="active" ariaCurrentWhenActive="page">Edit</a></div>
+      <div><a (click)="delete()" href="#">Delete</a></div>
+    </div>
     <div class="location__info">
       <div class="location__name">{{ location.name }}</div>
       <div class="location__light">(light) {{ location.light }}</div>
       <div class="location__visibility">{{ location.public ? 'public' : 'private'}}</div>
     </div>
   </div>
-  <plant-list *ngIf="location.plants" [list]="location.plants"></plant-list>
+  <plant-list *ngIf="location.plants" [locationId]="location.id" [list]="location.plants"></plant-list>
 </div>
 
 <ng-template #invalidId>

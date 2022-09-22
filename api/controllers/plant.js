@@ -20,7 +20,7 @@ const create = async (req, res, next) => {
   ];
   const data = {};
 
-  if (!req.body.specieId && !req.body.customName) return next({ error: 'PLANT_SPECIE_OR_NAME' });
+  // if (!req.body.specieId && !req.body.customName) return next({ error: 'PLANT_SPECIE_OR_NAME' });
 
   for (const field of requiredFields) {
     if (!req.body[field]) return next({ error: 'MISSING_FIELD', data: { field } });
@@ -29,39 +29,42 @@ const create = async (req, res, next) => {
   }
 
   for (const field of optionalFields) {
-    switch (field) {
-      case 'condition': {
-        if (!Condition.hasOwnProperty(req.body.condition)) return next({ error: 'PLANT_CONDITION' });
-        else data.condition = Condition[req.body.condition];
-        break;
+    if (req.body[field]) {
+      switch (field) {
+        case 'condition': {
+          if (!Condition.hasOwnProperty(req.body.condition)) return next({ error: 'PLANT_CONDITION' });
+          else data.condition = Condition[req.body.condition];
+          break;
+        }
+        case 'specieId':
+        case 'waterFreq':
+        case 'fertFreq':
+        case 'potSize': {
+          data[field] = req.parser[field];
+          break;
+        }
+        case 'waterLast':
+        case 'fertLast': {
+          const date = new Date(req.body[field]);
+          data[field] = date;
+          break;
+        }
+        case 'public': {
+          data.public = ((req.body.public === true) || (req.body.public === 'true'));
+          break;
+        }
+        default:
+          data[field] = req.body[field];
       }
-      case 'specieId':
-      case 'waterFreq':
-      case 'fertFreq':
-      case 'potSize': {
-        data[field] = req.parser[field];
-        break;
-      }
-      case 'waterLast':
-      case 'fertLast': {
-        const date = new Date(req.body[field]);
-        data[field] = date;
-        break;
-      }
-      case 'public': {
-        data.public = ((req.body.public === true) || (req.body.public === 'true'));
-        break;
-      }
-      default:
-        data[field] = req.body[field];
     }
   }
 
   data.ownerId = req.auth.userId;
   try {
-    await prisma.plant.create({ data });
-    res.send({ msg: 'PLANT_CREATED' });
+    const newPlant = await prisma.plant.create({ data });
+    res.send({ msg: 'PLANT_CREATED', plant: newPlant });
   } catch (e) {
+    console.log(e);
     next({ code: 500 });
   }
 

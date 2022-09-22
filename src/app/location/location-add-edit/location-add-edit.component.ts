@@ -16,8 +16,6 @@ export class LocationAddEditComponent implements OnInit {
   locationForm: FormGroup;
   id?: number;
   createNew: boolean = false;
-  data = {};
-
   created: boolean = false;
   edited: boolean = false;
   
@@ -65,7 +63,6 @@ export class LocationAddEditComponent implements OnInit {
     });
   }
 
-
   submit(): void {
     const data: Location = this.locationForm.value;
     let insert: Observable<any> | undefined;
@@ -83,11 +80,21 @@ export class LocationAddEditComponent implements OnInit {
           else if (res.msg === 'LOCATION_UPDATED') this.router.navigate([`location/${data.id}`]);
         },
         error: (err) => {
-          if (err.msg === 'IMG_NOT_VALID') console.log('Image not valid');
-          else if (err.msg === 'INCORRECT_FIELD') {
-            console.log(`Incorrect field: ${err.data.field}.`);
+          switch (err.msg) {
+            case 'IMG_NOT_VALID': {
+              console.log('Image not valid');
+              break;
+            }
+            case 'INCORRECT_FIELD': {
+              console.log(`Incorrect field: ${err.data.field}.`);
 
-            if (err.data.values) console.log(`Possible values: ${err.data.values.join(',')}`);
+              if (err.data.values) console.log(`Possible values: ${err.data.values.join(',')}`);
+              break;
+            }
+            case 'MISSING_FIELD': {
+              console.log(`Missing field: ${err.data.field}.`);
+              break;
+            }
           }
         }
       })

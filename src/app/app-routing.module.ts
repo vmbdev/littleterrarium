@@ -9,10 +9,10 @@ import { LocationComponent } from './location/location/location.component';
 import { LocationAddEditComponent } from './location/location-add-edit/location-add-edit.component';
 import { LocationListComponent } from './location/location-list/location-list.component';
 import { PlantComponent } from './plant/plant/plant.component';
-import { PlantAddEditComponent } from './plant/plant-add-edit/plant-add-edit.component';
 import { PhotoComponent } from './photo/photo/photo.component';
-import { PhotoAddEditComponent } from './photo/photo-add-edit/photo-add-edit.component';
+import { PhotoAddComponent } from './photo/photo-add/photo-add.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
+import { PlantAddComponent } from './plant/plant-add/plant-add.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -36,16 +36,16 @@ const routes: Routes = [
   {
     path: 'plant', component: DefaultLayoutComponent,
     children: [
-      { path: 'create', component: PlantAddEditComponent },
-      { path: 'edit/:plantId', component: PlantAddEditComponent },
+      { path: 'create/:locationId', component: PlantAddComponent },
+      { path: 'edit/:plantId', component: PlantAddComponent },
       { path: ':plantId', component: PlantComponent },
     ]
   },
   {
     path: 'photo', component: DefaultLayoutComponent,
     children: [
-      { path: 'create', component: PhotoAddEditComponent },
-      { path: 'edit/:photoId', component: PhotoAddEditComponent },
+      { path: 'create/:plantId', component: PhotoAddComponent },
+      { path: 'edit/:photoId', component: PhotoAddComponent },
       { path: ':photoId', component: PhotoComponent },
     ]
   },

@@ -40,7 +40,7 @@ export interface Specie extends PrismaSpecie {
 }
 
 export interface Photo extends PrismaPhoto {
-
+  pictureFiles: Blob[]
 }
 
 export const Light = {

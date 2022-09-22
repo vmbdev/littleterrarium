@@ -1,32 +1,39 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
 import { PlantListComponent } from './plant-list/plant-list.component';
 import { PlantComponent } from './plant/plant.component';
 import { PhotoModule } from '../photo/photo.module';
-import { PlantAddEditComponent } from './plant-add-edit/plant-add-edit.component';
 import { PictureBoxModule } from '../picture-box/picture-box.module';
+import { PlantAddComponent } from './plant-add/plant-add.component';
+import { WizardModule } from '../wizard/wizard.module';
+import { FileUploaderModule } from '../file-uploader/file-uploader.module';
+import { SpecieFinderModule } from '../specie-finder/specie-finder.module';
 
 @NgModule({
   declarations: [
     PlantListComponent,
     PlantComponent,
-    PlantAddEditComponent
+    PlantAddComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
     SharedModule,
+    ReactiveFormsModule,
     PhotoModule,
-    PictureBoxModule
+    PictureBoxModule,
+    WizardModule,
+    FileUploaderModule,
+    SpecieFinderModule
   ],
   exports: [
     PlantListComponent,
-    PlantAddEditComponent
+    PlantAddComponent
   ]
 })
 export class PlantModule { }

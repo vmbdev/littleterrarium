@@ -20,11 +20,11 @@ const insertSpeciesNames = () => {
     const parts = line.replace(/['"]+/g, '').split(',');
     let name = `${parts[4]} ${parts[6]}`;
 
-    if (parts[7] && parts[8]) name += ` ${parts[7]} ${parts[8]}`;
+    if (parts[7] && parts[8]) name += `${parts[7]} ${parts[8]}`;
 
     species.push({
       family: parts[2],
-      name
+      name: name.toLowerCase()
     });
   });
 

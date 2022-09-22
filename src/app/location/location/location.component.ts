@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
@@ -15,6 +15,7 @@ export class LocationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private apiService: ApiService
   ) { }
 
@@ -33,5 +34,16 @@ export class LocationComponent implements OnInit {
       });
     }
     else this.isValidId = false;
+  }
+
+  delete(): void {
+    this.apiService.deleteLocation(this.id).subscribe({
+      next: (data) => {
+        if (data.msg === 'LOCATION_REMOVED') this.router.navigate(['/']);
+      },
+      error: (err) => {
+        if (err.msg === 'LOCATION_NOT_VALID') console.log('error');
+      }
+    })
   }
 }

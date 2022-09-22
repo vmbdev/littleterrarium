@@ -5,7 +5,7 @@ const create = (req, res, next) => {
   if (req.disk.files.length === 0) return next({ error: 'PHOTO_NOT_FOUND' });
 
   const data = {};
-  const optionalFields = ['description', 'public', 'takenAt'];
+  const optionalFields = ['description', 'public'];
 
   data.ownerId = req.auth.userId;
   data.plantId = req.parser.plantId;

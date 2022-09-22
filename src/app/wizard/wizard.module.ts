@@ -1,26 +1,29 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MultiFormComponent } from './multiform/multiform.component';
+import { WizardComponent } from './wizard/wizard.component';
 import { PageComponent } from './page/page.component';
 import { PageDescriptionComponent } from './page-description/page-description.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { WizardHeaderComponent } from './wizard-header/wizard-header.component';
 
 
 
 @NgModule({
   declarations: [
-    MultiFormComponent,
+    WizardComponent,
     PageComponent,
-    PageDescriptionComponent
+    PageDescriptionComponent,
+    WizardHeaderComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule
   ],
   exports: [
-    MultiFormComponent,
+    WizardComponent,
     PageComponent,
-    PageDescriptionComponent
+    PageDescriptionComponent,
+    WizardHeaderComponent
   ]
 })
-export class MultiFormModule { }
+export class WizardModule { }

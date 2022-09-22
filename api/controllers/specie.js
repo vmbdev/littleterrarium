@@ -11,14 +11,16 @@ const create = async (req, res, next) => {
   }
 
   for (const field of optionalFields) {
-    if (field === 'care') {
-      try {
-        data.care = JSON.parse(req.body.care);
-      } catch (err) {
-        return next({ error: 'SPECIE_CARE_NOT_VALID' });
+    if (req.body[field]) {
+      if (field === 'care') {
+        try {
+          data.care = JSON.parse(req.body.care);
+        } catch (err) {
+          return next({ error: 'SPECIE_CARE_NOT_VALID' });
+        }
       }
+      else data[field] = req.body[field];
     }
-    else data[field] = req.body[field];
   }
 
   try {
@@ -32,9 +34,9 @@ const create = async (req, res, next) => {
 const find = async (req, res, next) => {
   if (!req.params.name) return next({ error: 'SPECIE_NAME_NOT_VALID' });
 
-  const name = req.params.name.slice(0,1).toUpperCase() + req.params.name.slice(1);
+  const name = req.params.name.toLowerCase();
   const plants = await prisma.specie.findMany({
-    take: 10,
+    take: 5,
     select: {
       id: true,
       name: true,
@@ -42,7 +44,7 @@ const find = async (req, res, next) => {
     },
     where: {
       name: {
-        startsWith: name
+        contains: name
       }
     }
   });

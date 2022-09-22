@@ -9,6 +9,7 @@ import { Photo } from 'src/app/intefaces';
 })
 export class PhotoListComponent implements OnInit {
   @Input() list!: Photo[];
+  @Input() plantId!: number;
 
   constructor() { }
 

@@ -15,5 +15,5 @@
   <p *ngIf="plant.soil">{{ plant.soil }}</p>
   <p *ngIf="plant.public">{{ plant.public }}</p>
 
-  <photo-list *ngIf="plant.photos" [list]="plant.photos"></photo-list>
+  <photo-list *ngIf="plant.photos" [plantId]="plant.id" [list]="plant.photos"></photo-list>
 </div>

@@ -1,4 +1,9 @@
 $pictureBoxSize: 250px;
+$error: #CC3636;
+$form: (
+  input-bg: #F9F9F9,
+  input-accent: #4E9F3D
+);
 
 @mixin dottedBorder {
   background-color: #2848851C;

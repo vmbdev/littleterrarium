@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhotoAddEditComponent } from './photo-add-edit.component';
+import { SpecieFinderComponent } from './specie-finder.component';
 
-describe('PhotoAddEditComponent', () => {
-  let component: PhotoAddEditComponent;
-  let fixture: ComponentFixture<PhotoAddEditComponent>;
+describe('SpecieFinderComponent', () => {
+  let component: SpecieFinderComponent;
+  let fixture: ComponentFixture<SpecieFinderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PhotoAddEditComponent ]
+      declarations: [ SpecieFinderComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PhotoAddEditComponent);
+    fixture = TestBed.createComponent(SpecieFinderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MultiFormComponent } from './multiform.component';
+import { PhotoAddComponent } from './photo-add.component';
 
-describe('MultiFormComponent', () => {
-  let component: MultiFormComponent;
-  let fixture: ComponentFixture<MultiFormComponent>;
+describe('PhotoAddComponent', () => {
+  let component: PhotoAddComponent;
+  let fixture: ComponentFixture<PhotoAddComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MultiFormComponent ]
+      declarations: [ PhotoAddComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MultiFormComponent);
+    fixture = TestBed.createComponent(PhotoAddComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

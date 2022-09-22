@@ -141,7 +141,13 @@ const modify = async (req, res, next) => {
 }
 
 const remove = async (req, res, next) => {
-  const { count } = await prisma.location.deleteMany({ where: { id, ownerId: req.auth.userId } });
+  const { count } = await prisma.location.deleteMany({
+    where: {
+      id: req.parser.id,
+      ownerId: req.auth.userId
+    }
+  });
+
   if (count === 1) res.send({ msg: 'LOCATION_REMOVED' });
   else next({ error: 'LOCATION_NOT_VALID' });
 }

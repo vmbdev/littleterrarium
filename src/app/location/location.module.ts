@@ -9,7 +9,7 @@ import { LocationAddEditComponent } from './location-add-edit/location-add-edit.
 import { LocationComponent } from './location/location.component';
 import { FileUploaderModule } from '../file-uploader/file-uploader.module';
 import { PictureBoxModule } from '../picture-box/picture-box.module';
-import { MultiFormModule } from '../multiform/multiform.module';
+import { WizardModule } from '../wizard/wizard.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { MultiFormModule } from '../multiform/multiform.module';
     PlantModule,
     FileUploaderModule,
     PictureBoxModule,
-    MultiFormModule
+    WizardModule
   ],
   exports: [
     LocationListComponent,
