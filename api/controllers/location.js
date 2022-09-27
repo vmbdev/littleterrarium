@@ -34,7 +34,7 @@ const create = async (req, res, next) => {
   }
 
   // if picture
-  if (req.disk) data.picture = req.disk.file.url;
+  if (req.disk) data.pictures = req.disk.file.url;
 
   data.ownerId = req.auth.userId;
   try {
@@ -64,7 +64,7 @@ const find = async (req, res, next) => {
     query.select = {
       id: true,
       name: true,
-      picture: true,
+      pictures: true,
       plants: {
         take: limit > 0? limit : undefined,
         select: {
@@ -73,7 +73,7 @@ const find = async (req, res, next) => {
           customName: true,
           photos: {
             take: 1,
-            select: { image: true }
+            select: { images: true }
           }
         }
       }
@@ -87,11 +87,12 @@ const find = async (req, res, next) => {
 const findOne = async (req, res, next) => {
   const query = {
     where: { id: req.parser.id, ownerId: req.auth.userId },
-    select: { id: true, name: true, picture: true, light: true, public: true }
+    select: { id: true, name: true, pictures: true, light: true, public: true }
    };
 
   if (req.query.plants) {
     const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
+
     query.select.plants = {
       take: limit > 0 ? limit : undefined,
       select: {
@@ -100,7 +101,7 @@ const findOne = async (req, res, next) => {
         customName: true,
         photos: {
           take: 1,
-          select: { image: true }
+          select: { images: true }
         }
       }
     };
@@ -113,7 +114,7 @@ const findOne = async (req, res, next) => {
 }
 
 const modify = async (req, res, next) => {
-  const fields = ['name', 'picture', 'light', 'public'];
+  const fields = ['name', 'pictures', 'light', 'public'];
   const data = {};
 
   for (const requestedField of Object.keys(req.body)) {
@@ -126,7 +127,7 @@ const modify = async (req, res, next) => {
   }
 
   // if picture
-  if (req.disk) data.picture = req.disk.file.url;
+  if (req.disk) data.pictures = req.disk.file.url;
 
   // req.auth.userId is authorised by auth middleware
   const { count } = await prisma.location.updateMany({

@@ -1,0 +1,5 @@
+<div class="toolbox">
+  <div *ngFor="let button of buttons">
+    <ng-template [ngTemplateOutlet]="button.buttonTemplate"></ng-template>
+  </div>
+</div>

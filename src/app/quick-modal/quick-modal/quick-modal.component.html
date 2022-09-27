@@ -1,0 +1,9 @@
+<div class="quick-modal">
+  <div class="container">
+    <close-button (close)="propagateClose()"></close-button>
+    <div class="container__title">{{ title }}</div>
+    <div class="container__content">
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

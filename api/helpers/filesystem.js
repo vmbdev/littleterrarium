@@ -2,8 +2,7 @@ import { createHash } from 'node:crypto';
 import { mkdir, rename, readFile, unlink } from 'node:fs/promises';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readChunk } from 'read-chunk';
-import imageType, { minimumBytes } from 'image-type';
+import sharp from 'sharp';
 import { files } from '../../littleterrarium.config.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,16 +26,33 @@ const saveFile = async (filePath) => {
   const hash = await hashFile(filePath);
   const ext = await getImageExt(filePath);
   const { newDir, newFile, relativeDir } = await createDirectories(hash);
-  const filename = `${newFile}.${ext}`;
-  const fullPath = path.join(newDir, filename);
 
-  await rename(filePath, fullPath);
+  const filenameFull = `${newFile}.${ext}`;
+  const filenameThumb = `${newFile}-thumb.${ext}`;
+  const filenameMid = `${newFile}-mid.${ext}`
+  const imageFull = path.join(newDir, filenameFull);
+  const imageThumb = path.join(newDir, filenameThumb);
+  const imageMid = path.join(newDir, filenameMid);
+
+  await rename(filePath, imageFull);
+  
+  const img = sharp(imageFull);
+  await img.resize({ width: 250, height: 250, fit: 'cover'})
+  .withMetadata()
+  .toFile(imageThumb);
+
+  await img.resize({ width: 750, fit: 'contain', position: 'left top' })
+  .withMetadata()
+  .toFile(imageMid);
 
   return ({
     destination: newDir,
-    filename,
     hash,
-    path: `${relativeDir}${filename}`,
+    path: {
+      full: `${relativeDir}${filenameFull}`,
+      mid: `${relativeDir}${filenameMid}`,
+      thumb: `${relativeDir}${filenameThumb}`
+    }
   });
 }
 
@@ -66,12 +82,16 @@ const removeFile = (filePath) => {
 }
 
 const getImageExt = async (filePath) => {
-  const buffer = await readChunk(filePath, { length: minimumBytes });
-  const imgInfo = await imageType(buffer);
+  const img = sharp(filePath);
+  let metadata;
 
-  if (!imgInfo) throw { error: 'IMG_NOT_VALID' };
+  try {
+    metadata = await img.metadata();
+  } catch (err) {
+    throw { error: 'IMG_NOT_VALID' };
+  }
 
-  return imgInfo.ext;
+  return metadata.format;
 }
 
 export default {

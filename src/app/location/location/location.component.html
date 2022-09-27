@@ -1,11 +1,12 @@
 <div class="location" *ngIf="location; else invalidId">
+  <toolbox>
+    <toolbox-button image="/assets/edit.png" (click)="edit()"></toolbox-button>
+    <toolbox-button image="/assets/delete.png" (click)="delete()"></toolbox-button>
+  </toolbox>
+
   <div class="location__horizontal">
     <div class="location__picturebox">
-      <img class="location__picture" [src]="location.picture">
-    </div>
-    <div class="location__navigation">
-      <div><a [routerLink]="['/location', 'edit', location.id]" routerLinkActive="active" ariaCurrentWhenActive="page">Edit</a></div>
-      <div><a (click)="delete()" href="#">Delete</a></div>
+      <img class="location__picture" [src]="location.pictures?.mid">
     </div>
     <div class="location__info">
       <div class="location__name">{{ location.name }}</div>

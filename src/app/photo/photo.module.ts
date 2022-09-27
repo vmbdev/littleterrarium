@@ -9,6 +9,7 @@ import { PictureBoxModule } from '../picture-box/picture-box.module';
 import { WizardModule } from '../wizard/wizard.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FileUploaderModule } from '../file-uploader/file-uploader.module';
+import { ToolboxModule } from '../toolbox/toolbox.module';
 
 
 
@@ -25,7 +26,8 @@ import { FileUploaderModule } from '../file-uploader/file-uploader.module';
     ReactiveFormsModule,
     PictureBoxModule,
     WizardModule,
-    FileUploaderModule
+    FileUploaderModule,
+    ToolboxModule
   ],
   exports: [
     PhotoComponent,

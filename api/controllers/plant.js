@@ -63,8 +63,7 @@ const create = async (req, res, next) => {
   try {
     const newPlant = await prisma.plant.create({ data });
     res.send({ msg: 'PLANT_CREATED', plant: newPlant });
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
     next({ code: 500 });
   }
 
@@ -78,12 +77,14 @@ const find = async (req, res, next) => {
 
   const plants = await prisma.plant.findMany({
     where: conditions,
-    include: {
+    select: {
+      id: true,
+      customName: true,
       photos: {
+        take: 1,
         select: {
           id: true,
-          image: true,
-          description: true,
+          images: true,
           public: true,
           takenAt: true
         }
@@ -111,7 +112,7 @@ const findOne = async (req, res, next) => {
       photos: {
         select: {
           id: true,
-          image: true,
+          images: true,
           description: true,
           public: true,
           takenAt: true

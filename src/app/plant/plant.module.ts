@@ -12,12 +12,16 @@ import { PlantAddComponent } from './plant-add/plant-add.component';
 import { WizardModule } from '../wizard/wizard.module';
 import { FileUploaderModule } from '../file-uploader/file-uploader.module';
 import { SpecieFinderModule } from '../specie-finder/specie-finder.module';
+import { ToolboxModule } from '../toolbox/toolbox.module';
+import { QuickModalModule } from '../quick-modal/quick-modal.module';
+import { PlantEditWateringComponent } from './plant-edit-watering/plant-edit-watering.component';
 
 @NgModule({
   declarations: [
     PlantListComponent,
     PlantComponent,
-    PlantAddComponent
+    PlantAddComponent,
+    PlantEditWateringComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +33,9 @@ import { SpecieFinderModule } from '../specie-finder/specie-finder.module';
     PictureBoxModule,
     WizardModule,
     FileUploaderModule,
-    SpecieFinderModule
+    SpecieFinderModule,
+    ToolboxModule,
+    QuickModalModule
   ],
   exports: [
     PlantListComponent,

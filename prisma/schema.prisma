@@ -45,7 +45,7 @@ model Session {
 model Location {
   id          Int        @id @default(autoincrement())
   name        String
-  picture     String?
+  pictures    Json?
   light       Light
   public      Boolean    @default(false)
   plants      Plant[]
@@ -106,7 +106,7 @@ model Hash {
 
 model Photo {
   id          Int        @id @default(autoincrement())
-  image       String
+  images      Json
   description String?
   public      Boolean    @default(false)
   takenAt     DateTime   @default(now())

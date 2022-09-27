@@ -123,7 +123,7 @@ export class ApiService {
     );
   }
 
-  createPlant(plant: Plant): Observable<Plant> {
+  createPlant(plant: Plant): Observable<any> {
     return this.http.post<Plant>(this.endpoint('plant'), plant).pipe(
       map((data: any) => {
         if (data.msg === 'PLANT_CREATED') return data;

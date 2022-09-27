@@ -1,7 +1,12 @@
-<div *ngIf="photo" class="photo">
+<div *ngIf="isValidId && photo" class="photo">
+  <toolbox>
+    <toolbox-button image="/assets/edit.png"></toolbox-button>
+    <toolbox-button image="/assets/delete.png"></toolbox-button>
+  </toolbox>
+
   <div class="photo__image">
-    <a [href]="photo.image" target="_blank">
-      <img [src]="photo.image">
+    <a [href]="photo.images.full" target="_blank">
+      <img [src]="photo.images.mid">
     </a>
   </div>
   <div class="photo__info">

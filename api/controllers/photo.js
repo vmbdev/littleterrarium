@@ -21,9 +21,7 @@ const create = (req, res, next) => {
 
   const ops = req.disk.files.map((file) => {
     const currentData = { ...data };
-
-    // TODO: check this
-    currentData.image = file.url;
+    currentData.images = file.url;
 
     // on both update or insert, we always create the picture
     return prisma.hash.upsert({
@@ -75,7 +73,7 @@ const findOne = async (req, res, next) => {
       },
       select: {
         id: true,
-        image: true,
+        images: true,
         description: true,
         public: true,
         takenAt: true
@@ -88,7 +86,7 @@ const findOne = async (req, res, next) => {
 }
 
 // let's be conservative here:
-// user can only update the description and the takenAt date
+// user can only update the description and the takenAt date, not the picture
 const modify = async (req, res, next) => {
   const data = {};
   const fields = ['description', 'takenAt', 'public'];

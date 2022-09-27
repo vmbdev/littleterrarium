@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location, Plant } from 'src/app/intefaces';
+import { of, switchMap } from 'rxjs';
+import { Location, Photo, Plant } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
@@ -12,6 +13,7 @@ import { ApiService } from 'src/app/shared/api/api.service';
 export class PlantAddComponent implements OnInit {
   plantForm: FormGroup;
   locationId!: number;
+  newPlantId?: number;
   location!: Location;
   photos: File[] = [];
 
@@ -53,14 +55,25 @@ export class PlantAddComponent implements OnInit {
     const plant: Plant = this.plantForm.value;
     plant.locationId = this.locationId;
 
-    this.api.createPlant(plant).subscribe({
-      next: (data: Plant) => {
-        console.log(data);
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    this.api.createPlant(plant)
+    .pipe(
+      switchMap(data => {
+        const plant: Plant = data.plant;
+        this.newPlantId = plant.id;
+
+        if (this.photos.length === 0) return of(true);
+        else {
+          const photos = {
+            plantId: plant.id,
+            public: plant.public,
+            pictureFiles: this.photos
+          } as Photo;
+          
+          return this.api.createPhoto(photos);
+        }
+      })
+    )
+    .subscribe(() => { this.router.navigate(['/plant', this.newPlantId])});
 
   }
 

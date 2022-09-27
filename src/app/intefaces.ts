@@ -21,7 +21,8 @@ import {
 export interface Location extends PrismaLocation {
   plants?: Plant[],
   _count?: any,
-  pictureFile: Blob
+  pictureFile: File,
+  pictures: any
 }
 
 export interface Plant extends PrismaPlant {
@@ -40,7 +41,8 @@ export interface Specie extends PrismaSpecie {
 }
 
 export interface Photo extends PrismaPhoto {
-  pictureFiles: Blob[]
+  pictureFiles: File[],
+  images: any
 }
 
 export const Light = {

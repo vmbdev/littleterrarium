@@ -36,6 +36,10 @@ export class LocationComponent implements OnInit {
     else this.isValidId = false;
   }
 
+  edit(): void {
+    this.router.navigate(['/location', 'edit', this.id]);
+  }
+
   delete(): void {
     this.apiService.deleteLocation(this.id).subscribe({
       next: (data) => {

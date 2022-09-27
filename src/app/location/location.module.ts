@@ -10,6 +10,7 @@ import { LocationComponent } from './location/location.component';
 import { FileUploaderModule } from '../file-uploader/file-uploader.module';
 import { PictureBoxModule } from '../picture-box/picture-box.module';
 import { WizardModule } from '../wizard/wizard.module';
+import { ToolboxModule } from '../toolbox/toolbox.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { WizardModule } from '../wizard/wizard.module';
     PlantModule,
     FileUploaderModule,
     PictureBoxModule,
-    WizardModule
+    WizardModule,
+    ToolboxModule
   ],
   exports: [
     LocationListComponent,

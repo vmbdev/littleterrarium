@@ -14,31 +14,33 @@ export class PlantComponent implements OnInit {
   isValidId: boolean = false;
   plant!: Plant;
   plantCondition = Condition;
+  enableWaterEditing: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService
+    private apiService: ApiService,
   ) { }
 
   ngOnInit(): void {
     const paramId = this.route.snapshot.paramMap.get('plantId');
-    console.log(paramId);
     this.id = paramId ? +paramId : NaN;
 
     if (this.id) {
       this.apiService.getPlant(this.id).subscribe({
         next: (plant: Plant) => {
-          console.log(plant);
           this.plant = plant;
           this.isValidId = true;
         },
         error: (error) => {
-          console.log(error);
           if (error.msg === 'PLANT_NOT_VALID') this.isValidId = false;
         }
       })
     }
     else this.isValidId = false;
+  }
+
+  toggleWaterEditing(): void {
+    this.enableWaterEditing = !this.enableWaterEditing;
   }
 
 }

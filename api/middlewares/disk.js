@@ -8,7 +8,6 @@ import FileSystem from '../helpers/filesystem.js';
 
 const processFile = async (file) => {
   const diskFile = await FileSystem.saveFile(file.path);
-
   diskFile.fieldname = file.fieldname;
   diskFile.mimetype = file.mimetype;
   diskFile.size = file.size;
@@ -21,9 +20,14 @@ export const image = async (req, res, next) => {
     req.disk = {};
     try {
       req.disk.file = await processFile(req.file);
-      req.disk.file.url = `${req.protocol}://${req.get('host')}/${req.disk.file.path}`;
-    } catch (e) {
-      if (e.error && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
+      req.disk.file.url = {};
+
+      for (const size of Object.keys(req.disk.file.path)) {
+        req.disk.file.url[size] = `${req.protocol}://${req.get('host')}/${req.disk.file.path[size]}`;
+      }
+
+    } catch (err) {
+      if (err.error && (err.error === 'IMG_NOT_VALID')) return next({ error: err.error });
       else return next({ code: 500 });
     }
   }
@@ -35,13 +39,19 @@ export const gallery = async (req, res, next) => {
   if (req.files) {
     req.disk = {};
     req.disk.files = [];
+
     for (const file of req.files) {
       try {
         const diskFile = await processFile(file);
-        diskFile.url = `${req.protocol}://${req.get('host')}/${diskFile.path}`;
+        diskFile.url = {};
+
+        for (const size of Object.keys(diskFile.path)) {
+           diskFile.url[size] = `${req.protocol}://${req.get('host')}/${diskFile.path[size]}`;
+        }
+
         req.disk.files.push(diskFile);
-      } catch (e) {
-        if (e.error && (e.error === 'IMG_NOT_VALID')) return next({ error: e.error });
+      } catch (err) {
+        if (err.error && (err.error === 'IMG_NOT_VALID')) return next({ error: err.error });
         else return next({ code: 500 });
       }
     }

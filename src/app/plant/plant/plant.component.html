@@ -1,4 +1,16 @@
+<quick-modal *ngIf="enableWaterEditing" (close)="toggleWaterEditing()" title="Watering">
+  <plant-edit-watering></plant-edit-watering>
+</quick-modal>
+
 <div *ngIf="isValidId" class="plant">
+  <toolbox>
+    <toolbox-button image="/assets/water.png" (click)="toggleWaterEditing()"></toolbox-button>
+    <toolbox-button image="/assets/fertilizer.png"></toolbox-button>
+    <toolbox-button image="/assets/pot.png"></toolbox-button>
+    <toolbox-button image="/assets/edit.png"></toolbox-button>
+    <toolbox-button image="/assets/delete.png"></toolbox-button>
+  </toolbox>
+
   <p *ngIf="plant.specie">{{ plant.specie.name }}</p>
   <p *ngIf="plant.specie?.commonName">{{ plant.specie?.commonName }}</p>
   <p *ngIf="plant.customName">{{ plant.customName }}</p>
