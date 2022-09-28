@@ -15,13 +15,17 @@ import { SpecieFinderModule } from '../specie-finder/specie-finder.module';
 import { ToolboxModule } from '../toolbox/toolbox.module';
 import { QuickModalModule } from '../quick-modal/quick-modal.module';
 import { PlantEditWateringComponent } from './plant-edit-watering/plant-edit-watering.component';
+import { PlantEditFertilizerComponent } from './plant-edit-fertilizer/plant-edit-fertilizer.component';
+import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.component';
 
 @NgModule({
   declarations: [
     PlantListComponent,
     PlantComponent,
     PlantAddComponent,
-    PlantEditWateringComponent
+    PlantEditWateringComponent,
+    PlantEditFertilizerComponent,
+    PlantEditSoilComponent
   ],
   imports: [
     CommonModule,

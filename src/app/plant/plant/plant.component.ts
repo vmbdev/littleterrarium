@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Plant, Condition } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 import { __values } from 'tslib';
@@ -15,10 +15,14 @@ export class PlantComponent implements OnInit {
   plant!: Plant;
   plantCondition = Condition;
   enableWaterEditing: boolean = false;
+  enableFertilizerEditing: boolean = false;
+  enableSoilEditing: boolean = false;
+  enableEditing: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -39,8 +43,25 @@ export class PlantComponent implements OnInit {
     else this.isValidId = false;
   }
 
-  toggleWaterEditing(): void {
-    this.enableWaterEditing = !this.enableWaterEditing;
+  editSoil(): void {
+    this.router.navigate(['/plant/edit', this.id, 'soil']);
+  }
+
+  toggleEditing(modal: string): void {
+    switch (modal) {
+      case 'water':
+        this.enableWaterEditing = !this.enableWaterEditing;
+        break;
+      case 'fertilizer':
+        this.enableFertilizerEditing = !this.enableFertilizerEditing;
+        break;
+      case 'soil':
+        this.enableSoilEditing = !this.enableSoilEditing;
+        break;
+      case 'all':
+        this.enableEditing = !this.enableEditing;
+        break;
+    }
   }
 
 }

@@ -1,8 +1,10 @@
 <div class="quick-modal">
-  <div class="container">
+  <div class="quick-modal__title">
+    {{ title }}
     <close-button (close)="propagateClose()"></close-button>
-    <div class="container__title">{{ title }}</div>
-    <div class="container__content">
+  </div>
+  <div class="quick-modal__container">
+    <div class="quick-modal__content">
       <ng-content></ng-content>
     </div>
   </div>

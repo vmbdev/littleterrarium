@@ -13,6 +13,7 @@ import { PhotoComponent } from './photo/photo/photo.component';
 import { PhotoAddComponent } from './photo/photo-add/photo-add.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
 import { PlantAddComponent } from './plant/plant-add/plant-add.component';
+import { PlantEditSoilComponent } from './plant/plant-edit-soil/plant-edit-soil.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -38,6 +39,7 @@ const routes: Routes = [
     children: [
       { path: 'create/:locationId', component: PlantAddComponent },
       { path: 'edit/:plantId', component: PlantAddComponent },
+      { path: 'edit/:plantId/soil', component: PlantEditSoilComponent },
       { path: ':plantId', component: PlantComponent },
     ]
   },
@@ -53,7 +55,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

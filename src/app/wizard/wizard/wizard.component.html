@@ -13,7 +13,7 @@
       <button type="button" (click)="navigateBack()" [ngClass]="{ 'multiform__preview-hidden': currentIndex == 0 }">
         Previous
       </button>
-      <button type="button" *ngIf="currentIndex != (pageList.length -1)" (click)="navigateNext()">Next</button>
+      <button type="button" *ngIf="currentIndex != (pageList.length - 1)" (click)="navigateNext()">Next</button>
       <button type="submit" *ngIf="currentIndex === (pageList.length - 1)">Finish</button>
     </div>
   </div>

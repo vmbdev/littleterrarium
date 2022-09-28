@@ -1,0 +1,45 @@
+<form [formGroup]="potForm" method="post" (submit)="submit()">
+  <wizard [form]="potForm">
+    <wizard-header *ngIf="plant">
+      Editing soil and pot options for <b>{{ plant.customName ? plant.customName : plant.specie?.name }}</b>
+    </wizard-header>
+    
+    <page title="Pot">
+      <page-description>
+        <p>Nothing like finding a proper home to your plants, with a comfy floor!</p>
+      </page-description>
+      <p>What kind of <b>material</b> is your plant sitting on?</p>
+      <div class="pot-selector">
+        <div
+          *ngFor="let choice of potChoices"
+          class="pot-selector__material"
+          (click)="selectPot(choice.id)"
+          [ngClass]="{ 'pot-selector__material-selected': selectedChoice === choice.id } "
+        >
+          <img [src]="choice.image">
+          <p>{{ choice.name }}</p>
+        </div>
+      </div>
+    </page>
+
+    <page title="Pot size">
+      <div class="form__number">
+        <p>Do you know the <b>diameter of your plant</b>?</p>
+        <input type="number" formControlName="potSize">
+      </div>
+      <div class="form__radio form__radio-center">
+        <input type="radio" formControlName="potSizeUnits" id="units_cm" value="cm">
+        <label for="units_cm">Centimeters</label>
+        <input type="radio" formControlName="potSizeUnits" id="units_in" value="in">
+        <label for="units_in">Inches</label>
+      </div>
+    </page>
+
+    <page title="Soil">
+      <div class="form__textinput">
+        <p>Really, really, really important! Describe a bit what's your soil <b>composition</b></p>
+        <input type="text" formControlName="soil">
+      </div>
+    </page>
+  </wizard>
+</form>

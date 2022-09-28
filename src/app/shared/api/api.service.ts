@@ -101,7 +101,7 @@ export class ApiService {
     return this.upsertLocation(location);
   }
 
-  editLocation(location: Location): Observable<any> {
+  updateLocation(location: Location): Observable<any> {
     return this.upsertLocation(location, true);
   }
 
@@ -127,6 +127,24 @@ export class ApiService {
     return this.http.post<Plant>(this.endpoint('plant'), plant).pipe(
       map((data: any) => {
         if (data.msg === 'PLANT_CREATED') return data;
+        else return throwError(() => 'Server error');
+      }),
+      catchError(err => {
+        return throwError(() => (
+          {
+            msg: err.error.msg,
+            data: err.error.data ? err.error.data : undefined,
+            code: err.status.code ? err.status.code : undefined
+          }
+        ));
+      })
+    )
+  }
+
+  updatePlant(plant: Plant): Observable<any> {
+    return this.http.put<Plant>(this.endpoint('plant'), plant).pipe(
+      map((data: any) => {
+        if (data.msg === 'PLANT_UPDATED') return data;
         else return throwError(() => 'Server error');
       }),
       catchError(err => {

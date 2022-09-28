@@ -1,5 +1,12 @@
 @use 'src/styles/theming.scss' as t;
 
+@mixin block-middle {
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
 .quick-modal {
   position: fixed;
   display: flex;
@@ -10,29 +17,38 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0,0,0,50%);
-}
-
-.container {
-  position: relative;
-  background-color: white;
-  border: 1px solid black;
-  width: 35vw;
-  height: 60vh;
-  margin-left: auto;
-  margin-right: auto;
-  left: 0;
-  right: 0;
-  border-radius: 0 0 5% 5%;
 
   &__title {
     @include t.themify {
       background-color: t.theme(main_color);
     }
+    position: relative;
+  
     font-size: 14pt;
     font-weight: 600;
+  
+    @include block-middle;
+  
     padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    border-bottom: 0;
+    width: 35vw;
   }
 
+  &__container {
+    @include block-middle;
+  
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid black;
+    width: 35vw;
+    height: 60vh;
+  
+    border-radius: 0 0 5% 5%;
+    overflow: auto;
+  }
+  
   &__content {
     padding: 30px;
   }

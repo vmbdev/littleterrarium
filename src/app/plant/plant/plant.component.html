@@ -1,13 +1,19 @@
-<quick-modal *ngIf="enableWaterEditing" (close)="toggleWaterEditing()" title="Watering">
-  <plant-edit-watering></plant-edit-watering>
-</quick-modal>
+<ng-container *ngIf="plant">
+  <quick-modal *ngIf="enableWaterEditing" (close)="toggleEditing('water')" title="Watering">
+    <plant-edit-watering [plantId]="plant.id" [waterFreq]="plant.waterFreq" [waterLast]="plant.waterLast"></plant-edit-watering>
+  </quick-modal>
+
+  <quick-modal *ngIf="enableFertilizerEditing" (close)="toggleEditing('fertilizer')" title="Fertilizer">
+    <plant-edit-fertilizer [plantId]="plant.id" [fertFreq]="plant.fertFreq" [fertLast]="plant.fertLast"></plant-edit-fertilizer>
+  </quick-modal>
+</ng-container>
 
 <div *ngIf="isValidId" class="plant">
   <toolbox>
-    <toolbox-button image="/assets/water.png" (click)="toggleWaterEditing()"></toolbox-button>
-    <toolbox-button image="/assets/fertilizer.png"></toolbox-button>
-    <toolbox-button image="/assets/pot.png"></toolbox-button>
-    <toolbox-button image="/assets/edit.png"></toolbox-button>
+    <toolbox-button image="/assets/water.png" (click)="toggleEditing('water')"></toolbox-button>
+    <toolbox-button image="/assets/fertilizer.png" (click)="toggleEditing('fertilizer')"></toolbox-button>
+    <toolbox-button image="/assets/pot.png" (click)="editSoil()"></toolbox-button>
+    <toolbox-button image="/assets/edit.png" (click)="toggleEditing('all')"></toolbox-button>
     <toolbox-button image="/assets/delete.png"></toolbox-button>
   </toolbox>
 

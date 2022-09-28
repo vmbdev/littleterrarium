@@ -8,20 +8,22 @@ datasource db {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  username   String     @db.VarChar(32)     @unique
-  firstname  String?    @db.VarChar(50)
-  lastname   String?    @db.VarChar(50)
-  password   String     @db.Char(60)
-  email      String     @db.VarChar(120)    @unique
-  role       Role       @default(USER)
-  locations  Location[]
-  plants     Plant[]
-  photos     Photo[]
-  public     Boolean    @default(false)
-  status     UserStatus @default(UNVERIFIED)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  id            Int        @id @default(autoincrement())
+  username      String     @db.VarChar(32)     @unique
+  firstname     String?    @db.VarChar(50)
+  lastname      String?    @db.VarChar(50)
+  password      String     @db.Char(60)
+  email         String     @db.VarChar(120)    @unique
+  avatar        Json?
+  preferences   Json?
+  role          Role       @default(USER)
+  locations     Location[]
+  plants        Plant[]
+  photos        Photo[]
+  public        Boolean    @default(false)
+  status        UserStatus @default(UNVERIFIED)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
 
 enum Role {

@@ -1,41 +1,41 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from 'src/app/shared/api/api.service';
-import * as dayjs from 'dayjs';
 import { Router } from '@angular/router';
-import { Plant } from '@prisma/client';
+import * as dayjs from 'dayjs';
+import { Plant } from 'src/app/intefaces';
 
 @Component({
-  selector: 'plant-edit-watering',
-  templateUrl: './plant-edit-watering.component.html',
-  styleUrls: ['./plant-edit-watering.component.scss']
+  selector: 'plant-edit-fertilizer',
+  templateUrl: './plant-edit-fertilizer.component.html',
+  styleUrls: ['./plant-edit-fertilizer.component.scss']
 })
-export class PlantEditWateringComponent implements OnInit {
+export class PlantEditFertilizerComponent implements OnInit {
   @Input() plantId!: number;
-  @Input() waterFreq?: number | null;
-  @Input() waterLast?: any;
-  waterForm: FormGroup;
+  @Input() fertFreq?: number | null;
+  @Input() fertLast?: any;
+  fertForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private api: ApiService,
     private router: Router
   ) {
-    this.waterForm = this.fb.group({
-      waterFreq: [],
-      waterLast: [dayjs().format('YYYY-MM-DD')]
+    this.fertForm = this.fb.group({
+      fertFreq: [],
+      fertLast: [dayjs().format('YYYY-MM-DD')]
     })
   }
 
   ngOnInit(): void {
-    this.waterForm.setValue({
-      waterFreq: this.waterFreq,
-      waterLast: dayjs(this.waterLast).format('YYYY-MM-DD')
+    this.fertForm.setValue({
+      fertFreq: this.fertFreq,
+      fertLast: dayjs(this.fertLast).format('YYYY-MM-DD')
     })
   }
 
   submit(): void {
-    const plant: Plant = this.waterForm.value;
+    const plant: Plant = this.fertForm.value;
     plant.id = this.plantId;
     
     this.api.updatePlant(plant).subscribe({

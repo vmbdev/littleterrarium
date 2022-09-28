@@ -33,7 +33,9 @@ export interface Plant extends PrismaPlant {
 export interface User extends PrismaUser {
   locations?: Location[],
   plants?: Plant[],
-  photos?: Photo[]
+  photos?: Photo[],
+  avatar: any,
+  preferences: any,
 }
 
 export interface Specie extends PrismaSpecie {
@@ -65,7 +67,7 @@ export const Condition = {
   ...PrismaCondition,
   BAD: 'On the line',
   POOR: 'Holding on to life',
-  GOOD: 'I guess it\'s fine',
+  GOOD: 'Looks good',
   VERYGOO: 'Looking dapper',
   EXCELLENT: 'Prime example of its specie',
 }
