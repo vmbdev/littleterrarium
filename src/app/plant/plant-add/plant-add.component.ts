@@ -73,7 +73,9 @@ export class PlantAddComponent implements OnInit {
         }
       })
     )
-    .subscribe(() => { this.router.navigate(['/plant', this.newPlantId])});
+    .subscribe(() => {
+      this.router.navigate(['/plant', this.newPlantId])
+    });
 
   }
 

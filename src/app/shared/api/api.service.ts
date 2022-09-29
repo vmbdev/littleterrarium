@@ -19,6 +19,10 @@ export class ApiService {
     return `${endpoint}/${path}`;
   }
 
+  /**
+   * Auth and user API functions
+   */
+
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(this.endpoint('user'))
   }
@@ -29,6 +33,10 @@ export class ApiService {
 
   logOut(): Observable<any> {
     return this.http.get<any>(this.endpoint('user/logout'));
+  }
+
+  getPasswordRequirements(): Observable<any> {
+    return this.http.get<any>(this.endpoint('user/password/requirements'));
   }
 
   /**
@@ -117,7 +125,11 @@ export class ApiService {
     return this.http.get<Plant>(this.endpoint(`plant/${id}`)).pipe(
       map(data => data),
       catchError((HttpError: HttpErrorResponse) => {
-        if (HttpError.error.msg) return throwError(() => { return { msg: HttpError.error.msg, code: HttpError.status } })
+        if (HttpError.error.msg) {
+          return throwError(() => {
+            return { msg: HttpError.error.msg, code: HttpError.status }
+          });
+        }
         else return throwError(() => undefined);
       })
     );

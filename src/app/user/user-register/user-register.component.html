@@ -1,5 +1,38 @@
-<wizard>
-  <page title="Main">página 1</page>
-  <page title="this">página 2</page>
-  <page title="that">página 3</page>
-</wizard>
+<form [formGroup]="userForm" (ngSubmit)="submit()" method="post">
+  <wizard [form]="userForm" [start]="2">
+    <page title="Username" control="username">
+      <page-description>
+        <p>We are really happy that you decided to become part of our family! We hope the journey is great and your plants are happy.</p>
+        <p>First of all, let's decide on your <b>username</b>. It may be the moniker you've been using for the last 20 years or something like your Instagram username</p>
+      </page-description>
+
+      <div class="form__textinput">
+        <input type="textinput" formControlName="username">
+      </div>
+    </page>
+
+    <page title="E-mail" control="email">
+      <page-description>
+        <p>This is how we identify you uniquely, and it's needed to receive notifications and to reset your password in case you forget it.</p>
+      </page-description>
+
+      <div class="form__textinput">
+        <input type="email" formControlName="email">
+      </div>
+    </page>
+
+    <page title="Password" control="password">
+      <page-description>
+        <p><b>We're almost there</b>. Last but not least, a <b>password</b> to protect your access</p>
+        <p>Password must be at least {{ passwordRequirements?.length }} characters long</p>
+      </page-description>
+
+      <div class="form__textinput">
+        <input type="password" formControlName="password" placeholder="Your password">
+      </div>
+      <div class="form__textinput">
+        <input type="password" placeholder="Again, your password">
+      </div>
+    </page>
+  </wizard>
+</form>

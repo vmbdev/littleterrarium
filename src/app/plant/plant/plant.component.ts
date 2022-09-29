@@ -16,7 +16,6 @@ export class PlantComponent implements OnInit {
   plantCondition = Condition;
   enableWaterEditing: boolean = false;
   enableFertilizerEditing: boolean = false;
-  enableSoilEditing: boolean = false;
   enableEditing: boolean = false;
 
   constructor(
@@ -54,9 +53,6 @@ export class PlantComponent implements OnInit {
         break;
       case 'fertilizer':
         this.enableFertilizerEditing = !this.enableFertilizerEditing;
-        break;
-      case 'soil':
-        this.enableSoilEditing = !this.enableSoilEditing;
         break;
       case 'all':
         this.enableEditing = !this.enableEditing;
