@@ -57,7 +57,7 @@ export class PlantAddComponent implements OnInit {
 
     this.api.createPlant(plant)
     .pipe(
-      switchMap(data => {
+      switchMap((data: any) => {
         const plant: Plant = data.plant;
         this.newPlantId = plant.id;
 

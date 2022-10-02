@@ -36,10 +36,15 @@ const register = async (req, res, next) => {
   }
 
   try {
-    await prisma.user.create({ data });
+    const user = await prisma.user.create({ data });
+
+    req.session.signedIn = true;
+    req.session.role = user.role;
+    req.session.userId = user.id;
+
     res.send({ msg: 'USER_CREATED' });
   } catch (err) {
-    if (err.code === 'P2002') next({ error: 'USER_FIELD', data: { field: err.meta.target } })
+    if (err.code === 'P2002') next({ error: 'USER_FIELD', data: { field: err.meta.target[0] } })
     else next({ code: 500 });
   }
 }
@@ -68,7 +73,7 @@ const find = async (req, res, next) => {
 
   if (user) {
     // FIXME: manage this through auth middleware ?
-    if (user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
+    if ((!req.params.username) || user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
       res.send(user);
     }
     else next({ error: 'USER_PRIVATE', code: 403 });
@@ -192,7 +197,7 @@ const verify = (req, res, next) => {
 }
 
 const checkPassword = (req, res, next) => {
-  const pcheck = Password.check(req.params.password);
+  const pcheck = Password.check(req.body.password);
 
   if (pcheck.valid) res.send({ msg: 'PASSWD_VALID' });
   else {

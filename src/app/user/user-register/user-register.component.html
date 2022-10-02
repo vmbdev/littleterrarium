@@ -1,5 +1,5 @@
 <form [formGroup]="userForm" (ngSubmit)="submit()" method="post">
-  <wizard [form]="userForm" [start]="2">
+  <wizard [form]="userForm" [start]="wizardStart">
     <page title="Username" control="username">
       <page-description>
         <p>We are really happy that you decided to become part of our family! We hope the journey is great and your plants are happy.</p>
@@ -24,15 +24,27 @@
     <page title="Password" control="password">
       <page-description>
         <p><b>We're almost there</b>. Last but not least, a <b>password</b> to protect your access</p>
-        <p>Password must be at least {{ passwordRequirements?.length }} characters long</p>
+        <p>
+          Password must be at least <b>{{ pwdReq?.length }} characters</b> long
+          <ng-container *ngIf="havePasswordConditions()">
+            and contain:
+            <ul>
+              <li>{{ pwdReq.requireUppercase ? '1 uppercase' : '' }}</li>
+              <li>{{ pwdReq.requireNumber ? '1 number' : '' }}</li>
+              <li>{{ pwdReq.requireUppercase ? '1 non-alphanumeric character' : '' }}</li>
+            </ul>
+          </ng-container>
+        </p>
       </page-description>
 
-      <div class="form__textinput">
-        <input type="password" formControlName="password" placeholder="Your password">
-      </div>
-      <div class="form__textinput">
-        <input type="password" placeholder="Again, your password">
-      </div>
+      <ng-container formGroupName="passwordCheck">
+        <div class="form__textinput">
+          <input type="password" formControlName="password1" placeholder="Your password">
+        </div>
+        <div class="form__textinput">
+          <input type="password" formControlName="password2" placeholder="Again, your password">
+        </div>
+      </ng-container>
     </page>
   </wizard>
 </form>

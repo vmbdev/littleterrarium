@@ -14,7 +14,7 @@ router.get('/logout', user.logout);
 router.post('/restore', user.restore);
 router.get('/validate/:key', user.verify);
 router.get('/password/requirements', user.passwordRequirements);
-router.get('/password/check/:password', user.checkPassword)
+router.post('/password/check', user.checkPassword)
 router.get('/:username?', user.find);
 
 export default router;

@@ -9,7 +9,7 @@ import { ApiService } from '../../shared/api/api.service';
   styleUrls: ['./userbox.component.scss']
 })
 export class UserboxComponent implements OnInit {
-  user!: User;
+  user?: User;
 
   constructor(
     public authService: AuthService,

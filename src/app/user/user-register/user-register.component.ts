@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map } from 'rxjs/operators';
+import { catchError, of, switchMap } from 'rxjs';
+import { User } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
@@ -11,7 +13,18 @@ import { ApiService } from 'src/app/shared/api/api.service';
 })
 export class UserRegisterComponent implements OnInit {
   userForm: FormGroup;
-  passwordRequirements: any;
+  pwdReq: any;
+  wizardStart: number = 0;
+  errors = {
+    username: false,
+    email: false,
+    pwd: {
+      length: false,
+      uppercase: false,
+      numbers: false,
+      nonAlphanumeric: false
+    }
+  }
 
   constructor(
     private api: ApiService,
@@ -21,20 +34,72 @@ export class UserRegisterComponent implements OnInit {
     this.userForm = this.fb.group({
       username: ['', Validators.required],
       email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/i)])],
-      password: ['', Validators.required]
+      passwordCheck: this.fb.group({
+        password1: ['', Validators.required],
+        password2: ['', Validators.required]
+      }, { validators: this.checkPasswords }),
     })
   }
 
   ngOnInit(): void {
-    this.api.getPasswordRequirements().subscribe({
-      next: (data: any) => {
-        this.passwordRequirements = data;
-        console.log(this.passwordRequirements);
-      },
-    );
+    this.api.getPasswordRequirements().subscribe((data: any) => {
+      this.pwdReq = data;
+    });
+  }
+
+  checkPasswords(group: AbstractControl): ValidationErrors | null {
+    const pwd1 = group.get('password1')?.value;
+    const pwd2 = group.get('password2')?.value;
+
+    return (pwd1 === pwd2) ? null : { different: true };
+  }
+
+  havePasswordConditions(): boolean {
+    return !!(this.pwdReq && (this.pwdReq.requireNumber || this.pwdReq.requireUppercase || this.pwdReq.requireNonAlphanumeric));
   }
 
   submit(): void {
-    
+    if (!this.userForm.valid) return;
+
+    const pwd = this.userForm.get('passwordCheck')?.get('password1')?.value;
+
+    this.api.checkPassword(pwd).pipe(
+      switchMap(() => {
+        const user: User = this.userForm.value;
+        user.password = pwd;
+
+        return this.api.createUser(user);
+      }),
+      catchError((err: HttpErrorResponse) => {
+        const error = err.error;
+
+        if (error.msg === 'USER_FIELD') {
+          if (error.data.field === 'username') {
+            this.errors.username = true;
+            this.wizardStart = 0;
+          }
+          else if (error.data.field === 'email') {
+            this.errors.email = true;
+            this.wizardStart = 1;
+          }
+        }
+
+        else if (error.msg === 'PASSWD_INVALID') {
+          this.wizardStart = 2;
+
+          if (!error.data.comp.minLength) this.errors.pwd.length = true;
+          if (!error.data.comp.hasUppercase) this.errors.pwd.uppercase = true;
+          if (!error.data.comp.hasNumber) this.errors.pwd.numbers = true;
+          if (!error.data.comp.hasNonAlphanumeric) this.errors.pwd.nonAlphanumeric = true;
+        }
+
+        return of(false);
+      })
+    )
+    .subscribe((data: any) => {
+      if (data === false)
+        console.log(this.errors);
+      else this.router.navigate(['/']);
+    });
   }
 }

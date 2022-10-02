@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ContentChild, ContentChildren, Input, OnInit, QueryList } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, ContentChildren, Input, OnInit, QueryList, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WizardHeaderComponent } from '../wizard-header/wizard-header.component';
 import { PageComponent } from '../page/page.component';
@@ -27,6 +27,10 @@ export class WizardComponent implements OnInit {
 
   ngAfterViewChecked(): void {
     this.cdr.detectChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['start']) this.currentIndex = changes['start'].currentValue;
   }
 
   navigateBack(): void {
