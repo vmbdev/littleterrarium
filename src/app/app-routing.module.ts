@@ -14,6 +14,9 @@ import { PhotoAddComponent } from './photo/photo-add/photo-add.component';
 import { UserRegisterComponent } from './user/user-register/user-register.component';
 import { PlantAddComponent } from './plant/plant-add/plant-add.component';
 import { PlantEditSoilComponent } from './plant/plant-edit-soil/plant-edit-soil.component';
+import { PlantAllComponent } from './plant/plant-all/plant-all.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { GreenHomeComponent } from './green-home/green-home/green-home.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,7 +25,8 @@ const routes: Routes = [
   {
     path: 'user', component: DefaultLayoutComponent,
     children: [
-      { path: 'register', component: UserRegisterComponent }
+      { path: 'register', component: UserRegisterComponent },
+      { path: 'edit', component: UserEditComponent }
     ]
   },
   {
@@ -37,6 +41,7 @@ const routes: Routes = [
   {
     path: 'plant', component: DefaultLayoutComponent,
     children: [
+      { path: 'all', component: PlantAllComponent },
       { path: 'create/:locationId', component: PlantAddComponent },
       { path: 'edit/:plantId', component: PlantAddComponent },
       { path: 'edit/:plantId/soil', component: PlantEditSoilComponent },
@@ -49,6 +54,12 @@ const routes: Routes = [
       { path: 'create/:plantId', component: PhotoAddComponent },
       { path: 'edit/:photoId', component: PhotoAddComponent },
       { path: ':photoId', component: PhotoComponent },
+    ]
+  },
+  {
+    path: 'greenhome', component: DefaultLayoutComponent,
+    children: [
+      { path: '', component: GreenHomeComponent }
     ]
   },
   { path: 'photo/:photoId', component: PhotoComponent },

@@ -1,8 +1,15 @@
 <nav class="mainnav">
   <div class="mainnav__left">
-    <div class="mainnav__item"><a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a></div>
+    <div class="mainnav__brand">
+      <a routerLink="/" routerLinkActive="active" ariaCurrentWehnActive="page">
+        <img src="/assets/logo-h-sm.jpg">
+      </a>
+    </div>
   </div>
   <div class="mainnav__right">
+    <div class="mainnav__item"><a routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">Home</a></div>
+    <div class="mainnav__item"><a routerLink="/plant/all" routerLinkActive="active" ariaCurrentWhenActive="page">Plants</a></div>
+    <div class="mainnav__item">Pending Tasks</div>
     <div class="mainnav__item">
       <userbox></userbox>
     </div>

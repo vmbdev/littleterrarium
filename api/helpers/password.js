@@ -12,7 +12,7 @@ const compare = (password, hash) => {
 const check = (password) => {
   
   const arrPasswd = [...password];
-  let minLength = (password.length >= passwordConfig.length);
+  let minLength = (password.length >= passwordConfig.minLength);
   let hasUppercase = !passwordConfig.requireUppercase;
   let hasNumber = !passwordConfig.requireNumber;
   let hasNonAlphanumeric = !passwordConfig.requireNonAlphanumeric;

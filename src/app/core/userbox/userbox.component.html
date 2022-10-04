@@ -1,6 +1,21 @@
-<div class="userbox" *ngIf="authService.signedIn$ | async; else notSignedIn">
-  <a routerLink="/logout" routerLinkActive="active" ariaCurrentWhenActive="page">Hi {{ user?.username }}</a>
+<div class="userbox" (mouseover)="enableMenu()" (mouseout)="disableMenu()" *ngIf="authService.signedIn$ | async; else notSignedIn">
+  <div class="userbox__user">
+    <div class="userbox__avatar"></div>
+    <div class="userbox__link">
+      <a routerLink="/logout" routerLinkActive="active" ariaCurrentWhenActive="page">Hi <b>{{ user?.username }}</b></a>
+    </div>
+  </div>
+  <div class="userbox__menu" [ngClass]="{ 'userbox__menu-hidden' : !menuVisible }">
+    <div class="userbox__menulink">
+      <a routerLink="/user/edit" routerLinkActive="active" ariaCurrentWhenActive="page">Your profile</a>
+    </div>
+    <div class="userbox__menulink">
+      <a routerLink="/logout" routerLinkActive="active" ariaCurrentWhenActive="page">Log out</a>
+    </div>
+  </div>
 </div>
 <ng-template #notSignedIn>
-  <a routerLink="/signin" routerLinkActive="active" ariaCurrentWhenActive="page">Sign in</a>
+  <div class="userbox__link">
+    <a routerLink="/signin" routerLinkActive="active" ariaCurrentWhenActive="page">Sign in</a>
+  </div>
 </ng-template>

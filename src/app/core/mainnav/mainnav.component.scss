@@ -3,27 +3,40 @@
 .mainnav {
   display: flex;
   flex-direction: row;
-  border: 1px solid black;
-  padding: 15px;
+  border-bottom: 1px solid darken(#82b04d, 25%);
   margin-bottom: 25px;
+  background-color: #82b04d;
 
   &__left, &__right {
     display: flex;
     flex-direction: row;
-    gap: 10px;
+    gap: 40px;
+    align-items: center;
   }
 
   &__left {
     flex: 1;
   }
 
+  &__right {
+    margin-right: 20px;
+  }
+
   &__item {
-    
+    font-size: 14pt;
+    font-weight: 500;
     a {
       @include t.themify {
         color: t.theme(link_color);;
       }
       text-decoration: none;
+    }
+  }
+
+  &__brand {
+
+    img {
+      max-height: 80px;
     }
   }
 }

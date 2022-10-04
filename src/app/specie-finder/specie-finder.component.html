@@ -12,8 +12,8 @@
   </div>
 
   <div
-    [ngClass]="{'sf__results-hidden': (results.length === 0) || (resultsHidden) }"
     class="sf__results"
+    [ngClass]="{'sf__results-hidden': (results.length === 0) || (resultsHidden) }"
   >
     <div *ngFor="let specie of results" class="sf__item" (click)="selectSpecie(specie.id, specie.name)">
       <div class="sf__image"></div>
@@ -22,6 +22,6 @@
         <div *ngIf="specie.commonName" class="sf__subtitle" [innerHtml]="specie.name | highlight:currentSearch"></div>
       </div>
     </div>
-
   </div>
+  
 </div>

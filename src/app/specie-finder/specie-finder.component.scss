@@ -2,10 +2,8 @@
 @use 'src/styles/theming.scss' as t;
 
 .sf {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  
+  position: relative;
+
   &__searchbox {
     border: 1px solid rgb(118, 118, 118);
     width: 400px;
@@ -14,7 +12,15 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    position: relative;
+    text-align: center;
 
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+
+    margin-bottom: 0 !important;
   }
   
   &__search {
@@ -31,6 +37,7 @@
   }
 
   &__results {
+    position: absolute;
     background-color: white;
     border: 1px solid black;
     width: 400px;
@@ -38,6 +45,7 @@
     margin-right: auto;
     left: 0;
     right: 0;
+
     text-align: left;
 
     &-hidden {

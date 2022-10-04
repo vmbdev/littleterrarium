@@ -129,6 +129,10 @@ export class ApiService {
    * Plant related calls
    */
 
+  getPlants(): Observable<Plant[]> {
+    return this.http.get<Plant[]>(this.endpoint('plant'));
+  }
+
   getPlant(id: number): Observable<Plant> {
     return this.http.get<Plant>(this.endpoint(`plant/${id}`)).pipe(
       map(data => data),

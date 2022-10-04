@@ -55,7 +55,16 @@
         font-style: italic;
         color: lighten(black, 75%)
       }
+
+      &.ng-dirty.ng-invalid {
+        outline: 2px solid red;
+        border: 1px solid red;
+      }
     }
+  }
+
+  &__errormsg {
+    color: red;
   }
 
   &__date {

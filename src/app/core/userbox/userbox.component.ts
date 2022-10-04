@@ -10,6 +10,7 @@ import { ApiService } from '../../shared/api/api.service';
 })
 export class UserboxComponent implements OnInit {
   user?: User;
+  menuVisible: boolean = false;
 
   constructor(
     public authService: AuthService,
@@ -22,6 +23,14 @@ export class UserboxComponent implements OnInit {
         this.apiService.getCurrentUser().subscribe((user: User) => { this.user = user });
       }
     });
+  }
+
+  enableMenu(): void {
+    this.menuVisible = true;
+  }
+
+  disableMenu(): void {
+    this.menuVisible = false;
   }
 
 }

@@ -17,7 +17,7 @@ export const files = {
 }
 
 export const password = {
-  length: 8,
+  minLength: 8,
   requireUppercase: true,
   requireNumber: true,
   requireNonAlphanumeric: true

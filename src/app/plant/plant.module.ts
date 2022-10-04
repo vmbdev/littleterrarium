@@ -17,6 +17,7 @@ import { QuickModalModule } from '../quick-modal/quick-modal.module';
 import { PlantEditWateringComponent } from './plant-edit-watering/plant-edit-watering.component';
 import { PlantEditFertilizerComponent } from './plant-edit-fertilizer/plant-edit-fertilizer.component';
 import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.component';
+import { PlantAllComponent } from './plant-all/plant-all.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.compon
     PlantAddComponent,
     PlantEditWateringComponent,
     PlantEditFertilizerComponent,
-    PlantEditSoilComponent
+    PlantEditSoilComponent,
+    PlantAllComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +45,8 @@ import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.compon
   ],
   exports: [
     PlantListComponent,
-    PlantAddComponent
+    PlantAddComponent,
+    PlantAllComponent
   ]
 })
 export class PlantModule { }

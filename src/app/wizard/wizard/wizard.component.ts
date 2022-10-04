@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ContentChild, ContentChildren, Input, OnInit, QueryList, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { WizardHeaderComponent } from '../wizard-header/wizard-header.component';
 import { PageComponent } from '../page/page.component';
@@ -11,9 +11,10 @@ import { PageComponent } from '../page/page.component';
 export class WizardComponent implements OnInit {
   @ContentChildren(PageComponent, { descendants: true }) pageList!: QueryList<PageComponent>;
   @ContentChild(WizardHeaderComponent) wizardHeader?: WizardHeaderComponent;
-  // @ContentChild(FormGroup)
   @Input() form?: FormGroup;
   @Input() start?: number = 0;
+  @Input() moveTo: number | null = null;
+  @Output() indexChange = new EventEmitter();
   currentIndex: number = 0;
 
   constructor(private cdr: ChangeDetectorRef) {}
@@ -22,7 +23,7 @@ export class WizardComponent implements OnInit {
   }
 
   ngAfterContentInit(): void {
-    if (this.start) this.currentIndex = this.start;
+    if (this.start) this.setIndex(this.start);
   }
 
   ngAfterViewChecked(): void {
@@ -30,11 +31,18 @@ export class WizardComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['start']) this.currentIndex = changes['start'].currentValue;
+    if (changes['moveTo'] && +changes['moveTo'].currentValue) { 
+      this.setIndex(changes['moveTo'].currentValue);
+    }
+  }
+
+  setIndex(value: number): void {
+    this.currentIndex = value;
+    this.indexChange.emit();
   }
 
   navigateBack(): void {
-    if (this.currentIndex > 0) this.currentIndex--;
+    if (this.currentIndex > 0) this.setIndex(this.currentIndex - 1);
   }
 
   navigateNext(): void {
@@ -53,6 +61,9 @@ export class WizardComponent implements OnInit {
         }
       }
     }
-    if (!validationErrors && (this.currentIndex < (this.pageList.toArray().length - 1))) this.currentIndex++;
+
+    if (!validationErrors && (this.currentIndex < (this.pageList.toArray().length - 1))) {
+      this.setIndex(this.currentIndex + 1);
+    }
   }
 }

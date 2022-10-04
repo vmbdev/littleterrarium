@@ -13,8 +13,8 @@ import { ApiService } from 'src/app/shared/api/api.service';
 })
 export class UserRegisterComponent implements OnInit {
   userForm: FormGroup;
-  pwdReq: any;
-  wizardStart: number = 0;
+  pwdReq?: any = null;
+  wizardPage: number | null = null;
   errors = {
     username: false,
     email: false,
@@ -33,7 +33,7 @@ export class UserRegisterComponent implements OnInit {
   ) {
     this.userForm = this.fb.group({
       username: ['', Validators.required],
-      email: ['', Validators.compose([Validators.required, Validators.email, Validators.pattern(/^\S+@\S+\.\S+$/i)])],
+      email: ['', Validators.compose([Validators.required, Validators.pattern(/^\S+@\S+\.\S+$/i)])],
       passwordCheck: this.fb.group({
         password1: ['', Validators.required],
         password2: ['', Validators.required]
@@ -51,11 +51,24 @@ export class UserRegisterComponent implements OnInit {
     const pwd1 = group.get('password1')?.value;
     const pwd2 = group.get('password2')?.value;
 
-    return (pwd1 === pwd2) ? null : { different: true };
+    if (pwd1 !== pwd2) return { different: true };
+    
+    return null;
   }
 
   havePasswordConditions(): boolean {
     return !!(this.pwdReq && (this.pwdReq.requireNumber || this.pwdReq.requireUppercase || this.pwdReq.requireNonAlphanumeric));
+  }
+
+  /**
+   * Reset the wizard page so that we can move to it even if it's the same as previously
+   */
+  indexChange(): void {
+    this.wizardPage = null;
+  }
+
+  moveWizardPage(value: number | null): void {
+    this.wizardPage = value;
   }
 
   submit(): void {
@@ -76,16 +89,16 @@ export class UserRegisterComponent implements OnInit {
         if (error.msg === 'USER_FIELD') {
           if (error.data.field === 'username') {
             this.errors.username = true;
-            this.wizardStart = 0;
+            this.moveWizardPage(0);
           }
           else if (error.data.field === 'email') {
             this.errors.email = true;
-            this.wizardStart = 1;
+            this.moveWizardPage(1);
           }
         }
 
         else if (error.msg === 'PASSWD_INVALID') {
-          this.wizardStart = 2;
+          this.moveWizardPage(2);
 
           if (!error.data.comp.minLength) this.errors.pwd.length = true;
           if (!error.data.comp.hasUppercase) this.errors.pwd.uppercase = true;
