@@ -13,14 +13,14 @@ export class UserboxComponent implements OnInit {
   menuVisible: boolean = false;
 
   constructor(
-    public authService: AuthService,
-    private apiService: ApiService
+    public auth: AuthService,
+    private api: ApiService
   ) { }
 
   ngOnInit(): void {
-    this.authService.signedIn$.subscribe((signedIn: boolean) => {
+    this.auth.signedIn$.subscribe((signedIn: boolean) => {
       if (signedIn) {
-        this.apiService.getCurrentUser().subscribe((user: User) => { this.user = user });
+        this.api.getCurrentUser().subscribe((user: User) => { this.user = user });
       }
     });
   }

@@ -1,0 +1,11 @@
+.breadcrumb {
+
+  .breadcrumb__link {
+    display: inline-block;
+
+    &:not(:last-child)::after {
+      content: '>';
+      margin-right: 3px;
+    }
+  }
+}

@@ -9,15 +9,15 @@ import { ApiService } from '../../shared/api/api.service';
 export class AuthService {
   signedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  constructor(private apiService: ApiService) {
-    this.apiService.getCurrentUser().subscribe({
+  constructor(private api: ApiService) {
+    this.api.getCurrentUser().subscribe({
       next: () => { this.signedIn$.next(true) },
       error: () => { this.signedIn$.next(false) }
     });
   }
 
   signIn(username: string, password: string): Observable<any> {
-    return this.apiService.signIn(username, password).pipe(
+    return this.api.signIn(username, password).pipe(
       map(res => {
         this.signedIn$.next(true);
         return res;
@@ -32,6 +32,6 @@ export class AuthService {
   logOut(): Observable<any> {
     this.signedIn$.next(false);
   
-    return this.apiService.logOut().pipe(catchError(() => of(null)));
+    return this.api.logOut().pipe(catchError(() => of(null)));
   }
 }

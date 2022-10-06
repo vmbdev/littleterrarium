@@ -53,7 +53,6 @@ export class SpecieFinderComponent implements OnInit {
     this.selectSpecieId.emit(id);
     this.inputValue = name;
     this.hideResults();
-    console.log(id);
   }
 
 }

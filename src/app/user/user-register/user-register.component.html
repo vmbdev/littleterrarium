@@ -27,13 +27,22 @@
       <page-description>
         <p><b>We're almost there</b>. Last but not least, a <b>password</b> to protect your access</p>
         <p>
-          Password must be at least <b>{{ pwdReq?.minLength }} characters</b> long
           <ng-container *ngIf="havePasswordConditions()">
-            and contain:
+            Password must contain:
             <ul>
-              <li>{{ pwdReq.requireUppercase ? '1 uppercase' : '' }}</li>
-              <li>{{ pwdReq.requireNumber ? '1 number' : '' }}</li>
-              <li>{{ pwdReq.requireUppercase ? '1 non-alphanumeric character' : '' }}</li>
+
+              <li [ngClass]="{ 'form__errormsg': userForm.get('passwordCheck')?.get('password')?.hasError('minLength') }">
+                Password must be at least <b>{{ pwdReq?.minLength }} characters</b> long
+              </li>
+              <li [ngClass]="{ 'form__errormsg': userForm.get('passwordCheck')?.get('password')?.hasError('missingUppercase') }">
+                {{ pwdReq.requireUppercase ? 'One uppercase' : '' }}
+              </li>
+              <li [ngClass]="{ 'form__errormsg': userForm.get('passwordCheck')?.get('password')?.hasError('missingNumber') }">
+                {{ pwdReq.requireNumber ? 'One number' : '' }}
+              </li>
+              <li [ngClass]="{ 'form__errormsg': userForm.get('passwordCheck')?.get('password')?.hasError('missingNonAlphanumeric') }">
+                {{ pwdReq.requireUppercase ? 'One non-alphanumeric character' : '' }}
+              </li>
             </ul>
           </ng-container>
         </p>
@@ -41,7 +50,7 @@
 
       <ng-container formGroupName="passwordCheck">
         <div class="form__textinput">
-          <input type="password" formControlName="password1" placeholder="Your password">
+          <input type="password" formControlName="password" placeholder="Your password">
         </div>
         <div class="form__textinput">
           <input type="password" formControlName="password2" placeholder="Again, your password">

@@ -2,7 +2,7 @@
   <picturebox *ngIf="locationId" [add]="true" [link]="['/plant','create', locationId]"></picturebox>
 
   <div class="plant-list__plant" *ngFor="let pic of pictures">
-    <a routerLink="/plant/{{ pic.id }}" routerLinkActive="active" ariaCurrentWhenActive="page">
+    <a routerLink="/plant/{{ pic.id }}">
       <picturebox [image]="pic.image" [contentBelow]="true">
         {{ pic.name }}
       </picturebox>

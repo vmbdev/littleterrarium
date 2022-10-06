@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 import { Plant, Condition } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 import { __values } from 'tslib';
@@ -21,7 +22,8 @@ export class PlantComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private breadcrumb: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +34,10 @@ export class PlantComponent implements OnInit {
       this.apiService.getPlant(this.id).subscribe({
         next: (plant: Plant) => {
           this.plant = plant;
+          this.breadcrumb.setNavigation([
+            { name: this.plant.customName, link: ['/plant', this.id] }
+          ], true);
+
           this.isValidId = true;
         },
         error: (error) => {

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from 'src/app/intefaces';
+import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
@@ -16,7 +17,8 @@ export class LocationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private apiService: ApiService
+    private api: ApiService,
+    private breadcrumb: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -26,8 +28,14 @@ export class LocationComponent implements OnInit {
     if (this.id) {
       this.isValidId = true;
 
-      this.apiService.getLocation(this.id, true).subscribe({
-        next: (data) => { this.location = data },
+      this.api.getLocation(this.id, true).subscribe({
+        next: (data) => {
+          this.location = data;
+
+          this.breadcrumb.setNavigation([
+            { name: this.location.name, link: ['/location', this.id] },
+          ])
+        },
         error: (error) => {
           if (error.msg === 'LOCATION_NOT_FOUND') this.isValidId = false;
         }
@@ -41,7 +49,7 @@ export class LocationComponent implements OnInit {
   }
 
   delete(): void {
-    this.apiService.deleteLocation(this.id).subscribe({
+    this.api.deleteLocation(this.id).subscribe({
       next: (data) => {
         if (data.msg === 'LOCATION_REMOVED') this.router.navigate(['/']);
       },

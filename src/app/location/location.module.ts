@@ -11,6 +11,7 @@ import { FileUploaderModule } from '../file-uploader/file-uploader.module';
 import { PictureBoxModule } from '../picture-box/picture-box.module';
 import { WizardModule } from '../wizard/wizard.module';
 import { ToolboxModule } from '../toolbox/toolbox.module';
+import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ToolboxModule } from '../toolbox/toolbox.module';
     FileUploaderModule,
     PictureBoxModule,
     WizardModule,
-    ToolboxModule
+    ToolboxModule,
+    BreadcrumbModule
   ],
   exports: [
     LocationListComponent,

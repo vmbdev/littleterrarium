@@ -13,7 +13,7 @@ export class WizardComponent implements OnInit {
   @ContentChild(WizardHeaderComponent) wizardHeader?: WizardHeaderComponent;
   @Input() form?: FormGroup;
   @Input() start?: number = 0;
-  @Input() moveTo: number | null = null;
+  @Input() moveTo: number | undefined = undefined;
   @Output() indexChange = new EventEmitter();
   currentIndex: number = 0;
 
@@ -31,7 +31,7 @@ export class WizardComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['moveTo'] && +changes['moveTo'].currentValue) { 
+    if (changes['moveTo'] && (changes['moveTo'].currentValue !== undefined)) { 
       this.setIndex(changes['moveTo'].currentValue);
     }
   }

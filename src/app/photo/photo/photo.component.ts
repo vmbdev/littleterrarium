@@ -1,7 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 import { Photo } from 'src/app/intefaces';
 import { ApiService } from 'src/app/shared/api/api.service';
+import * as dayjs from 'dayjs';
+import * as LocalizedFormat from 'dayjs/plugin/localizedFormat';
+
 
 @Component({
   selector: 'photo',
@@ -15,7 +19,8 @@ export class PhotoComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private breadcrumb: BreadcrumbService
   ) { }
 
   ngOnInit(): void {
@@ -26,7 +31,15 @@ export class PhotoComponent implements OnInit {
       this.isValidId = true;
 
       this.apiService.getPhoto(this.id).subscribe({
-        next: (data) => { this.photo = data },
+        next: (data) => {
+          this.photo = data;
+
+          dayjs.extend(LocalizedFormat);
+          this.breadcrumb.setNavigation([
+            { name: dayjs(this.photo.takenAt).format('LL'), link: ['/photo', this.id] }
+          ], true);
+
+        },
         error: (error) => {
           if (error.msg === 'PLANT_NOT_FOUND') this.isValidId = false;
         }

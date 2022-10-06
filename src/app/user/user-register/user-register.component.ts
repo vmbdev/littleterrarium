@@ -14,17 +14,8 @@ import { ApiService } from 'src/app/shared/api/api.service';
 export class UserRegisterComponent implements OnInit {
   userForm: FormGroup;
   pwdReq?: any = null;
-  wizardPage: number | null = null;
-  errors = {
-    username: false,
-    email: false,
-    pwd: {
-      length: false,
-      uppercase: false,
-      numbers: false,
-      nonAlphanumeric: false
-    }
-  }
+  wizardPage: number | undefined = undefined;
+  errors: any = {};
 
   constructor(
     private api: ApiService,
@@ -35,10 +26,12 @@ export class UserRegisterComponent implements OnInit {
       username: ['', Validators.required],
       email: ['', Validators.compose([Validators.required, Validators.pattern(/^\S+@\S+\.\S+$/i)])],
       passwordCheck: this.fb.group({
-        password1: ['', Validators.required],
+        password: ['', [Validators.required, this.checkPasswordStrength.bind(this)]],
         password2: ['', Validators.required]
-      }, { validators: this.checkPasswords }),
-    })
+      }, { validators: this.checkPasswordsEqual }),
+    });
+
+    this.resetErrors();
   }
 
   ngOnInit(): void {
@@ -47,13 +40,42 @@ export class UserRegisterComponent implements OnInit {
     });
   }
 
-  checkPasswords(group: AbstractControl): ValidationErrors | null {
-    const pwd1 = group.get('password1')?.value;
+  resetErrors(): void {
+    this.errors = {
+      username: false,
+      email: false,
+      pwd: {
+        length: false,
+        uppercase: false,
+        numbers: false,
+        nonAlphanumeric: false
+      }
+    }
+  }
+
+  checkPasswordsEqual(group: AbstractControl): ValidationErrors | null {
+    const pwd1 = group.get('password')?.value;
     const pwd2 = group.get('password2')?.value;
 
     if (pwd1 !== pwd2) return { different: true };
-    
+
     return null;
+  }
+
+  checkPasswordStrength(pwd: AbstractControl): ValidationErrors | null {
+    const value = pwd.value;
+    const errorObj: ValidationErrors = {};
+
+    if (this.pwdReq) {
+      if (value.length < this.pwdReq.minLength) errorObj['minLength'] = true;
+      if (this.pwdReq.requireUppercase && !value.match(/.*([A-Z]).*/)) errorObj['missingUppercase'] = true;
+      if (this.pwdReq.requireNumber && !value.match(/.*(\d).*/)) errorObj['missingNumber'] = true;
+      if (this.pwdReq.requireNonAlphanumeric && value.match(/^([a-zA-Z0-9]+)?$/)) {
+        errorObj['missingNonAlphanumeric'] = true;
+      }
+    }
+
+    return (Object.keys(errorObj).length > 0) ? errorObj : null;
   }
 
   havePasswordConditions(): boolean {
@@ -64,17 +86,19 @@ export class UserRegisterComponent implements OnInit {
    * Reset the wizard page so that we can move to it even if it's the same as previously
    */
   indexChange(): void {
-    this.wizardPage = null;
+    this.wizardPage = undefined;
   }
 
-  moveWizardPage(value: number | null): void {
+  moveWizardPage(value: number | undefined): void {
     this.wizardPage = value;
   }
 
   submit(): void {
     if (!this.userForm.valid) return;
 
-    const pwd = this.userForm.get('passwordCheck')?.get('password1')?.value;
+    this.resetErrors();
+
+    const pwd = this.userForm.get('passwordCheck')?.get('password')?.value;
 
     this.api.checkPassword(pwd).pipe(
       switchMap(() => {

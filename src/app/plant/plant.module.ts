@@ -18,6 +18,7 @@ import { PlantEditWateringComponent } from './plant-edit-watering/plant-edit-wat
 import { PlantEditFertilizerComponent } from './plant-edit-fertilizer/plant-edit-fertilizer.component';
 import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.component';
 import { PlantAllComponent } from './plant-all/plant-all.component';
+import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { PlantAllComponent } from './plant-all/plant-all.component';
     FileUploaderModule,
     SpecieFinderModule,
     ToolboxModule,
-    QuickModalModule
+    QuickModalModule,
+    BreadcrumbModule
   ],
   exports: [
     PlantListComponent,
