@@ -10,10 +10,10 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
+  authInvalid: boolean = false;
   controls = {
     usernameEmpty: false,
     passwordEmpty: false,
-    httpError: '',
   }
 
   constructor(
@@ -30,7 +30,7 @@ export class SigninComponent implements OnInit {
   resetControls() {
     this.controls.usernameEmpty = false;
     this.controls.passwordEmpty = false;
-    this.controls.httpError = '';
+    this.authInvalid = false;
   }
 
   onSubmit(signinForm: any) {
@@ -47,8 +47,8 @@ export class SigninComponent implements OnInit {
         next: () => {
           this.router.navigate(['/']);
         },
-        error: (HttpError: HttpErrorResponse) => {
-          if (HttpError.error.msg) this.controls.httpError = HttpError.error.msg;
+        error: (err: any) => {
+          if (err.msg && (err.msg === 'USER_DATA_INCORRECT')) this.authInvalid = true;
         }
       });
     }

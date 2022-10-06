@@ -13,7 +13,6 @@ export class BreadcrumbService {
     private route: ActivatedRoute,
     private router: Router
   ) {
-    // FIXME: identify pages and allow appending to a certain one (i.e. plants to location)
     this.router.events
     .pipe(filter((event: Event): event is NavigationEnd => event instanceof NavigationEnd))
     .subscribe(() => {
@@ -22,8 +21,22 @@ export class BreadcrumbService {
     })
   }
 
-  setNavigation(links: any[], append: boolean = false): void {
-    if (append) this.links$.next(this.prev.concat([...links]));
+  setNavigation(links: any[], options: any = {}): void {
+    if (options.attachTo) {
+      const newLinks = [];
+      let found = false;
+      let i = 0;
+
+      while ((i < this.prev.length) && !found) {
+        newLinks.push(this.prev[i]);
+
+        if (this.prev[i].id === options.attachTo) found = true;
+
+        i++;
+      }
+      
+      this.links$.next(newLinks.concat([...links]));
+    }
     else this.links$.next(links);
   }
 

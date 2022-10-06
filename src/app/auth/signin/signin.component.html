@@ -12,6 +12,9 @@
         <p>Password</p>
         <input type="password" name="password" placeholder="Password" [ngClass]="{ 'form__error': controls.passwordEmpty }" required ngModel>
       </div>
+      <div *ngIf="authInvalid" class="signinForm__center form__errormsg">
+        Sorry, the credentials are not valid.
+      </div>
       <div class="form__submit">
         <button [disabled]="!signinForm.valid">Sign in</button>
       </div>
@@ -19,8 +22,10 @@
         <p>
           <a routerLink="/user/register">Don't have an account? <b>Sign up!</b></a>
         </p>
+        <p>
+          <a routerLink="/user/retrievepwd">Forgot your password?</a>
+        </p>
       </div>
-      <div class="signin__error">{{ this.controls.httpError }}</div>
     </div>
   </div>
 </form>

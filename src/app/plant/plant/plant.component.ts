@@ -35,8 +35,8 @@ export class PlantComponent implements OnInit {
         next: (plant: Plant) => {
           this.plant = plant;
           this.breadcrumb.setNavigation([
-            { name: this.plant.customName, link: ['/plant', this.id] }
-          ], true);
+            { id: 'plant', name: this.plant.customName, link: ['/plant', this.id] }
+          ], { attachTo: 'location' });
 
           this.isValidId = true;
         },

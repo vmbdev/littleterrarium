@@ -36,8 +36,8 @@ export class PhotoComponent implements OnInit {
 
           dayjs.extend(LocalizedFormat);
           this.breadcrumb.setNavigation([
-            { name: dayjs(this.photo.takenAt).format('LL'), link: ['/photo', this.id] }
-          ], true);
+            { id: 'photo', name: dayjs(this.photo.takenAt).format('LL'), link: ['/photo', this.id] }
+          ], { attachTo: 'plant' })
 
         },
         error: (error) => {

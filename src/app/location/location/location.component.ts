@@ -33,7 +33,7 @@ export class LocationComponent implements OnInit {
           this.location = data;
 
           this.breadcrumb.setNavigation([
-            { name: this.location.name, link: ['/location', this.id] },
+            { id: 'location', name: this.location.name, link: ['/location', this.id] },
           ])
         },
         error: (error) => {

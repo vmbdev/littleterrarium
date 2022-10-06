@@ -1,4 +1,4 @@
-<div class="breadcrumb" *ngIf="breadcrumb.links$">
+<div class="breadcrumb" *ngIf="breadcrumb.links$ | async">
   <div class="breadcrumb__link"><a routerLink="/">Home</a></div>
 
   <div *ngFor="let link of breadcrumb.links$ | async" class="breadcrumb__link">
