@@ -1,7 +1,0 @@
-@use 'src/styles/variables.scss' as var;
-
-.location-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, var.$pictureBoxSize);
-  gap: 15px;
-}

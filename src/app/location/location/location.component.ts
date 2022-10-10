@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location } from 'src/app/intefaces';
+import { Location, Light } from 'src/app/intefaces';
 import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 import { ApiService } from 'src/app/shared/api/api.service';
 
@@ -57,5 +57,34 @@ export class LocationComponent implements OnInit {
         if (err.msg === 'LOCATION_NOT_VALID') console.log('error');
       }
     })
+  }
+
+  getLightName(): string {
+    console.log(Light[this.location.light]);
+    return Light[this.location.light].desc;
+  }
+
+  getLightClass(): string {
+    let modifier: string;
+
+    if (this.location.light === 'FULLSUN') modifier = 'sun';
+    else if (this.location.light === 'PARTIALSUN') modifier = 'partial';
+    else modifier = 'shade';
+
+    return `location__light-${modifier}`;
+  }
+
+  getVisibilityClass(): string {
+    let modifier: string;
+    modifier = this.location.public ? 'public' : 'private';
+    
+    return `location__visibility-${modifier}`;
+  }
+
+  getPlantsClass(): string {
+    let modifier: string;
+    modifier = (this.location.plants && (this.location.plants.length > 0)) ? 'exists' : 'empty';
+
+    return `location__plants-${modifier}`;
   }
 }

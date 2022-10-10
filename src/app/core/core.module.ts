@@ -6,12 +6,14 @@ import { SharedModule } from '../shared/shared.module';
 import { UserboxComponent } from './userbox/userbox.component';
 import { BreadcrumbNavigationComponent } from './breadcrumb-navigation/breadcrumb-navigation.component';
 import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
+import { FooternavComponent } from './footernav/footernav.component';
 
 @NgModule({
   declarations: [
     MainnavComponent,
     UserboxComponent,
     BreadcrumbNavigationComponent,
+    FooternavComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
   ],
   exports: [
     MainnavComponent,
-    UserboxComponent
+    UserboxComponent,
+    FooternavComponent
   ]
 })
 export class CoreModule { }

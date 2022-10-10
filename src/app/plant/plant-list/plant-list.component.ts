@@ -9,6 +9,7 @@ import { Plant } from 'src/app/intefaces';
 export class PlantListComponent implements OnInit {
   @Input() list!: Plant[];
   @Input() locationId?: number;
+  @Input() center?: boolean = false;
   pictures: any[] = [];
 
   constructor() { }

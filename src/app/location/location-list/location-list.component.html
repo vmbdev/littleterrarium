@@ -1,4 +1,4 @@
-<div class="location-list">
+<div class="picture-list picture-list-center">
   <picturebox [add]="true" [link]="['/location','create']"></picturebox>
 
   <picturebox *ngFor="let location of list" [image]="location.pictures?.thumb" [link]="['/location', location.id]">

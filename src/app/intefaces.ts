@@ -47,7 +47,7 @@ export interface Photo extends PrismaPhoto {
   images: any
 }
 
-export const Light = {
+export const Light: { [key: string]: any } = {
   ...PrismaLight,
   FULLSUN: {
     desc: 'Full sun',

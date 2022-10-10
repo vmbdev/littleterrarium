@@ -1,0 +1,17 @@
+@use 'src/styles/theming.scss' as t;
+
+.footer {
+  margin-top: 10px;
+  padding: 10px;
+  height: 5vh;
+  width: 100vw;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include t.themify {
+    background-color: t.theme(main_color);
+  }
+}

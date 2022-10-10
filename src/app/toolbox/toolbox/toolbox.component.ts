@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ContentChildren, EventEmitter, OnInit, Output, QueryList } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList } from '@angular/core';
 import { ButtonComponent } from '../button/button.component';
 
 @Component({
@@ -8,6 +8,7 @@ import { ButtonComponent } from '../button/button.component';
 })
 export class ToolboxComponent implements OnInit {
   @ContentChildren(ButtonComponent) buttons!: QueryList<ButtonComponent>;
+  @Input() title?: string;
 
   constructor(private cdr: ChangeDetectorRef) { }
 

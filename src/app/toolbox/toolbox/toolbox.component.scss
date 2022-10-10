@@ -1,6 +1,35 @@
+@use 'src/styles/theming.scss' as t;
+
 .toolbox {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+
   margin: 10px;
+  padding: 10px 10px;
+  box-sizing: border-box;
+
+  @include t.themify {
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, t.theme(main_color) 100%);
+  }
+
+  &__divider {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__title {
+    flex: 1;
+
+    display: flex;
+    align-items: center;
+
+    h1 {
+      margin: 0 ;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+  }
 }
