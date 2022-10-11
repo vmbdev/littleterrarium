@@ -1,4 +1,4 @@
-<ng-container *ngIf="plant">
+<ng-container *ngIf="isValidId">
   <quick-modal *ngIf="enableWaterEditing" (close)="toggleEditing('water')" title="Watering">
     <plant-edit-watering [plantId]="plant.id" [waterFreq]="plant.waterFreq" [waterLast]="plant.waterLast"></plant-edit-watering>
   </quick-modal>
@@ -8,8 +8,8 @@
   </quick-modal>
 </ng-container>
 
-<div *ngIf="isValidId" class="plant">
-  <toolbox>
+<div class="plant" *ngIf="isValidId">
+  <toolbox [title]="plantTitle" [subtitle]="plantSubtitle">
     <toolbox-button image="/assets/water.png" (click)="toggleEditing('water')"></toolbox-button>
     <toolbox-button image="/assets/fertilizer.png" (click)="toggleEditing('fertilizer')"></toolbox-button>
     <toolbox-button image="/assets/pot.png" (click)="editSoil()"></toolbox-button>
@@ -17,20 +17,33 @@
     <toolbox-button image="/assets/delete.png"></toolbox-button>
   </toolbox>
 
-  <p *ngIf="plant.specie">{{ plant.specie.name }}</p>
-  <p *ngIf="plant.specie?.commonName">{{ plant.specie?.commonName }}</p>
-  <p *ngIf="plant.customName">{{ plant.customName }}</p>
-  <p *ngIf="plant.description">{{ plant.description }}</p>
+  <div class="plant__description" *ngIf="plant.description">
+    {{ plant.description }}
+  </div>
+
+  <div class="plant__row">
+    <div class="plant__box plant__watering">
+      <div class="plant__boximage-water"></div>
+      <p *ngIf="plant.waterFreq">{{ plant.waterFreq }}</p>
+      <p *ngIf="plant.waterLast">{{ plant.waterLast | date }}</p>
+    </div>
+
+    <div class="plant__box plant__fertilizer">
+      <div class="plant__boximage-fertilizer"></div>
+      <p *ngIf="plant.fertFreq">{{ plant.fertFreq }}</p>
+      <p *ngIf="plant.fertLast">{{ plant.fertLast | date }}</p>
+      <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
+    </div>
+
+    <div class="plant__box plant__pot">
+      <div class="plant__boximage-pot"></div>
+      <p *ngIf="plant.potType">{{ plant.potType }}</p>
+      <p *ngIf="plant.potSize">{{ plant.potSize | unit:'in' }}</p>
+      <p *ngIf="plant.soil">{{ plant.soil }}</p>
+    </div>
+  </div>
+
   <p *ngIf="plant.condition">{{ plantCondition[plant.condition] }}</p>
-  <p *ngIf="plant.waterFreq">{{ plant.waterFreq }}</p>
-  <p *ngIf="plant.waterLast">{{ plant.waterLast | date }}</p>
-  <p *ngIf="plant.fertFreq">{{ plant.fertFreq }}</p>
-  <p *ngIf="plant.fertLast">{{ plant.fertLast | date }}</p>
-  <p *ngIf="plant.description">{{ plant.description }}</p>
-  <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
-  <p *ngIf="plant.potType">{{ plant.potType }}</p>
-  <p *ngIf="plant.potSize">{{ plant.potSize | unit:'in' }}</p>
-  <p *ngIf="plant.soil">{{ plant.soil }}</p>
   <p *ngIf="plant.public">{{ plant.public }}</p>
 
   <photo-list *ngIf="plant.photos" [plantId]="plant.id" [list]="plant.photos"></photo-list>

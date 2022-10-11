@@ -78,7 +78,6 @@ export class PlantEditSoilComponent implements OnInit {
     this.api.updatePlant(plant).subscribe({
       next: (data: any) => {
         if (data.msg === 'PLANT_UPDATED') {
-          console.log(data)
           this.router.navigate(['/plant', this.plantId]);
         }
       },

@@ -14,6 +14,7 @@ export class PlantEditFertilizerComponent implements OnInit {
   @Input() plantId!: number;
   @Input() fertFreq?: number | null;
   @Input() fertLast?: any;
+  @Input() fertType?: string; // TODO: implement fertType! forgot completely
   fertForm: FormGroup;
 
   constructor(
@@ -41,7 +42,6 @@ export class PlantEditFertilizerComponent implements OnInit {
     this.api.updatePlant(plant).subscribe({
       next: (data: any) => {
         if (data.msg === 'PLANT_UPDATED') {
-          console.log(data)
           this.router.navigate(['/plant', this.plantId]);
         }
       },

@@ -1,14 +1,8 @@
-@use 'src/styles/theming.scss' as t;
-
 .toolbox {
-
   margin: 10px;
   padding: 10px 10px;
   box-sizing: border-box;
-
-  @include t.themify {
-    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, t.theme(main_color) 100%);
-  }
+  border-bottom: 1px solid black;
 
   &__divider {
     display: flex;
@@ -17,12 +11,19 @@
 
   &__title {
     flex: 1;
-
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    // justify-items: center;
+
+    color: darken(gray, 15%);
 
     h1 {
-      margin: 0 ;
+      margin: 0;
+    }
+
+    h2 {
+      margin: 6px 0 0 0;
+      font-weight: 400;
     }
   }
 
@@ -30,6 +31,7 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    align-items: center;
     gap: 10px;
   }
 }

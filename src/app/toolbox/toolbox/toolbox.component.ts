@@ -9,6 +9,7 @@ import { ButtonComponent } from '../button/button.component';
 export class ToolboxComponent implements OnInit {
   @ContentChildren(ButtonComponent) buttons!: QueryList<ButtonComponent>;
   @Input() title?: string;
+  @Input() subtitle?: string;
 
   constructor(private cdr: ChangeDetectorRef) { }
 

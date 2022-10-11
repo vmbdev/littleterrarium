@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ToolboxComponent } from './toolbox/toolbox.component';
 import { ButtonComponent } from './button/button.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -11,7 +12,8 @@ import { ButtonComponent } from './button/button.component';
     ButtonComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    SharedModule
   ],
   exports: [
     ToolboxComponent,

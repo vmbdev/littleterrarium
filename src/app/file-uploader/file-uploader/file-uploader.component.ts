@@ -22,7 +22,6 @@ export class FileUploaderComponent implements OnInit {
     event.preventDefault();
 
     if (!this.dragOver) this.dragOver = true;
-    console.log('enter', this.dragOver)
   }
 
   dragLeave(event: Event) {
@@ -30,7 +29,6 @@ export class FileUploaderComponent implements OnInit {
     event.preventDefault();
 
     if (this.dragOver) this.dragOver = false;
-    console.log('leave', this.dragOver)
   }
 
   dropFile(event: DragEvent) {

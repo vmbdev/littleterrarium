@@ -60,7 +60,6 @@ export class LocationComponent implements OnInit {
   }
 
   getLightName(): string {
-    console.log(Light[this.location.light]);
     return Light[this.location.light].desc;
   }
 

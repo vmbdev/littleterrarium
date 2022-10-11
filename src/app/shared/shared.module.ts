@@ -7,12 +7,14 @@ import { SafeUrlPipe } from './safeurl/safeurl.pipe';
 import { NavigateBackService } from './navigateback/navigateback.service';
 import { UnitPipe } from './unit/unit.pipe';
 import { FloatingButtonComponent } from './floating-button/floating-button.component';
+import { CapitalizePipe } from './capitalize/capitalize.pipe';
 
 @NgModule({
   declarations: [
     FloatingButtonComponent,
     SafeUrlPipe,
     UnitPipe,
+    CapitalizePipe
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { FloatingButtonComponent } from './floating-button/floating-button.compo
     FloatingButtonComponent,
     SafeUrlPipe,
     UnitPipe,
+    CapitalizePipe
   ]
 })
 export class SharedModule { }

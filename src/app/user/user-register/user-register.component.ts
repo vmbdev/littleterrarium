@@ -134,9 +134,7 @@ export class UserRegisterComponent implements OnInit {
       })
     )
     .subscribe((data: any) => {
-      if (data === false)
-        console.log(this.errors);
-      else this.router.navigate(['/']);
+      if (data) this.router.navigate(['/']);
     });
   }
 }

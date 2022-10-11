@@ -4,16 +4,16 @@
     <toolbox-button image="/assets/delete.png" (click)="delete()"></toolbox-button>
   </toolbox>
 
-  <div class="location__horizontal">
-    <div class="location__picturebox">
-      <img class="location__picture" [src]="location.pictures?.mid">
+  <div class="location__vertical">
+    <div *ngIf="location.pictures" class="location__picturebox">
+      <img class="location__picture" [src]="location.pictures.mid">
     </div>
     <div class="location__info">
       <div class="location__property" [ngClass]="getLightClass()">{{ getLightName() }}</div>
       <div class="location__property" [ngClass]="getVisibilityClass()">{{ location.public ? 'Public' : 'Private'}}</div>
       <div class="location__property" [ngClass]="getPlantsClass()">
         <ng-container *ngIf="(location.plants && (location.plants.length > 0)); else noPlants">
-          We have {{ location.plants.length }} plants here
+          {{ location.plants.length }} plants here
         </ng-container>
         <ng-template #noPlants>
           No plants yet!

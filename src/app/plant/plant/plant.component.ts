@@ -14,6 +14,8 @@ export class PlantComponent implements OnInit {
   id!: number;
   isValidId: boolean = false;
   plant!: Plant;
+  plantTitle?: string;
+  plantSubtitle?: string;
   plantCondition = Condition;
   enableWaterEditing: boolean = false;
   enableFertilizerEditing: boolean = false;
@@ -21,7 +23,7 @@ export class PlantComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private apiService: ApiService,
+    private api: ApiService,
     private router: Router,
     private breadcrumb: BreadcrumbService
   ) { }
@@ -31,12 +33,20 @@ export class PlantComponent implements OnInit {
     this.id = paramId ? +paramId : NaN;
 
     if (this.id) {
-      this.apiService.getPlant(this.id).subscribe({
+      this.api.getPlant(this.id).subscribe({
         next: (plant: Plant) => {
           this.plant = plant;
           this.breadcrumb.setNavigation([
             { id: 'plant', name: this.plant.customName, link: ['/plant', this.id] }
           ], { attachTo: 'location' });
+
+          if (plant.customName) {
+            this.plantTitle = plant.customName;
+
+            if (plant.specie) this.plantSubtitle = plant.specie.name;
+          }
+          else if (plant.specie) this.plantTitle = plant.specie.name
+          else this.plantTitle = 'Unidentified plant';
 
           this.isValidId = true;
         },
