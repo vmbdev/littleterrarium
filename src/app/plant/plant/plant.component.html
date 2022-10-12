@@ -24,27 +24,26 @@
   <div class="plant__row">
     <div class="plant__box plant__watering">
       <div class="plant__boximage-water"></div>
-      <p *ngIf="plant.waterFreq">{{ plant.waterFreq }}</p>
-      <p *ngIf="plant.waterLast">{{ plant.waterLast | date }}</p>
+      <p *ngIf="plant.waterLast">Last time: {{ plant.waterLast | date }}</p>
+      <p *ngIf="plant.waterFreq">Water every {{ plant.waterFreq }} days</p>
     </div>
 
     <div class="plant__box plant__fertilizer">
       <div class="plant__boximage-fertilizer"></div>
-      <p *ngIf="plant.fertFreq">{{ plant.fertFreq }}</p>
-      <p *ngIf="plant.fertLast">{{ plant.fertLast | date }}</p>
+      <p *ngIf="plant.fertLast">Last time: {{ plant.fertLast | date }}</p>
+      <p *ngIf="plant.fertFreq">Fertilize every {{ plant.fertFreq }} days</p>
       <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
     </div>
 
     <div class="plant__box plant__pot">
       <div class="plant__boximage-pot"></div>
-      <p *ngIf="plant.potType">{{ plant.potType }}</p>
-      <p *ngIf="plant.potSize">{{ plant.potSize | unit:'in' }}</p>
-      <p *ngIf="plant.soil">{{ plant.soil }}</p>
+      <p *ngIf="plant.potType">Your pot is made of <b>{{ plant.potType }}</b>&nbsp;<span *ngIf="plant.potSize">with a size of <b>{{ plant.potSize | unit:'cm' }} cm</b></span>.</p>
+      <p *ngIf="plant.soil">Your plant has a nice soil made up of <b>{{ plant.soil }}</b>.</p>
     </div>
   </div>
 
   <p *ngIf="plant.condition">{{ plantCondition[plant.condition] }}</p>
-  <p *ngIf="plant.public">{{ plant.public }}</p>
+  <p *ngIf="plant.public">{{ plant.public ? 'Public' : 'Private' }}</p>
 
   <photo-list *ngIf="plant.photos" [plantId]="plant.id" [list]="plant.photos"></photo-list>
 </div>

@@ -1,3 +1,5 @@
+@use 'src/styles/media.scss' as m;
+
 .close-button {
   position: absolute;
   top: -15px;
@@ -11,4 +13,11 @@
   background-color: #191A19;
   border-radius: 15%;
   border: 2px solid black;
+
+  @include m.media('mobile') {
+    & {
+      top: 0;
+      right: 0;
+    }
+  }
 }

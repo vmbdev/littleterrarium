@@ -1,5 +1,6 @@
-.location {
+@use 'src/styles/media.scss' as m;
 
+.location {
   &__vertical {
     display: flex;
     flex-direction: column;
@@ -70,6 +71,12 @@
 
     &-empty::before {
       background-image: url('/assets/plants-empty.png');
+    }
+  }
+
+  @include m.media('mobile') {
+    &__picture {
+      max-width: 100%;
     }
   }
 }

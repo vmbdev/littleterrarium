@@ -1,4 +1,5 @@
 @use 'src/styles/theming.scss' as t;
+@use 'src/styles/media.scss' as m;
 
 .mainnav {
   display: flex;
@@ -38,6 +39,12 @@
 
     img {
       max-height: 80px;
+    }
+  }
+
+  @include m.media('mobile') {
+    &__right {
+      display: none;
     }
   }
 }
