@@ -43,8 +43,11 @@
   }
 
   @include m.media('mobile') {
+    & {
+      flex-direction: column;
+    }
     &__right {
-      display: none;
+      flex-direction: column;
     }
   }
 }
