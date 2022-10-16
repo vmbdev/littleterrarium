@@ -183,6 +183,10 @@ export class ApiService {
     )
   }
 
+  deletePlant(id: number): Observable<any> {
+    return this.http.delete<number>(this.endpoint(`plant/${id}`));
+  }
+
   /**
    * Photo related calls
    */

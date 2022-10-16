@@ -63,7 +63,7 @@ export const Light: { [key: string]: any } = {
   },
 }
 
-export const Condition = {
+export const Condition: { [key: string]: string } = {
   ...PrismaCondition,
   BAD: 'On the line',
   POOR: 'Holding on to life',

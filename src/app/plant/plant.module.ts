@@ -19,6 +19,8 @@ import { PlantEditFertilizerComponent } from './plant-edit-fertilizer/plant-edit
 import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.component';
 import { PlantAllComponent } from './plant-all/plant-all.component';
 import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
+import { PlusButtonModule } from '../plus-button/plus-button.module';
+import { ConfirmModalModule } from '../confirm-modal/confirm-modal.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,9 @@ import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
     SpecieFinderModule,
     ToolboxModule,
     QuickModalModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    PlusButtonModule,
+    ConfirmModalModule
   ],
   exports: [
     PlantListComponent,

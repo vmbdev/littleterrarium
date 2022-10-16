@@ -111,6 +111,18 @@
     }
   }
 
+  &__button {
+    button {
+      background-color: #42855B;
+      border: none;
+      color: white;
+      font-weight: 400;
+      font-size: 12pt;
+      width: 100px;
+      height: 40px;
+    }
+  }
+
   &-error input {
     box-shadow: 0 0 5px var.$error;
     border: 1px solid var.$error;

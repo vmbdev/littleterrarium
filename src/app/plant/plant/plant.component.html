@@ -6,6 +6,20 @@
   <quick-modal *ngIf="enableFertilizerEditing" (close)="toggleEditing('fertilizer')" title="Fertilizer">
     <plant-edit-fertilizer [plantId]="plant.id" [fertFreq]="plant.fertFreq" [fertLast]="plant.fertLast"></plant-edit-fertilizer>
   </quick-modal>
+
+  <confirm-modal *ngIf="confirmWatering" (accept)="addWater()" (cancel)="confirmWatering = false">
+    <p>This will update your <b>last time watered</b> to today.</p>
+    <p>If you haven't watered it yet, please check your soil. Never water your plants on a schedule!</p>
+  </confirm-modal>
+
+  <confirm-modal *ngIf="confirmFertilizing" (accept)="addFertilizer()" (cancel)="confirmFertilizing = false">
+    This will update your <b>last time fertilized</b> to today.
+  </confirm-modal>
+
+  <confirm-modal *ngIf="confirmDelete" (accept)="delete()" (cancel)="confirmDelete = false">
+    <p>This will remove this plant and all of its photos. Are you sure?</p>
+    <p><strong>This decision is irreversible.</strong></p>
+  </confirm-modal>
 </ng-container>
 
 <div class="plant" *ngIf="isValidId">
@@ -14,7 +28,7 @@
     <toolbox-button image="/assets/fertilizer.png" (click)="toggleEditing('fertilizer')"></toolbox-button>
     <toolbox-button image="/assets/pot.png" (click)="editSoil()"></toolbox-button>
     <toolbox-button image="/assets/edit.png" (click)="toggleEditing('all')"></toolbox-button>
-    <toolbox-button image="/assets/delete.png"></toolbox-button>
+    <toolbox-button image="/assets/delete.png" (click)="confirmDelete = true"></toolbox-button>
   </toolbox>
 
   <div class="plant__description" *ngIf="plant.description">
@@ -26,6 +40,7 @@
       <div class="plant__boximage-water"></div>
       <p *ngIf="plant.waterLast">Last time: {{ plant.waterLast | date }}</p>
       <p *ngIf="plant.waterFreq">Water every {{ plant.waterFreq }} days</p>
+      <plus-button type="add" title="Water" (click)="confirmWatering = true"></plus-button>
     </div>
 
     <div class="plant__box plant__fertilizer">
@@ -33,11 +48,12 @@
       <p *ngIf="plant.fertLast">Last time: {{ plant.fertLast | date }}</p>
       <p *ngIf="plant.fertFreq">Fertilize every {{ plant.fertFreq }} days</p>
       <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
+      <plus-button type="add" title="Fertilize" (click)="confirmFertilizing = true"></plus-button>
     </div>
 
     <div class="plant__box plant__pot">
       <div class="plant__boximage-pot"></div>
-      <p *ngIf="plant.potType">Your pot is made of <b>{{ plant.potType }}</b>&nbsp;<span *ngIf="plant.potSize">with a size of <b>{{ plant.potSize | unit:'cm' }} cm</b></span>.</p>
+      <p *ngIf="plant.potType">Your pot is made of <b>{{ plant.potType }}</b>&nbsp;<span *ngIf="plant.potSize">with a size of <b>{{ plant.potSize | unit:'cm' }}</b></span>.</p>
       <p *ngIf="plant.soil">Your plant has a nice soil made up of <b>{{ plant.soil }}</b>.</p>
     </div>
   </div>
