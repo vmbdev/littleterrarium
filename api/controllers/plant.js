@@ -182,9 +182,20 @@ const modify = async (req, res, next) => {
     }
   }
 
-  const { count } = await prisma.plant.updateMany({ where: { id: req.parser.id, ownerId: req.auth.userId }, data });
-  if (count === 1) res.send({ msg: 'PLANT_UPDATED' })
-  else next({ error: 'PLANT_NOT_VALID' });
+  try {
+    const plant = await prisma.plant.update({
+      where: {
+        id_ownerId: {
+          id: req.parser.id,
+          ownerId: req.auth.userId
+        },
+      },
+      data
+    });
+    res.send({ msg: 'PLANT_UPDATED', plant });
+  } catch (err) {
+    next({ error: 'PLANT_NOT_VALID' });
+  }
 }
 
 const remove = async (req, res, next) => {

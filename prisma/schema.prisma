@@ -86,6 +86,9 @@ model Plant {
   ownerId     Int
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+
+  // eases up operations
+  @@unique([id, ownerId])
 }
 
 // On the line -> Holding on to life -> I guess It's fine -> Looking dapper -> Prime example of its specie

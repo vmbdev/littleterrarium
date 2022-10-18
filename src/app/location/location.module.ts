@@ -12,6 +12,7 @@ import { PictureBoxModule } from '../picture-box/picture-box.module';
 import { WizardModule } from '../wizard/wizard.module';
 import { ToolboxModule } from '../toolbox/toolbox.module';
 import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
+import { ConfirmModalModule } from '../confirm-modal/confirm-modal.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
     PictureBoxModule,
     WizardModule,
     ToolboxModule,
-    BreadcrumbModule
+    BreadcrumbModule,
+    ConfirmModalModule
   ],
   exports: [
     LocationListComponent,

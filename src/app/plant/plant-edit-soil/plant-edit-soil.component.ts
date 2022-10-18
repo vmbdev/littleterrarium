@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plant } from 'src/app/intefaces';
-import { ApiService } from 'src/app/shared/api/api.service';
+import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
+import { Plant, potChoices } from 'src/app/interfaces';
+import { PlantService } from '../plant.service';
 
 @Component({
   selector: 'plant-edit-soil',
@@ -10,26 +11,16 @@ import { ApiService } from 'src/app/shared/api/api.service';
   styleUrls: ['./plant-edit-soil.component.scss']
 })
 export class PlantEditSoilComponent implements OnInit {
-  plantId!: number;
-  plant?: Plant;
+  id!: number;
   potForm: FormGroup;
-  potChoices = [
-    { id: 'LT_POT_TERRACOTTA', name: 'Terracotta', image: '/assets/pot-terracotta.jpg' },
-    { id: 'LT_POT_PLASTIC', name: 'Plastic', image: '/assets/pot-plastic.jpg' },
-    { id: 'LT_POT_CERAMIC', name: 'Ceramic', image: '/assets/pot-ceramic.jpg' },
-    { id: 'LT_POT_METAL', name: 'Metal', image: '/assets/pot-metal.jpg' },
-    { id: 'LT_POT_GLASS', name: 'Glass', image: '/assets/pot-glass.jpg' },
-    { id: 'LT_POT_WOOD', name: 'Wood', image: '/assets/pot-wood.jpg' },
-    { id: 'LT_POT_CONCRETE', name: 'Concrete', image: '/assets/pot-concrete.jpg' },
-    { id: 'LT_POT_OTHER', name: 'Other', image: '/assets/pot-other.jpg' },
-  ];
-  selectedChoice: string | null = null;
+  selectedPot: string | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
+    public plantService: PlantService,
+    private breadcrumb: BreadcrumbService
   ) {
     this.potForm = this.fb.group({
       potSize: [],
@@ -40,18 +31,21 @@ export class PlantEditSoilComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.plantId = +this.route.snapshot.params['plantId'];
+    this.id = +this.route.snapshot.params['plantId'];
 
-    if (this.plantId) {
-      this.api.getPlant(this.plantId).subscribe({
-        next: (data: Plant) => {
-          this.plant = data;
-          this.selectPot(data.potType);
+    if (this.id) {
+      this.plantService.get(this.id).subscribe({
+        next: (plant: Plant) => {
+          this.selectPot(plant.potType);
 
           this.potForm.patchValue({
-            potSize: data.potSize,
-            soil: data.soil
+            potSize: plant.potSize,
+            soil: plant.soil
           });
+
+          this.breadcrumb.setNavigation([
+            { id: 'plant-edit-soil', name: 'Edit pot and soil' }
+          ], { attachTo: 'plant' });
         }
       })
     }
@@ -59,31 +53,28 @@ export class PlantEditSoilComponent implements OnInit {
 
   selectPot(id: any): void {
     // deselect 
-    if (id === this.selectedChoice) this.selectedChoice = null;
-    else this.selectedChoice = id;
+    if (id === this.selectedPot) this.selectedPot = null;
+    else this.selectedPot = id;
 
     this.potForm.patchValue({
-      potType: this.selectedChoice
+      potType: this.selectedPot
     });
+  }
+
+  pots(): any[] {
+    return Object.keys(potChoices).map(key => { return { id: key, ...potChoices[key] } });
   }
 
   submit(): void {
     const plant: Plant = this.potForm.value;
-    plant.id = this.plantId;
+    plant.id = this.id;
 
     if (plant.potSize) {
       plant.potSize = this.potForm.value.potSizeUnits === 'in' ? plant.potSize * 2.54 : plant.potSize;
     }
     
-    this.api.updatePlant(plant).subscribe({
-      next: (data: any) => {
-        if (data.msg === 'PLANT_UPDATED') {
-          this.router.navigate(['/plant', this.plantId]);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    this.plantService.update(plant).subscribe(() => {
+      this.router.navigate(['/plant', this.id]);
+    });
   }
 }

@@ -72,4 +72,15 @@ export const Condition: { [key: string]: string } = {
   EXCELLENT: 'Prime example of its specie',
 }
 
+export const potChoices: { [key: string]: any } = {
+  LT_POT_TERRACOTTA: { name: 'Terracotta', image: '/assets/pot-terracotta.jpg' },
+  LT_POT_PLASTIC: { name: 'Plastic', image: '/assets/pot-plastic.jpg' },
+  LT_POT_CERAMIC: { name: 'Ceramic', image: '/assets/pot-ceramic.jpg' },
+  LT_POT_METAL: { name: 'Metal', image: '/assets/pot-metal.jpg' },
+  LT_POT_GLASS: { name: 'Glass', image: '/assets/pot-glass.jpg' },
+  LT_POT_WOOD: { name: 'Wood', image: '/assets/pot-wood.jpg' },
+  LT_POT_CONCRETE: { name: 'Concrete', image: '/assets/pot-concrete.jpg' },
+  LT_POT_OTHER: { name: 'Other', image: '/assets/pot-other.jpg' },
+};
+
 export { Role, UserStatus }

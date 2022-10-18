@@ -1,4 +1,4 @@
-<form [formGroup]="potForm" method="post" (submit)="submit()">
+<form *ngIf="plantService.plant$ | async as plant" [formGroup]="potForm" method="post" (submit)="submit()">
   <wizard [form]="potForm">
     <wizard-header *ngIf="plant">
       Editing soil and pot options for <b>{{ plant.customName ? plant.customName : plant.specie?.name }}</b>
@@ -11,13 +11,13 @@
       <p>What kind of <b>material</b> is your plant sitting on?</p>
       <div class="pot-selector">
         <div
-          *ngFor="let choice of potChoices"
+          *ngFor="let pot of pots()"
           class="pot-selector__material"
-          (click)="selectPot(choice.id)"
-          [ngClass]="{ 'pot-selector__material-selected': selectedChoice === choice.id } "
+          (click)="selectPot(pot.id)"
+          [ngClass]="{ 'pot-selector__material-selected': selectedPot === pot.id } "
         >
-          <img [src]="choice.image">
-          <p>{{ choice.name }}</p>
+          <img [src]="pot.image">
+          <p>{{ pot.name }}</p>
         </div>
       </div>
     </page>
@@ -37,7 +37,7 @@
 
     <page title="Soil">
       <div class="form__textinput">
-        <p>Really, really, really important! Describe a bit what's your soil <b>composition</b></p>
+        <p>Let's be a completionist and describe a bit what's your soil <b>composition</b></p>
         <input type="text" formControlName="soil">
       </div>
     </page>

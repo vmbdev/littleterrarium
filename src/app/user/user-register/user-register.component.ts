@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { catchError, of, switchMap } from 'rxjs';
-import { User } from 'src/app/intefaces';
+import { User } from 'src/app/interfaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({

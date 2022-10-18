@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Plant } from 'src/app/intefaces';
+import { Plant } from 'src/app/interfaces';
 
 @Component({
   selector: 'plant-list',

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 
-import { User, Location, Plant, Photo, Specie } from 'src/app/intefaces';
+import { User, Location, Plant, Photo, Specie } from 'src/app/interfaces';
 import { endpoint } from 'src/config';
 
 @Injectable({
@@ -165,10 +165,10 @@ export class ApiService {
     )
   }
 
-  updatePlant(plant: Plant): Observable<any> {
+  updatePlant(plant: Plant): Observable<Plant> {
     return this.http.put<Plant>(this.endpoint('plant'), plant).pipe(
       map((data: any) => {
-        if (data.msg === 'PLANT_UPDATED') return data;
+        if (data.msg === 'PLANT_UPDATED') return data.plant;
         else return throwError(() => 'Server error');
       }),
       catchError(err => {

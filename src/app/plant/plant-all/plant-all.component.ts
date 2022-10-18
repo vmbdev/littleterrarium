@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Plant } from 'src/app/intefaces';
+import { Plant } from 'src/app/interfaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({

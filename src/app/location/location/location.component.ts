@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Location, Light } from 'src/app/intefaces';
+import { Location, Light } from 'src/app/interfaces';
 import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 import { ApiService } from 'src/app/shared/api/api.service';
 
@@ -13,6 +13,8 @@ export class LocationComponent implements OnInit {
   private id!: number;
   isValidId!: boolean;
   location!: Location;
+
+  confirmDelete: boolean = false;
 
   constructor(
     private route: ActivatedRoute,

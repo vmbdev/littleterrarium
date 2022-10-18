@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 
-import { Location, Light } from 'src/app/intefaces';
+import { Location, Light } from 'src/app/interfaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({
@@ -23,7 +24,8 @@ export class LocationAddEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private api: ApiService
+    private api: ApiService,
+    private breadcrumb: BreadcrumbService
   ) {
     this.locationForm = this.fb.group({
       name: ['', Validators.required],
@@ -40,11 +42,16 @@ export class LocationAddEditComponent implements OnInit {
     // editing
     if (!this.createNew && +paramId) {
       this.id = +paramId;
+
       this.api.getLocation(this.id).subscribe({
         next: (location: Location) => {
           Object.keys(this.locationForm.value).forEach((key) => {
             this.locationForm.controls[key].setValue(location[key as keyof Location]);
-          })
+          });
+
+          this.breadcrumb.setNavigation([
+            { id: 'location-edit', name: 'Edit location' }
+          ], { attachTo: 'location' });
         },
         error: () => {
           // FIXME: handle error

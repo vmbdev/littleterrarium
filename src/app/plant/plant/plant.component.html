@@ -1,10 +1,21 @@
-<ng-container *ngIf="isValidId">
-  <quick-modal *ngIf="enableWaterEditing" (close)="toggleEditing('water')" title="Watering">
-    <plant-edit-watering [plantId]="plant.id" [waterFreq]="plant.waterFreq" [waterLast]="plant.waterLast"></plant-edit-watering>
+<ng-container *ngIf="plantService.plant$ | async as plant">
+  <quick-modal *ngIf="enableWaterEditing" (close)="enableWaterEditing = false" title="Watering">
+    <plant-edit-watering
+    [plantId]="id"
+    [waterFreq]="plant.waterFreq"
+    [waterLast]="plant.waterLast"
+    (updated)="enableWaterEditing = false">
+    </plant-edit-watering>
   </quick-modal>
 
-  <quick-modal *ngIf="enableFertilizerEditing" (close)="toggleEditing('fertilizer')" title="Fertilizer">
-    <plant-edit-fertilizer [plantId]="plant.id" [fertFreq]="plant.fertFreq" [fertLast]="plant.fertLast"></plant-edit-fertilizer>
+  <quick-modal *ngIf="enableFertilizerEditing" (close)="enableFertilizerEditing = false" title="Fertilizer">
+    <plant-edit-fertilizer
+      [plantId]="id"
+      [fertFreq]="plant.fertFreq"
+      [fertLast]="plant.fertLast"
+      [fertType]="plant.fertType"
+      (updated)="enableFertilizerEditing = false">
+    </plant-edit-fertilizer>
   </quick-modal>
 
   <confirm-modal *ngIf="confirmWatering" (accept)="addWater()" (cancel)="confirmWatering = false">
@@ -20,46 +31,47 @@
     <p>This will remove this plant and all of its photos. Are you sure?</p>
     <p><strong>This decision is irreversible.</strong></p>
   </confirm-modal>
+
+  <div class="plant">
+    <toolbox [title]="plantTitle" [subtitle]="plantSubtitle">
+      <toolbox-button image="/assets/water.png" (click)="enableWaterEditing = true"></toolbox-button>
+      <toolbox-button image="/assets/fertilizer.png" (click)="enableFertilizerEditing = true"></toolbox-button>
+      <toolbox-button image="/assets/pot.png" (click)="editSoil()"></toolbox-button>
+      <toolbox-button image="/assets/edit.png" (click)="toggleEditing('all')"></toolbox-button>
+      <toolbox-button image="/assets/delete.png" (click)="confirmDelete = true"></toolbox-button>
+    </toolbox>
+
+    <div class="plant__description" *ngIf="plant.description">
+      {{ plant.description }}
+    </div>
+
+    <div class="plant__row">
+      <div class="plant__box plant__watering">
+        <div class="plant__boximage-water"></div>
+        <p *ngIf="plant.waterLast">Last time: {{ plant.waterLast | date }}</p>
+        <p *ngIf="plant.waterFreq">Water every {{ plant.waterFreq }} days</p>
+        <plus-button type="add" title="Water" (click)="confirmWatering = true"></plus-button>
+      </div>
+
+      <div class="plant__box plant__fertilizer">
+        <div class="plant__boximage-fertilizer"></div>
+        <p *ngIf="plant.fertLast">Last time: {{ plant.fertLast | date }}</p>
+        <p *ngIf="plant.fertFreq">Fertilize every {{ plant.fertFreq }} days</p>
+        <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
+        <plus-button type="add" title="Fertilize" (click)="confirmFertilizing = true"></plus-button>
+      </div>
+
+      <div class="plant__box plant__pot">
+        <div class="plant__boximage-pot"></div>
+        <p *ngIf="plant.potType">Your pot is made of <b>{{ potName }}</b>&nbsp;<span *ngIf="plant.potSize">with a size of <b>{{ plant.potSize | unit:'cm' }}</b></span>.</p>
+        <p *ngIf="plant.soil">Your plant has a nice soil made up of <b>{{ plant.soil }}</b>.</p>
+      </div>
+    </div>
+
+    <p *ngIf="plant.condition">{{ plantCondition[plant.condition] }}</p>
+    <p *ngIf="plant.public">{{ plant.public ? 'Public' : 'Private' }}</p>
+
+    <photo-list *ngIf="plant.photos" [plantId]="plant.id" [list]="plant.photos"></photo-list>
+  </div>
+
 </ng-container>
-
-<div class="plant" *ngIf="isValidId">
-  <toolbox [title]="plantTitle" [subtitle]="plantSubtitle">
-    <toolbox-button image="/assets/water.png" (click)="toggleEditing('water')"></toolbox-button>
-    <toolbox-button image="/assets/fertilizer.png" (click)="toggleEditing('fertilizer')"></toolbox-button>
-    <toolbox-button image="/assets/pot.png" (click)="editSoil()"></toolbox-button>
-    <toolbox-button image="/assets/edit.png" (click)="toggleEditing('all')"></toolbox-button>
-    <toolbox-button image="/assets/delete.png" (click)="confirmDelete = true"></toolbox-button>
-  </toolbox>
-
-  <div class="plant__description" *ngIf="plant.description">
-    {{ plant.description }}
-  </div>
-
-  <div class="plant__row">
-    <div class="plant__box plant__watering">
-      <div class="plant__boximage-water"></div>
-      <p *ngIf="plant.waterLast">Last time: {{ plant.waterLast | date }}</p>
-      <p *ngIf="plant.waterFreq">Water every {{ plant.waterFreq }} days</p>
-      <plus-button type="add" title="Water" (click)="confirmWatering = true"></plus-button>
-    </div>
-
-    <div class="plant__box plant__fertilizer">
-      <div class="plant__boximage-fertilizer"></div>
-      <p *ngIf="plant.fertLast">Last time: {{ plant.fertLast | date }}</p>
-      <p *ngIf="plant.fertFreq">Fertilize every {{ plant.fertFreq }} days</p>
-      <p *ngIf="plant.fertType">{{ plant.fertType }}</p>
-      <plus-button type="add" title="Fertilize" (click)="confirmFertilizing = true"></plus-button>
-    </div>
-
-    <div class="plant__box plant__pot">
-      <div class="plant__boximage-pot"></div>
-      <p *ngIf="plant.potType">Your pot is made of <b>{{ plant.potType }}</b>&nbsp;<span *ngIf="plant.potSize">with a size of <b>{{ plant.potSize | unit:'cm' }}</b></span>.</p>
-      <p *ngIf="plant.soil">Your plant has a nice soil made up of <b>{{ plant.soil }}</b>.</p>
-    </div>
-  </div>
-
-  <p *ngIf="plant.condition">{{ plantCondition[plant.condition] }}</p>
-  <p *ngIf="plant.public">{{ plant.public ? 'Public' : 'Private' }}</p>
-
-  <photo-list *ngIf="plant.photos" [plantId]="plant.id" [list]="plant.photos"></photo-list>
-</div>

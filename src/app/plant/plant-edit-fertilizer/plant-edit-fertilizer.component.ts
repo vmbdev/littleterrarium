@@ -1,9 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ApiService } from 'src/app/shared/api/api.service';
-import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { Plant } from 'src/app/intefaces';
+import { Plant } from 'src/app/interfaces';
+import { PlantService } from '../plant.service';
 
 @Component({
   selector: 'plant-edit-fertilizer',
@@ -14,24 +13,26 @@ export class PlantEditFertilizerComponent implements OnInit {
   @Input() plantId!: number;
   @Input() fertFreq?: number | null;
   @Input() fertLast?: any;
-  @Input() fertType?: string; // TODO: implement fertType! forgot completely
+  @Input() fertType?: string | null; // TODO: implement fertType! forgot completely
+  @Output() updated: EventEmitter<any> = new EventEmitter<any>();
   fertForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private api: ApiService,
-    private router: Router
+    public plantService: PlantService
   ) {
     this.fertForm = this.fb.group({
       fertFreq: [],
-      fertLast: [dayjs().format('YYYY-MM-DD')]
+      fertLast: [dayjs().format('YYYY-MM-DD')],
+      fertType: [''],
     })
   }
 
   ngOnInit(): void {
     this.fertForm.setValue({
       fertFreq: this.fertFreq,
-      fertLast: dayjs(this.fertLast).format('YYYY-MM-DD')
+      fertLast: dayjs(this.fertLast).format('YYYY-MM-DD'),
+      fertType: this.fertType
     })
   }
 
@@ -39,15 +40,8 @@ export class PlantEditFertilizerComponent implements OnInit {
     const plant: Plant = this.fertForm.value;
     plant.id = this.plantId;
     
-    this.api.updatePlant(plant).subscribe({
-      next: (data: any) => {
-        if (data.msg === 'PLANT_UPDATED') {
-          this.router.navigate(['/plant', this.plantId]);
-        }
-      },
-      error: (err) => {
-        console.log(err);
-      }
-    })
+    this.plantService.update(plant).subscribe(() => {
+      this.updated.emit();
+    });
   }
 }

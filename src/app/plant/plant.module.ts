@@ -4,23 +4,26 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 
-import { PlantListComponent } from './plant-list/plant-list.component';
-import { PlantComponent } from './plant/plant.component';
 import { PhotoModule } from '../photo/photo.module';
 import { PictureBoxModule } from '../picture-box/picture-box.module';
-import { PlantAddComponent } from './plant-add/plant-add.component';
 import { WizardModule } from '../wizard/wizard.module';
 import { FileUploaderModule } from '../file-uploader/file-uploader.module';
 import { SpecieFinderModule } from '../specie-finder/specie-finder.module';
 import { ToolboxModule } from '../toolbox/toolbox.module';
 import { QuickModalModule } from '../quick-modal/quick-modal.module';
+import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
+import { PlusButtonModule } from '../plus-button/plus-button.module';
+import { ConfirmModalModule } from '../confirm-modal/confirm-modal.module';
+
+import { PlantComponent } from './plant/plant.component';
+import { PlantAddComponent } from './plant-add/plant-add.component';
+import { PlantListComponent } from './plant-list/plant-list.component';
 import { PlantEditWateringComponent } from './plant-edit-watering/plant-edit-watering.component';
 import { PlantEditFertilizerComponent } from './plant-edit-fertilizer/plant-edit-fertilizer.component';
 import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.component';
 import { PlantAllComponent } from './plant-all/plant-all.component';
-import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
-import { PlusButtonModule } from '../plus-button/plus-button.module';
-import { ConfirmModalModule } from '../confirm-modal/confirm-modal.module';
+
+import { PlantService } from './plant.service';
 
 @NgModule({
   declarations: [
@@ -53,6 +56,9 @@ import { ConfirmModalModule } from '../confirm-modal/confirm-modal.module';
     PlantListComponent,
     PlantAddComponent,
     PlantAllComponent
+  ],
+  providers: [
+    PlantService
   ]
 })
 export class PlantModule { }

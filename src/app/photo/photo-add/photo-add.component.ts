@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Plant, Photo } from 'src/app/intefaces';
+import { Plant, Photo } from 'src/app/interfaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 
 @Component({

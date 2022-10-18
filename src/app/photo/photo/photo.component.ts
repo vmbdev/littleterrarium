@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
-import { Photo } from 'src/app/intefaces';
+import { Photo } from 'src/app/interfaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 import * as dayjs from 'dayjs';
 import * as LocalizedFormat from 'dayjs/plugin/localizedFormat';

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Specie } from '../intefaces';
+import { Specie } from '../interfaces';
 import { ApiService } from '../shared/api/api.service';
 
 @Component({

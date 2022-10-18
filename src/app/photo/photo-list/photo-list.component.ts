@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { Photo } from 'src/app/intefaces';
+import { Photo } from 'src/app/interfaces';
 
 @Component({
   selector: 'photo-list',
