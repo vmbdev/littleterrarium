@@ -41,4 +41,8 @@ export class PlantService {
       })
     );
   }
+
+  delete(id: number): Observable<any> {
+    return this.api.deletePlant(id);
+  }
 }

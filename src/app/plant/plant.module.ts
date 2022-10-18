@@ -14,6 +14,7 @@ import { QuickModalModule } from '../quick-modal/quick-modal.module';
 import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
 import { PlusButtonModule } from '../plus-button/plus-button.module';
 import { ConfirmModalModule } from '../confirm-modal/confirm-modal.module';
+import { WidgetBoxModule } from '../widget-box/widget-box.module';
 
 import { PlantComponent } from './plant/plant.component';
 import { PlantAddComponent } from './plant-add/plant-add.component';
@@ -24,6 +25,9 @@ import { PlantEditSoilComponent } from './plant-edit-soil/plant-edit-soil.compon
 import { PlantAllComponent } from './plant-all/plant-all.component';
 
 import { PlantService } from './plant.service';
+import { PlantWidgetWaterComponent } from './plant-widget-water/plant-widget-water.component';
+import { PlantWidgetFertilizerComponent } from './plant-widget-fertilizer/plant-widget-fertilizer.component';
+import { PlantWidgetSoilComponent } from './plant-widget-soil/plant-widget-soil.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +37,10 @@ import { PlantService } from './plant.service';
     PlantEditWateringComponent,
     PlantEditFertilizerComponent,
     PlantEditSoilComponent,
-    PlantAllComponent
+    PlantAllComponent,
+    PlantWidgetWaterComponent,
+    PlantWidgetFertilizerComponent,
+    PlantWidgetSoilComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +57,8 @@ import { PlantService } from './plant.service';
     QuickModalModule,
     BreadcrumbModule,
     PlusButtonModule,
-    ConfirmModalModule
+    ConfirmModalModule,
+    WidgetBoxModule
   ],
   exports: [
     PlantListComponent,

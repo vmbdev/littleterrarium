@@ -72,6 +72,7 @@ export const Condition: { [key: string]: string } = {
   EXCELLENT: 'Prime example of its specie',
 }
 
+// client-side only
 export const potChoices: { [key: string]: any } = {
   LT_POT_TERRACOTTA: { name: 'Terracotta', image: '/assets/pot-terracotta.jpg' },
   LT_POT_PLASTIC: { name: 'Plastic', image: '/assets/pot-plastic.jpg' },

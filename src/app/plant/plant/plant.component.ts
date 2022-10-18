@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
-import { Plant, Condition, potChoices } from 'src/app/interfaces';
-import { ApiService } from 'src/app/shared/api/api.service';
+import { Plant, Condition } from 'src/app/interfaces';
 import { PlantService } from '../plant.service';
 
 @Component({
@@ -17,7 +16,6 @@ export class PlantComponent implements OnInit {
   plantTitle?: string;
   plantSubtitle?: string;
   plantCondition = Condition;
-  potName?: string;
 
   // Quick modals
   enableWaterEditing: boolean = false;
@@ -25,13 +23,10 @@ export class PlantComponent implements OnInit {
   enableEditing: boolean = false;
 
   // Confirm modals
-  confirmWatering: boolean = false;
-  confirmFertilizing: boolean = false;
   confirmDelete: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private api: ApiService,
     private router: Router,
     private breadcrumb: BreadcrumbService,
     public plantService: PlantService
@@ -55,11 +50,6 @@ export class PlantComponent implements OnInit {
         }
         else if (plant.specie) this.plantTitle = plant.specie.name
         else this.plantTitle = 'Unidentified plant';
-
-        if (plant.potType) {
-          if (potChoices.hasOwnProperty(plant.potType)) this.potName = potChoices[plant.potType].name;
-          else this.potName = plant.potType;
-        }
 
         this.breadcrumb.setNavigation([
           { id: 'plant', name: this.plantTitle, link: ['/plant', this.id] }
@@ -91,28 +81,8 @@ export class PlantComponent implements OnInit {
     }
   }
 
-  addWater(): void {
-    const updatedPlant = {
-      id: this.id,
-      waterLast: new Date()
-    } as Plant;
-
-    this.confirmWatering = false;
-    this.plantService.update(updatedPlant).subscribe();
-  }
-
-  addFertilizer(): void {
-    const updatedPlant = {
-      id: this.id,
-      fertLast: new Date()
-    } as Plant;
-
-    this.confirmFertilizing = false;
-    this.plantService.update(updatedPlant).subscribe();
-  }
-
   delete(): void {
-    this.api.deletePlant(this.id).subscribe(() => {
+    this.plantService.delete(this.id).subscribe(() => {
       const { locationId } = this.plantService.plant$.getValue();
       this.router.navigate(['/location', locationId])
     })

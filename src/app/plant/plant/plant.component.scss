@@ -5,51 +5,9 @@
   &__row {
     display: grid;
     grid-template-columns: repeat(auto-fit, 350px);
+    grid-auto-rows: minmax(min-content, max-content);
     gap: 15px;
     justify-content: center;
     padding-top: 10px;
   }
-
-  &__box {
-    position: relative;
-    border: 1px solid black;
-    border-radius: 20px;
-    padding: 25px;
-    margin: 10px 10px;
-  }
-
-  &__boximage {
-    position: absolute;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
-    top: -20px;
-    background-color: white;
-    width: 48px;
-    height: 48px;
-
-    &-water {
-      @extend .plant__boximage;
-      background-image: url('/assets/water.png');
-      background-size: cover;
-    }
-
-    &-fertilizer {
-      @extend .plant__boximage;
-      background-image: url('/assets/fertilizer.png');
-      background-size: cover;
-    }
-
-    &-pot {
-      @extend .plant__boximage;
-      background-image: url('/assets/pot.png');
-      background-size: cover;
-    }
-  }
-
-  @include m.media('mobile') {
-
-  }
-
 }
