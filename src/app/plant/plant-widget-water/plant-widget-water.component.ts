@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Plant } from 'src/app/interfaces';
 import { PlantService } from '../plant.service';
 import * as relativeTime from 'dayjs/plugin/relativeTime'
+import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import * as dayjs from 'dayjs';
 
 @Component({
@@ -13,6 +14,7 @@ export class PlantWidgetWaterComponent implements OnInit {
 
   constructor(public plantService: PlantService) {
     dayjs.extend(relativeTime);
+    dayjs.extend(isSameOrBefore);
   }
 
   ngOnInit(): void {
@@ -30,18 +32,11 @@ export class PlantWidgetWaterComponent implements OnInit {
   }
 
   nextWatering(): any {
-    let nextWater = null;
-
-    const { waterLast, waterFreq } = this.plantService.plant$.getValue();
-
-    if (waterLast && waterFreq) {
-      nextWater = {
-        diff: dayjs(waterLast).add(waterFreq, 'day').diff(dayjs(), 'days'),
-        text: dayjs(waterLast).add(waterFreq, 'day').fromNow()
-      };
+    const { waterNext } = this.plantService.plant$.getValue();
+    return {
+      text: dayjs(waterNext).fromNow(),
+      due: dayjs(waterNext).isSameOrBefore(dayjs())
     }
-
-    return nextWater;
   }
 
 }

@@ -17,7 +17,6 @@ import {
   Condition as PrismaCondition,
 } from "@prisma/client";
 
-
 export interface Location extends PrismaLocation {
   plants?: Plant[],
   _count?: any,

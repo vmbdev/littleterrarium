@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Plant } from 'src/app/interfaces';
 import { PlantService } from '../plant.service';
 import * as relativeTime from 'dayjs/plugin/relativeTime'
+import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import * as dayjs from 'dayjs';
 
 @Component({
@@ -11,7 +12,10 @@ import * as dayjs from 'dayjs';
 export class PlantWidgetFertilizerComponent implements OnInit {
   confirmFertilizing: boolean = false;
 
-  constructor(public plantService: PlantService) { }
+  constructor(public plantService: PlantService) {
+    dayjs.extend(relativeTime);
+    dayjs.extend(isSameOrBefore);
+  }
 
   ngOnInit(): void {
   }
@@ -28,18 +32,11 @@ export class PlantWidgetFertilizerComponent implements OnInit {
   }
 
   nextFertilizing(): any {
-    let nextFert = null;
-
-    const { fertLast, fertFreq } = this.plantService.plant$.getValue();
-
-    if (fertLast && fertFreq) {
-      nextFert = {
-        diff: dayjs(fertLast).add(fertFreq, 'day').diff(dayjs(), 'days'),
-        text: dayjs(fertLast).add(fertFreq, 'day').fromNow()
-      };
+    const { fertNext } = this.plantService.plant$.getValue();
+    return {
+      text: dayjs(fertNext).fromNow(),
+      due: dayjs(fertNext).isSameOrBefore(dayjs())
     }
-
-    return nextFert;
   }
 
 }

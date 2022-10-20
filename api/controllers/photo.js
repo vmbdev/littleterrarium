@@ -66,10 +66,8 @@ const findOne = async (req, res, next) => {
   try {
     const photo = await prisma.photo.findUniqueOrThrow({
       where: {
-        id_ownerId: {
-          id: req.parser.id,
-          ownerId: req.auth.userId
-        }
+        id: req.parser.id,
+        ownerId: req.auth.userId
       },
       select: {
         id: true,
@@ -102,10 +100,8 @@ const modify = async (req, res, next) => {
   try {
     await prisma.photo.update({
       where: {
-        id_ownerId: {
-          id: req.parser.id,
-          ownerId: req.auth.userId
-        }
+        id: req.parser.id,
+        ownerId: req.auth.userId
       },
       data,
     });
@@ -119,10 +115,8 @@ const remove = async (req, res, next) => {
   try {
     const { hashId, image } = await prisma.photo.delete({
       where: {
-        id_ownerId: {
-          id: req.parser.id,
-          ownerId: req.auth.userId
-        }
+        id: req.parser.id,
+        ownerId: req.auth.userId
       }
     });
 

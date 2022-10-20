@@ -61,4 +61,10 @@ app.get('*', (req, res) => {
 
 app.use(errorHandling);
 
+// setInterval(() => {
+
+// }, 1000);
+
+console.log('hola');
+
 export default app;
