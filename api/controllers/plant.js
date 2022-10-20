@@ -229,7 +229,6 @@ const modify = async (req, res, next) => {
       data
     });
 
-
     /**
      * Check if the object has both frequency and last time for both water and
      * fertlizer. If so, updates the waterNext/waterFreq property.

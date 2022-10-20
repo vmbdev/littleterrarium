@@ -234,4 +234,12 @@ export class ApiService {
   findSpecie(name: string): Observable<Specie[]> {
     return this.http.get<Specie[]>(this.endpoint(`specie/name/${name}`));
   }
+
+  /**
+   * Tasks related calls
+   */
+
+  getTasks(): Observable<Plant[]> {
+    return this.http.get<Plant[]>(this.endpoint('tasks'));
+  }
 }

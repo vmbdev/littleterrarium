@@ -12,6 +12,7 @@ import { AuthInterceptor } from './auth.interceptor';
 import { LayoutModule } from './layout/layout.module';
 import { UserModule } from './user/user.module';
 import { GreenHomeModule } from './green-home/green-home.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { GreenHomeModule } from './green-home/green-home.module';
     HomeModule,
     AuthModule,
     UserModule,
-    GreenHomeModule
+    GreenHomeModule,
+    TasksModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

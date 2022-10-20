@@ -17,6 +17,7 @@ import { PlantEditSoilComponent } from './plant/plant-edit-soil/plant-edit-soil.
 import { PlantAllComponent } from './plant/plant-all/plant-all.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { GreenHomeComponent } from './green-home/green-home/green-home.component';
+import { TasksComponent } from './tasks/tasks/tasks.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -62,6 +63,7 @@ const routes: Routes = [
       { path: '', component: GreenHomeComponent }
     ]
   },
+  { path: 'tasks', component: TasksComponent },
   { path: 'photo/:photoId', component: PhotoComponent },
 ];
 

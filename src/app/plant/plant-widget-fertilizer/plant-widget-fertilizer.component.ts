@@ -33,10 +33,13 @@ export class PlantWidgetFertilizerComponent implements OnInit {
 
   nextFertilizing(): any {
     const { fertNext } = this.plantService.plant$.getValue();
-    return {
-      text: dayjs(fertNext).fromNow(),
-      due: dayjs(fertNext).isSameOrBefore(dayjs())
+    if (fertNext) {
+      return {
+        text: dayjs(fertNext).fromNow(),
+        due: dayjs(fertNext).isSameOrBefore(dayjs())
+      }
     }
+    else return null;
   }
 
 }

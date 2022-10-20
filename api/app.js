@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 import apiRoutes from './routes/api.js';
 import prisma from './prismainstance.js';
+import notifications from './helpers/notifications.js';
 import errorHandling from './middlewares/errorhandling.js';
 import { generateAuth } from './middlewares/auth.js';
 import { generateParser } from './middlewares/parser.js';
@@ -61,10 +62,8 @@ app.get('*', (req, res) => {
 
 app.use(errorHandling);
 
-// setInterval(() => {
-
-// }, 1000);
-
-console.log('hola');
+setInterval(() => {
+  notifications.check();
+}, 60*60*1000);
 
 export default app;
