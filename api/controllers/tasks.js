@@ -20,6 +20,12 @@ const find = async (req, res, next) => {
           name: true,
           commonName: true
         }
+      },
+      photos: {
+        take: 1,
+        select: {
+          images: true
+        }
       }
     }
   });
