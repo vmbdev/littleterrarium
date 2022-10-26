@@ -82,8 +82,8 @@ export class PlantComponent implements OnInit {
   }
 
   delete(): void {
-    this.plantService.delete(this.id).subscribe(() => {
-      const { locationId } = this.plantService.plant$.getValue();
+    const { locationId } = this.plantService.plant$.getValue();
+    this.plantService.delete().subscribe(() => {
       this.router.navigate(['/location', locationId])
     })
   }

@@ -1,27 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { LogoutComponent } from './logout/logout.component';
-import { SigninComponent } from './signin/signin.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SharedModule } from '../shared/shared.module';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './auth.service';
+import { AuthInterceptor } from './auth.interceptor';
 import { RouterModule } from '@angular/router';
-
-
 
 @NgModule({
   declarations: [
-    LogoutComponent,
-    SigninComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
-    FormsModule,
     RouterModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ]
 })
 export class AuthModule { }

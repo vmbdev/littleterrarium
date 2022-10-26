@@ -5,11 +5,15 @@
   </confirm-modal>
 
   <widget-box image="/assets/water.png">
-    <p *ngIf="plant.waterLast">Last time: {{ plant.waterLast | date }}</p>
-    <p *ngIf="plant.waterFreq">Water every {{ plant.waterFreq }} days</p>
-    <p *ngIf="nextWatering() as nextW">
-      Next time: <span [ngStyle]="{ 'color' : nextW.due ? 'red' : null }">{{ nextW.text }}</span>
-    </p>
-    <plus-button type="add" title="Water" (click)="confirmWatering = true"></plus-button>
+    <div>
+      <p *ngIf="plant.waterLast">Last time: {{ plant.waterLast | date }}</p>
+      <p *ngIf="plant.waterFreq">Water every {{ plant.waterFreq }} days</p>
+    </div>
+    <div bottom>
+      <p *ngIf="nextWatering() as nextW">
+        Next time: <span [ngStyle]="{ 'color' : nextW.due ? 'red' : null }">{{ nextW.text }}</span>
+      </p>
+      <plus-button type="add" title="Water" (click)="confirmWatering = true"></plus-button>
+    </div>
   </widget-box>
 </ng-container>

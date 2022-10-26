@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Plant } from 'src/app/interfaces';
 import { PlantService } from '../plant.service';
 import * as relativeTime from 'dayjs/plugin/relativeTime'
 import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -21,14 +20,8 @@ export class PlantWidgetFertilizerComponent implements OnInit {
   }
 
   addFertilizer(): void {
-    const { id } = this.plantService.plant$.getValue();
-    const updatedPlant = {
-      id: id,
-      fertLast: new Date()
-    } as Plant;
-
     this.confirmFertilizing = false;
-    this.plantService.update(updatedPlant).subscribe();
+    this.plantService.fertilize().subscribe();
   }
 
   nextFertilizing(): any {

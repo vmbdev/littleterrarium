@@ -42,7 +42,29 @@ export class PlantService {
     );
   }
 
-  delete(id: number): Observable<any> {
+  delete(): Observable<any> {
+    const { id } = this.plant$.getValue();
+
     return this.api.deletePlant(id);
+  }
+
+  fertilize(): Observable<any> {
+    const { id } = this.plant$.getValue();
+    const updatedPlant = {
+      id: id,
+      fertLast: new Date()
+    } as Plant;
+
+    return this.update(updatedPlant);
+  }
+
+  water(): Observable<any> {
+    const { id } = this.plant$.getValue();
+    const updatedPlant = {
+      id: id,
+      waterLast: new Date()
+    } as Plant;
+
+    return this.update(updatedPlant);
   }
 }

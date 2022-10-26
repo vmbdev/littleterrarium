@@ -3,9 +3,10 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpInterceptor
+  HttpInterceptor,
+  HttpErrorResponse
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 
 // TODO: intercept 401 errors
 
@@ -17,8 +18,17 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     request = request.clone({
       withCredentials: true
-    })
+    });
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      catchError((err) => {
+        if (err.status === 403) {
+          console.log('forbidden');
+          return throwError(() => new Error('Forbidden'))
+        }
+
+        return throwError(() => err);
+      })
+    );
   }
 }

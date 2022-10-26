@@ -7,9 +7,9 @@ import dayjs from "dayjs";
  * Even though we receive a Plant-like object, we specify which properties are allowed to be stored
  * and check each of them for security sake.
  * 
- * @param {express.Request} req 
- * @param {express.Response} res 
- * @param {express.NextFunction} next 
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
  */
 const create = async (req, res, next) => {
   const requiredFields = ['locationId'];
@@ -78,7 +78,7 @@ const create = async (req, res, next) => {
   try {
     const plant = await prisma.plant.create({ data });
 
-    res.send({ msg: 'PLANT_CREATED', plant: plant });
+    res.send({ msg: 'PLANT_CREATED', plant });
   } catch (err) {
     next({ code: 500 });
   }
@@ -87,87 +87,86 @@ const create = async (req, res, next) => {
 /**
  * Express Middleware to request a list of Plant objects optionally filtered by locationId.
  * The object contains one Photo object as well as the Specie object related to it.
- * @param {express.Request} req 
- * @param {express.Response} res 
- * @param {express.NextFunction} next 
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
  */
 const find = async (req, res, next) => {
-  const conditions = {};
+  const query = {};
+  const photos = {
+    take: 1,
+    select: { id: true, images: true, public: true, takenAt: true }
+  };
 
-  if (req.parser.locationId) conditions.locationId = req.parser.locationId;
-  conditions.ownerId = req.auth.userId;
+  // if asking for a different user, return only the ones that are public
+  if (req.parser.userId && (req.parser.userId !== req.auth.userId)) {
+    query.where = {
+      ownerId: req.parser.userId,
+      public: true
+    };
+    photos.where = {
+      public: true
+    };
+  }
+  else query.where = { ownerId: req.auth.userId };
 
-  const plants = await prisma.plant.findMany({
-    where: conditions,
-    select: {
-      id: true,
-      customName: true,
-      photos: {
-        take: 1,
-        select: {
-          id: true,
-          images: true,
-          public: true,
-          takenAt: true
-        }
-      },
-      specie: {
-        select: {
-          name: true,
-          commonName: true
-        }
-      }
+  if (req.parser.locationId) query.where.locationId = req.parser.locationId;
+
+  query.select = {
+    id: true,
+    customName: true,
+    photos,
+    specie: {
+      select: { name: true, commonName: true }
     }
-  });
+  };
+
+  const plants = await prisma.plant.findMany(query);
   res.send(plants);
 }
 
 /**
  * Express Middleware to request a Plant object by id.
  * The object contains all of the Photo objects linked to the plant, as well as its Specie object.
- * @param {express.Request} req 
- * @param {express.Response} res 
- * @param {express.NextFunction} next 
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
  */
 const findOne = async (req, res, next) => {
-  const conditions = {};
+  const query = {};
 
-  if (req.parser.id) conditions.id = req.parser.id;
-  conditions.ownerId = req.auth.userId;
-
-  const plant = await prisma.plant.findFirst({
-    where: conditions,
-    include: {
-      photos: {
-        select: {
-          id: true,
-          images: true,
-          description: true,
-          public: true,
-          takenAt: true
-        },
-        orderBy: { takenAt: 'asc' }
-      },
-      specie: {
-        select: {
-          name: true,
-          commonName: true
-        }
-      }
+  query.where = { id: req.parser.id };
+  query.include = {
+    photos: {
+      select: { id: true, images: true, description: true, public: true, takenAt: true },
+      orderBy: { takenAt: 'asc' }
+    },
+    specie: {
+      select: { name: true, commonName: true }
     }
-  });
+  };
+  const plant = await prisma.plant.findUnique(query);
 
-  if (plant) res.send(plant);
-  else next({ error: 'PLANT_NOT_VALID' });
+  // if requesting user is not the owner, send only if it's public
+  if (plant) {
+    if (plant.ownerId === req.auth.userId) res.send(plant);
+    else if ((plant.ownerId !== req.auth.userId) && plant.public) {
+      // remove photos that are private
+      if (plant.photos) plant.photos = plant.photos.filter((photo) => photo.public);
+
+      res.send(plant);
+    }
+    else return next({ code: 403 });
+  }
+  else next({ error: 'PLANT_NOT_FOUND', code: 404 });
 }
 
 /**
  * Express Middleware to update an existing Plant object by id.
  * Like when creating, we manually introduce the fields in the final object.
- * 
- * @param {express.Request} req 
- * @param {express.Response} res 
- * @param {express.NextFunction} next 
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
  */
 const modify = async (req, res, next) => {
   const data = {};
@@ -260,7 +259,6 @@ const modify = async (req, res, next) => {
 
     res.send({ msg: 'PLANT_UPDATED', plant });
   } catch (err) {
-    console.log(err);
     next({ error: 'PLANT_NOT_VALID' });
   }
 }
@@ -268,9 +266,9 @@ const modify = async (req, res, next) => {
 /**
  * Remove a Plant object by its id.
  * 
- * @param {express.Request} req 
- * @param {express.Response} res 
- * @param {express.NextFunction} next 
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
  */
 const remove = async (req, res, next) => {
   const plant = await prisma.plant.delete({ where: { id: req.parser.id, ownerId: req.auth.userId } });

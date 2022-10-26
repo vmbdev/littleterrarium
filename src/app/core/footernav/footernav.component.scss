@@ -11,8 +11,12 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-
+  
   @include t.themify {
     background-color: t.theme(main_color);
+  }
+
+  a {
+    color: white;
   }
 }

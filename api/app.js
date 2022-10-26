@@ -5,7 +5,7 @@ import { PrismaSessionStore } from '@quixo3/prisma-session-store';
 import path, { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import apiRoutes from './routes/api.js';
+import apiRoutes from './routes/api.routes.js';
 import prisma from './prismainstance.js';
 import notifications from './helpers/notifications.js';
 import errorHandling from './middlewares/errorhandling.js';

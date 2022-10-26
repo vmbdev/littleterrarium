@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, map, catchError, throwError, BehaviorSubject } from 'rxjs';
-import { ApiService } from '../../shared/api/api.service';
+import { ApiService } from '../shared/api/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +33,11 @@ export class AuthService {
     this.signedIn$.next(false);
   
     return this.api.logOut().pipe(catchError(() => of(null)));
+  }
+
+  isSignedIn(): boolean {
+    const val = this.signedIn$.getValue();
+
+    return val;
   }
 }

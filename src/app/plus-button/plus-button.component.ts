@@ -15,22 +15,6 @@ export class PlusButtonComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  getSymbol(): string {
-    let symbol;
-
-    switch(this.type) {
-      case 'update': {
-        symbol = '&#8635;';
-        break;
-      }
-      case 'add':
-      default:
-        symbol = '+';
-    }
-
-    return symbol;
-  }
-
   clickEvent(): void {
     this.click.emit();
   }

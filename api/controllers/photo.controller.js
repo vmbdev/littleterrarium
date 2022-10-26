@@ -42,45 +42,41 @@ const create = (req, res, next) => {
 }
 
 const find = async (req, res, next) => {
-  const conditions = {};
+  const query = {};
 
-  if (req.parser.plantId) conditions.plantId = req.parser.plantId;
-  conditions.ownerId = req.auth.userId;
-
-  const photos = await prisma.photo.findMany({
-    where: conditions,
-    select: {
-      id: true,
-      image: true,
-      description: true,
-      public: true,
-      takenAt: true
+  // if asking for a different user, return only the ones that are public
+  if (req.parser.userId && (req.parser.userId !== req.auth.userId)) {
+    query.where = {
+      ownerId: req.parser.userId,
+      public: true
     }
-  });
+  }
+  else query.where = { ownerId: req.auth.userId };
+
+  if (req.parser.plantId) query.where.plantId = req.parser.plantId;
+
+  query.select = { id: true, images: true, description: true, public: true, takenAt: true };
+
+  const photos = await prisma.photo.findMany(query);
 
   if (photos.length > 0) res.send(photos);
   else next({ error: 'PHOTO_NOT_FOUND' });
 }
 
 const findOne = async (req, res, next) => {
-  try {
-    const photo = await prisma.photo.findUniqueOrThrow({
-      where: {
-        id: req.parser.id,
-        ownerId: req.auth.userId
-      },
-      select: {
-        id: true,
-        images: true,
-        description: true,
-        public: true,
-        takenAt: true
-      }
-    });
-    res.send(photo);
-  } catch (err) {
-    next({ error: 'PHOTO_NOT_FOUND' });
+  const query = {
+    where: { id: req.parser.id },
+    select: { id: true, images: true, description: true, public: true, ownerId: true, takenAt: true }
+  };
+
+  const photo = await prisma.photo.findUnique(query);
+
+  // if requesting user is not the owner, send only if it's public
+  if (photo) {
+    if ((photo.ownerId === req.auth.userId) || photo.public) res.send(photo);
+    else return next({ code: 403 });
   }
+  else next({ error: 'PHOTO_NOT_FOUND', code: 404 });
 }
 
 // let's be conservative here:

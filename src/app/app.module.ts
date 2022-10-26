@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,11 +8,10 @@ import { HomeModule } from './home/home.module';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthInterceptor } from './auth.interceptor';
 import { LayoutModule } from './layout/layout.module';
 import { UserModule } from './user/user.module';
-import { GreenHomeModule } from './green-home/green-home.module';
 import { TasksModule } from './tasks/tasks.module';
+import { TerrariumModule } from './terrarium/terrarium.module';
 
 @NgModule({
   declarations: [
@@ -28,11 +27,8 @@ import { TasksModule } from './tasks/tasks.module';
     HomeModule,
     AuthModule,
     UserModule,
-    GreenHomeModule,
-    TasksModule
-  ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    TasksModule,
+    TerrariumModule
   ],
   bootstrap: [AppComponent]
 })

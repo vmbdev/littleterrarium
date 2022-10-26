@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Plant } from 'src/app/interfaces';
 import { PlantService } from '../plant.service';
 import * as relativeTime from 'dayjs/plugin/relativeTime'
 import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -21,14 +20,8 @@ export class PlantWidgetWaterComponent implements OnInit {
   }
 
   addWater(): void {
-    const { id } = this.plantService.plant$.getValue();
-    const updatedPlant = {
-      id: id,
-      waterLast: new Date()
-    } as Plant;
-
     this.confirmWatering = false;
-    this.plantService.update(updatedPlant).subscribe();
+    this.plantService.water().subscribe();
   }
 
   nextWatering(): any {

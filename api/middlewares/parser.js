@@ -4,6 +4,7 @@ export const generateParser = (req, res, next) => {
   next();
 }
 
+// TODO: define body/params/query implicitly
 export const integers = (list) => {
   return (req, res, next) => {
     for (const field in list) {

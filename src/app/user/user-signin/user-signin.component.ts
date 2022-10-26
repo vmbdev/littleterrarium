@@ -1,15 +1,14 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss']
+  selector: 'user-signin',
+  templateUrl: './user-signin.component.html',
+  styleUrls: ['./user-signin.component.scss']
 })
-export class SigninComponent implements OnInit {
+export class UserSigninComponent implements OnInit {
   authInvalid: boolean = false;
   controls = {
     usernameEmpty: false,

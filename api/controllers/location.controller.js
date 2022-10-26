@@ -47,10 +47,23 @@ const create = async (req, res, next) => {
 
 const find = async (req, res, next) => {
   const query = {
-    where: { ownerId: req.auth.userId },
     orderBy: { createdAt: 'asc' },
-  }
+  };
+  const plants = {}
 
+  // if asking for a different user, return only the ones that are public
+  if (req.parser.userId && (req.parser.userId !== req.auth.userId)) {
+    query.where = {
+      ownerId: req.parser.userId,
+      public: true
+    };
+    plants.where = {
+      public: true
+    }
+  }
+  else query.where = { ownerId: req.auth.userId };
+
+  // when &plantcount is active in req.query, return the number of plants in the location
   if (req.query.plantcount) {
     query.include = {
       _count: {
@@ -61,33 +74,39 @@ const find = async (req, res, next) => {
 
   else if (req.query.plants) {
     const limit = req.query.limit ? Number.parseInt(req.query.limit) : undefined;
+
+    // a limit of 0 implies no limit
+    plants.take = (limit > 0) ? limit : undefined;
+    plants.select = { id: true, specieId: true, customName: true };
+    plants.select.photos = {
+      take: 1,
+      select: { images: true }
+    }
+
     query.select = {
       id: true,
       name: true,
       pictures: true,
-      plants: {
-        take: limit > 0? limit : undefined,
-        select: {
-          id: true,
-          specieId: true,
-          customName: true,
-          photos: {
-            take: 1,
-            select: { images: true }
-          }
-        }
-      }
-    }
+      plants
+    };
   }
 
   const locations = await prisma.location.findMany(query);
   res.send(locations);
 }
 
+/**
+ * Retrieve one location specified by ID.
+ * As we don't know the owner beforehand, privacy check of the location
+ * and the plants are checked upon retrieval from the database.
+ * @param {Express.Request} req 
+ * @param {Express.Response} res 
+ * @param {Express.NextFunction} next 
+ */
 const findOne = async (req, res, next) => {
   const query = {
-    where: { id: req.parser.id, ownerId: req.auth.userId },
-    select: { id: true, name: true, pictures: true, light: true, public: true }
+    where: { id: req.parser.id },
+    select: { id: true, name: true, pictures: true, light: true, public: true, ownerId: true }
    };
 
   if (req.query.plants) {
@@ -99,6 +118,7 @@ const findOne = async (req, res, next) => {
         id: true,
         specieId: true,
         customName: true,
+        public: true,
         photos: {
           take: 1,
           select: { images: true }
@@ -107,9 +127,19 @@ const findOne = async (req, res, next) => {
     };
   }
 
-  const location = await prisma.location.findFirst(query);
+  const location = await prisma.location.findUnique(query);
 
-  if (location) res.send(location);
+  // if requesting user is not the owner, send only if it's public
+  if (location) {
+    if (location.ownerId === req.auth.userId) res.send(location);
+    else if ((location.ownerId !== req.auth.userId) && location.public) {
+      // remove plants that are private
+      if (location.plants) location.plants = location.plants.filter((plant) => plant.public);
+
+      res.send(location);
+    }
+    else return next({ code: 403 });
+  }
   else next({ error: 'LOCATION_NOT_FOUND', code: 404 });
 }
 
@@ -129,27 +159,30 @@ const modify = async (req, res, next) => {
   // if picture
   if (req.disk) data.pictures = req.disk.file.url;
 
+  // it's already checked by auth.checkOwnership, but just to be extra paranoid
+  // we add it to the where clause
   // req.auth.userId is authorised by auth middleware
-  const { count } = await prisma.location.updateMany({
+  const location = await prisma.location.update({
     where: {
       id: req.parser.id,
       ownerId: req.auth.userId
     },
     data
   });
-  if (count === 1) res.send({ msg: 'LOCATION_UPDATED' });
+
+  if (location) res.send({ msg: 'LOCATION_UPDATED', location });
   else next({ error: 'LOCATION_NOT_VALID' });
 }
 
 const remove = async (req, res, next) => {
-  const { count } = await prisma.location.deleteMany({
+  const location = await prisma.location.delete({
     where: {
       id: req.parser.id,
       ownerId: req.auth.userId
     }
   });
 
-  if (count === 1) res.send({ msg: 'LOCATION_REMOVED' });
+  if (location) res.send({ msg: 'LOCATION_REMOVED' });
   else next({ error: 'LOCATION_NOT_VALID' });
 }
 

@@ -201,7 +201,7 @@ const checkPassword = (req, res, next) => {
 
   if (pcheck.valid) res.send({ msg: 'PASSWD_VALID' });
   else {
-    let data = {};
+    const data = {};
     if (pcheck.error === 'PASSWD_INVALID') data.comp = pcheck.comp;
     next({ error: pcheck.error, data });
   }

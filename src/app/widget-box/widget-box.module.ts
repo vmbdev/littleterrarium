@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { WidgetBoxComponent } from './widget-box.component';
+import { WidgetBoxComponent } from './widget-box/widget-box.component';
 
 
 
 @NgModule({
   declarations: [
-    WidgetBoxComponent
+    WidgetBoxComponent,
   ],
   imports: [
     CommonModule

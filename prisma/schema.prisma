@@ -15,6 +15,7 @@ model User {
   lastname      String?    @db.VarChar(50)
   password      String     @db.Char(60)
   email         String     @db.VarChar(120)    @unique
+  bio           String?     @db.VarChar(240)
   avatar        Json?
   preferences   Json?
   role          Role       @default(USER)
