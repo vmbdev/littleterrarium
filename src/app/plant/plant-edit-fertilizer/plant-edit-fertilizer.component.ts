@@ -13,7 +13,7 @@ export class PlantEditFertilizerComponent implements OnInit {
   @Input() plantId!: number;
   @Input() fertFreq?: number | null;
   @Input() fertLast?: any;
-  @Input() fertType?: string | null; // TODO: implement fertType! forgot completely
+  @Input() fertType?: string | null;
   @Output() updated: EventEmitter<any> = new EventEmitter<any>();
   fertForm: FormGroup;
 

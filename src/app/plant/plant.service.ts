@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
+import { AuthService } from '../auth/auth.service';
 import { Plant } from '../interfaces';
 import { ApiService } from '../shared/api/api.service';
 
@@ -9,12 +10,17 @@ import { ApiService } from '../shared/api/api.service';
 })
 export class PlantService {
   plant$: BehaviorSubject<Plant> = new BehaviorSubject<Plant>({} as Plant);
+  owned: boolean = false;
 
-  constructor(private api: ApiService) { }
+  constructor(
+    private api: ApiService,
+    private auth: AuthService
+    ) { }
 
   get(id: number): Observable<any> {
     return this.api.getPlant(id).pipe(
       map((plant: Plant) => {
+        this.owned = (this.auth.getUser()?.id === plant.ownerId) ? true : false;
         this.plant$.next(plant);
 
         return plant;

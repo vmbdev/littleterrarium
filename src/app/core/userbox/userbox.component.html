@@ -2,7 +2,7 @@
   <div class="userbox__user">
     <div class="userbox__avatar"></div>
     <div class="userbox__link">
-      Hi <b>{{ user?.username }}</b>
+      Hi <b>{{ auth.getUser()?.username }}</b>
     </div>
   </div>
   <div class="userbox__menu" [ngClass]="{ 'userbox__menu-hidden' : !menuVisible }">

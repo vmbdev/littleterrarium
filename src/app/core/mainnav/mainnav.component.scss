@@ -27,9 +27,10 @@
   &__item {
     font-size: 14pt;
     font-weight: 500;
+
     a {
       @include t.themify {
-        color: t.theme(link_color);;
+        color: t.theme(nav_link_color);
       }
       text-decoration: none;
     }

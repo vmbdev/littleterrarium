@@ -9,20 +9,11 @@ import { ApiService } from '../../shared/api/api.service';
   styleUrls: ['./userbox.component.scss']
 })
 export class UserboxComponent implements OnInit {
-  user?: User;
   menuVisible: boolean = false;
 
-  constructor(
-    public auth: AuthService,
-    private api: ApiService
-  ) { }
+  constructor(public auth: AuthService) {}
 
   ngOnInit(): void {
-    this.auth.signedIn$.subscribe((signedIn: boolean) => {
-      if (signedIn) {
-        this.api.getCurrentUser().subscribe((user: User) => { this.user = user });
-      }
-    });
   }
 
   enableMenu(): void {

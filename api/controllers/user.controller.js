@@ -27,7 +27,6 @@ const register = async (req, res, next) => {
   // check through the optinal fields and add them if they're present
   for (const field of optionalFields) {
     if (req.body[field]) {
-      // TODO: this may be a middleware (maybe parser?)
       if (field === 'public') {
         data.public = ((req.body.public === true) || (req.body.public === 'true'));
       }
@@ -72,7 +71,6 @@ const find = async (req, res, next) => {
   });
 
   if (user) {
-    // FIXME: manage this through auth middleware ?
     if ((!req.params.username) || user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
       res.send(user);
     }
@@ -101,7 +99,6 @@ const findById = async (req, res, next) => {
   });
 
   if (user) {
-    // FIXME: manage this through auth middleware ?
     if (user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
       res.send(user);
     }

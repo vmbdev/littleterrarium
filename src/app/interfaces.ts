@@ -1,53 +1,107 @@
-/**
- * Prisma Client creates the interfaces, yet it doesn't include
- * the relations. Here we do it.
- * We also re-export the rest of the data to import everything
- * from here
- */
-
-import {
-  User as PrismaUser,
-  Location as PrismaLocation,
-  Plant as PrismaPlant,
-  Specie as PrismaSpecie,
-  Photo as PrismaPhoto,
-  Role,
-  UserStatus,
-  Light as PrismaLight,
-  Condition as PrismaCondition,
-} from "@prisma/client";
-
-export interface Location extends PrismaLocation {
-  plants?: Plant[],
-  _count?: any,
-  pictureFile: File,
+export interface Location {
+  id: number
+  name: string
+  light: Light
+  public: boolean
+  ownerId: number
+  createdAt: Date
+  updatedAt: Date
+  plants?: Plant[]
+  _count?: any
+  pictureFile: File
   pictures: any
 }
 
-export interface Plant extends PrismaPlant {
-  photos?: Photo[],
+export interface Plant {
+  id: number
+  specieId: number | null
+  customName: string | null
+  description: string | null
+  condition: Condition | null
+  waterFreq: number | null
+  waterLast: Date | null
+  waterNext: Date | null
+  fertFreq: number | null
+  fertLast: Date | null
+  fertType: string | null
+  fertNext: Date | null
+  potType: string | null
+  potSize: number | null
+  soil: string | null
+  public: boolean
+  locationId: number
+  ownerId: number
+  createdAt: Date
+  updatedAt: Date
+  photos?: Photo[]
   specie?: Specie
 }
 
-export interface User extends PrismaUser {
-  locations?: Location[],
-  plants?: Plant[],
-  photos?: Photo[],
-  avatar: any,
-  preferences: any,
+export interface User {
+  id: number
+  username: string
+  firstname: string | null
+  lastname: string | null
+  password: string
+  avatar: any
+  preferences: any
+  email: string
+  bio: string | null
+  role: Role
+  public: boolean
+  status: UserStatus
+  createdAt: Date
+  updatedAt: Date
+  locations?: Location[]
+  plants?: Plant[]
+  photos?: Photo[]
 }
 
-export interface Specie extends PrismaSpecie {
+export interface Specie {
+  id: number
+  family: string
+  name: string
+  commonName: string | null
+  care: any
+  createdAt: Date
+  updatedAt: Date
   plants?: Plant[]
 }
 
-export interface Photo extends PrismaPhoto {
-  pictureFiles: File[],
+export interface Photo {
+  id: number
   images: any
+  description: string | null
+  public: boolean
+  takenAt: Date
+  hashId: number
+  plantId: number
+  ownerId: number
+  createdAt: Date
+  updatedAt: Date
+  pictureFiles: File[]
 }
 
+export type Notification = {
+  id: number
+  type: NotificationType
+  read: Date | null
+  content: any
+  plantId: number
+  ownerId: number
+  createdAt: Date
+  updatedAt: Date
+}
+
+export const NotificationType: { [key: string]: string } = {
+  WATER: 'WATER',
+  FERTILIZER: 'FERTILIZER',
+  COMMENT: 'COMMENT'
+};
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
 export const Light: { [key: string]: any } = {
-  ...PrismaLight,
   FULLSUN: {
     desc: 'Full sun',
     verbose: 'Sun shines over the whole day',
@@ -61,15 +115,16 @@ export const Light: { [key: string]: any } = {
     verbose: 'Sun is not allowed here',
   },
 }
+export type Light = (typeof Light)[keyof typeof Light];
 
 export const Condition: { [key: string]: string } = {
-  ...PrismaCondition,
   BAD: 'On the line',
   POOR: 'Holding on to life',
   GOOD: 'Looks good',
   VERYGOO: 'Looking dapper',
   EXCELLENT: 'Prime example of its specie',
 }
+export type Condition = (typeof Condition)[keyof typeof Condition];
 
 // client-side only
 export const potChoices: { [key: string]: any } = {
@@ -83,4 +138,16 @@ export const potChoices: { [key: string]: any } = {
   LT_POT_OTHER: { name: 'Other', image: '/assets/pot-other.jpg' },
 };
 
-export { Role, UserStatus }
+export const Role: { [key: string]: string } = {
+  USER: 'USER',
+  ADMIN: 'ADMIN'
+};
+export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const UserStatus: { [key: string]: string } = {
+  UNVERIFIED: 'UNVERIFIED',
+  VERIFIED: 'VERIFIED',
+  BANNED: 'BANNED'
+};
+export type UserStatus = (typeof UserStatus)[keyof typeof UserStatus]

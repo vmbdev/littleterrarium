@@ -42,7 +42,9 @@ const create = (req, res, next) => {
 }
 
 const find = async (req, res, next) => {
-  const query = {};
+  const query = {
+    select: { id: true, images: true, description: true, public: true, takenAt: true }
+  };
 
   // if asking for a different user, return only the ones that are public
   if (req.parser.userId && (req.parser.userId !== req.auth.userId)) {
@@ -54,8 +56,6 @@ const find = async (req, res, next) => {
   else query.where = { ownerId: req.auth.userId };
 
   if (req.parser.plantId) query.where.plantId = req.parser.plantId;
-
-  query.select = { id: true, images: true, description: true, public: true, takenAt: true };
 
   const photos = await prisma.photo.findMany(query);
 

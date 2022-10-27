@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  HttpRequest,
-  HttpHandler,
-  HttpEvent,
-  HttpInterceptor,
-  HttpErrorResponse
-} from '@angular/common/http';
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 
-// TODO: intercept 401 errors
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

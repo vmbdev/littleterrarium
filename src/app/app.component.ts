@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { theme } from 'src/config';
 
 @Component({
   selector: 'app-root',
@@ -6,10 +7,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  theme = theme;
 
-  constructor() {
-  }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 }

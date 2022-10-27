@@ -1,7 +1,9 @@
 <div *ngIf="isValidId && photo" class="photo">
   <toolbox>
-    <toolbox-button image="/assets/edit.png"></toolbox-button>
-    <toolbox-button image="/assets/delete.png"></toolbox-button>
+    <ng-container *ngIf="owned">
+      <toolbox-button image="/assets/edit.png"></toolbox-button>
+      <toolbox-button image="/assets/delete.png"></toolbox-button>
+    </ng-container>
   </toolbox>
 
   <div class="photo__image">

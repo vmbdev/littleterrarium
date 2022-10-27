@@ -13,10 +13,13 @@
   text-align: center;
   
   @include t.themify {
-    background-color: t.theme(main_color);
+    background-color: t.theme(footer_background);
+    color: t.theme(footer_text);
   }
 
   a {
-    color: white;
+    @include t.themify {
+      color: t.theme(footer_link);
+    }
   }
 }

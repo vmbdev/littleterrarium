@@ -10,6 +10,7 @@ import { Photo } from 'src/app/interfaces';
 export class PhotoListComponent implements OnInit {
   @Input() list!: Photo[];
   @Input() plantId!: number;
+  @Input() owned: boolean = true;
 
   constructor() { }
 

@@ -20,6 +20,6 @@ router.put('/',
   disk.image,
   location.modify
 );
-router.delete('/:id', auth.self, parser.integers({ id: true }), location.remove);
+router.delete('/:id', auth.self, auth.checkOwnership('location'), parser.integers({ id: true }), location.remove);
 
 export default router;

@@ -5,6 +5,7 @@ import { Photo } from 'src/app/interfaces';
 import { ApiService } from 'src/app/shared/api/api.service';
 import * as dayjs from 'dayjs';
 import * as LocalizedFormat from 'dayjs/plugin/localizedFormat';
+import { AuthService } from 'src/app/auth/auth.service';
 
 
 @Component({
@@ -16,11 +17,13 @@ export class PhotoComponent implements OnInit {
   @Input() id!: number;
   isValidId!: boolean;
   photo?: Photo;
+  owned?: boolean;
 
   constructor(
     private apiService: ApiService,
     private route: ActivatedRoute,
-    private breadcrumb: BreadcrumbService
+    private breadcrumb: BreadcrumbService,
+    private auth: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -33,6 +36,7 @@ export class PhotoComponent implements OnInit {
       this.apiService.getPhoto(this.id).subscribe({
         next: (data) => {
           this.photo = data;
+          this.owned = (this.auth.getUser()?.id === this.photo.ownerId) ? true : false;
 
           dayjs.extend(LocalizedFormat);
           this.breadcrumb.setNavigation([

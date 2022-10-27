@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location, Light } from 'src/app/interfaces';
 import { BreadcrumbService } from 'src/app/breadcrumb/breadcrumb.service';
 import { ApiService } from 'src/app/shared/api/api.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'location',
@@ -13,13 +14,14 @@ export class LocationComponent implements OnInit {
   private id!: number;
   isValidId!: boolean;
   location!: Location;
-
   confirmDelete: boolean = false;
+  owned: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
+    private auth: AuthService,
     private breadcrumb: BreadcrumbService
   ) { }
 
@@ -33,10 +35,11 @@ export class LocationComponent implements OnInit {
       this.api.getLocation(this.id, true).subscribe({
         next: (data) => {
           this.location = data;
-
           this.breadcrumb.setNavigation([
             { id: 'location', name: this.location.name, link: ['/location', this.id] },
           ])
+
+          this.owned = (this.auth.getUser()?.id === this.location.ownerId) ? true : false;
         },
         error: (error) => {
           if (error.msg === 'LOCATION_NOT_FOUND') this.isValidId = false;

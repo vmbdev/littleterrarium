@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of, map, catchError, throwError, BehaviorSubject } from 'rxjs';
+import { User } from '../interfaces';
 import { ApiService } from '../shared/api/api.service';
 
 @Injectable({
@@ -8,19 +9,23 @@ import { ApiService } from '../shared/api/api.service';
 })
 export class AuthService {
   signedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  user?: User;
 
   constructor(private api: ApiService) {
     this.api.getCurrentUser().subscribe({
-      next: () => { this.signedIn$.next(true) },
+      next: (user: User) => {
+        this.user = user;
+        this.signedIn$.next(true)
+      },
       error: () => { this.signedIn$.next(false) }
     });
   }
 
   signIn(username: string, password: string): Observable<any> {
     return this.api.signIn(username, password).pipe(
-      map(res => {
+      map((user: User) => {
+        this.user = user;
         this.signedIn$.next(true);
-        return res;
       }),
       catchError((HttpError: HttpErrorResponse) => {
         this.signedIn$.next(false);
@@ -39,5 +44,9 @@ export class AuthService {
     const val = this.signedIn$.getValue();
 
     return val;
+  }
+
+  getUser(): User | undefined {
+    return this.user;
   }
 }

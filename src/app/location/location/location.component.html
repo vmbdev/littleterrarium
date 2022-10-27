@@ -5,8 +5,10 @@
 
 <div class="location" *ngIf="location; else invalidId">
   <toolbox [title]="location.name">
-    <toolbox-button image="/assets/edit.png" (click)="edit()"></toolbox-button>
-    <toolbox-button image="/assets/delete.png" (click)="confirmDelete = true"></toolbox-button>
+    <ng-container *ngIf="owned">
+      <toolbox-button image="/assets/edit.png" (click)="edit()"></toolbox-button>
+      <toolbox-button image="/assets/delete.png" (click)="confirmDelete = true"></toolbox-button>
+    </ng-container>
   </toolbox>
 
   <div class="location__vertical">
@@ -27,7 +29,7 @@
     </div>
   </div>
   
-  <plant-list *ngIf="location.plants" [locationId]="location.id" [list]="location.plants"></plant-list>
+  <plant-list *ngIf="location.plants" [owned]="owned" [locationId]="location.id" [list]="location.plants"></plant-list>
 </div>
 
 <ng-template #invalidId>

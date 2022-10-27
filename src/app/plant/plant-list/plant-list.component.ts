@@ -10,6 +10,7 @@ export class PlantListComponent implements OnInit {
   @Input() list!: Plant[];
   @Input() locationId?: number;
   @Input() center?: boolean = false;
+  @Input() owned: boolean = true;
   pictures: any[] = [];
 
   constructor() { }

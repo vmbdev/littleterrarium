@@ -30,6 +30,6 @@ router.put('/',
   parser.integers({ id: true }),
   photo.modify
 );
-router.delete('/:id', auth.self, parser.integers({ id: true }), photo.remove);
+router.delete('/:id', auth.self, auth.checkOwnership('photo'), parser.integers({ id: true }), photo.remove);
 
 export default router;
