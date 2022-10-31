@@ -19,10 +19,10 @@ router.post('/',
 );
 router.get('/', auth.self, plant.find);
 // FIXME: this can be managed better
-router.get('/user/:userId', auth.self, parser.integers({ userId: true }), plant.find);
-router.get('/user/:userId/location/:locationId', auth.self, parser.integers({ userId: true, locationId: true }), plant.find);
-router.get('/location/:locationId', auth.self, parser.integers({ locationId: true }), plant.find);
-router.get('/:id?', auth.self, parser.integers({ id: false }), plant.findOne);
+router.get('/user/:userId', parser.integers({ userId: true }), plant.find);
+router.get('/user/:userId/location/:locationId', parser.integers({ userId: true, locationId: true }), plant.find);
+router.get('/location/:locationId', parser.integers({ locationId: true }), plant.find);
+router.get('/:id?', parser.integers({ id: false }), plant.findOne);
 router.put('/',
   auth.self,
   auth.checkOwnership('plant'),

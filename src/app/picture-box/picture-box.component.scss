@@ -36,7 +36,7 @@
     text-align: center;
     text-decoration: none;
     @include t.themify {
-      color: t.theme(main_textcolor);
+      color: t.theme(main_font_color);
     }
   }
 

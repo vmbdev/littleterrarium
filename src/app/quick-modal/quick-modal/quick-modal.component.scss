@@ -33,22 +33,33 @@
   
     padding: 10px;
     box-sizing: border-box;
-    border: 1px solid black;
     border-bottom: 0;
     width: 35vw;
+
+    @include t.themify {
+      border: 1px 1px 0 1px;
+      border-style: solid;
+      border-color: t.theme(main_font_color);
+    }
   }
 
   &__container {
     @include block-middle;
   
     box-sizing: border-box;
-    background-color: white;
-    border: 1px solid black;
     width: 35vw;
     height: 60vh;
   
     border-radius: 0 0 5% 5%;
     overflow: auto;
+
+    @include t.themify {
+      border: 1px 1px 0 1px;
+      border-style: solid;
+      border-color: t.theme(main_font_color);
+      background-color: t.theme(main_background);
+      color: t.theme(main_font_color);
+    }
   }
   
   &__content {

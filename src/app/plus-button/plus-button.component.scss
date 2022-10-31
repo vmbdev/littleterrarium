@@ -18,6 +18,10 @@
 
   &__title {
     font-size: 16pt;
+
+    @include t.themify {
+      color: t.theme(link_color);
+    }
   }
 
   &::before {

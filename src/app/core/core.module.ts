@@ -7,13 +7,18 @@ import { UserboxComponent } from './userbox/userbox.component';
 import { BreadcrumbNavigationComponent } from './breadcrumb-navigation/breadcrumb-navigation.component';
 import { BreadcrumbModule } from '../breadcrumb/breadcrumb.module';
 import { FooternavComponent } from './footernav/footernav.component';
+import { LangSwitcherComponent } from './lang-switcher/lang-switcher.component';
+import { ThemeSwitcherComponent } from './theme-switcher/theme-switcher.component';
+import { ThemeService } from './theme.service';
 
 @NgModule({
   declarations: [
     MainnavComponent,
     UserboxComponent,
     BreadcrumbNavigationComponent,
-    FooternavComponent
+    FooternavComponent,
+    LangSwitcherComponent,
+    ThemeSwitcherComponent
   ],
   imports: [
     CommonModule,
@@ -21,9 +26,11 @@ import { FooternavComponent } from './footernav/footernav.component';
     SharedModule,
     BreadcrumbModule
   ],
+  providers: [
+    ThemeService
+  ],
   exports: [
     MainnavComponent,
-    UserboxComponent,
     FooternavComponent
   ]
 })

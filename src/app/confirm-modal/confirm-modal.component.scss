@@ -1,5 +1,6 @@
 @use 'src/styles/form.scss';
 @use 'src/styles/media.scss' as m;
+@use 'src/styles/theming.scss' as t;
 
 .confirm-modal {
   position: fixed;
@@ -20,9 +21,13 @@
     right: 0;
     max-width: 340px;
 
-    background-color: white;
     padding: 20px;
-    border: 1px solid black;
+    
+    @include t.themify {
+      background-color: t.theme(main_background);
+      border: 1px solid t.theme(main_font_color);
+      color: t.theme(main_font_color);
+    }
   }
 
   &__text {

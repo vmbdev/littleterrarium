@@ -157,8 +157,7 @@ const signin = async (req, res, next) => {
     // did the user logged in with the username or with the password?
     const signinToken = isEmail(username) ? 'email' : 'username';
     const user = await prisma.user.findUnique({
-      where: { [signinToken]: username },
-      // select: { password: true, id: true, role: true }
+      where: { [signinToken]: username }
     });
 
     if (user) {
@@ -171,10 +170,10 @@ const signin = async (req, res, next) => {
         delete user.password;
         res.send(user);
       }
-      else next({ error: 'USER_DATA_INCORRECT', code: 403 });
+      else next({ error: 'USER_DATA_INCORRECT', code: 401 });
     }
     // we never give information on whether the user exists or not here
-    else next({ error: 'USER_DATA_INCORRECT', code: 403 })
+    else next({ error: 'USER_DATA_INCORRECT', code: 401 })
   }
 };
 

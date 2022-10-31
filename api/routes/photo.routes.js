@@ -18,11 +18,10 @@ router.post('/',
 );
 router.get('/', auth.self, photo.find);
 router.get('/plant/:plantId',
-  auth.self,
   parser.integers({ plantId: true }),
   photo.find
 );
-router.get('/:id', auth.self, parser.integers({ id: true }), photo.findOne);
+router.get('/:id', parser.integers({ id: true }), photo.findOne);
 router.put('/',
   auth.self,
   auth.checkOwnership('photo'),

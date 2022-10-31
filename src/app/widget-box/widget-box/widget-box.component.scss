@@ -1,11 +1,17 @@
+@use 'src/styles/theming.scss' as t;
+@use 'src/styles/media.scss' as m;
+
 .widget-box {
   position: relative;
-  border: 1px solid black;
   border-radius: 20px;
   padding: 25px;
-  margin: 10px 10px;
+  margin: 10px;
   height: 100%;
   box-sizing: border-box;
+
+  @include t.themify {
+    border: 1px solid t.theme(main_font_color);
+  }
   
   &__image {
     position: absolute;
@@ -14,10 +20,13 @@
     left: 0;
     right: 0;
     top: -20px;
-    background-color: white;
     width: 48px;
     height: 48px;
     background-size: cover;
+
+    @include t.themify {
+      background-color: t.theme(main_background);
+    }
   }
 
   &__content {
@@ -29,5 +38,4 @@
       flex: 1;
     }
   }
-
 }

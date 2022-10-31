@@ -16,12 +16,12 @@ export class UserSigninComponent implements OnInit {
   }
 
   constructor(
-    private authService: AuthService,
+    private auth: AuthService,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.authService.signedIn$.subscribe((val: boolean) => {
+    this.auth.signedIn$.subscribe((val: boolean) => {
       if (val) this.router.navigate(['/']);
     })
   }
@@ -42,7 +42,7 @@ export class UserSigninComponent implements OnInit {
 
     else {
 
-      this.authService.signIn(signinForm.value.username, signinForm.value.password).subscribe({
+      this.auth.signIn(signinForm.value.username, signinForm.value.password).subscribe({
         next: () => {
           this.router.navigate(['/']);
         },
