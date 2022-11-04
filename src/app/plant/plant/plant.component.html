@@ -39,9 +39,9 @@
     </div>
 
     <div class="plant__row">
-      <plant-widget-water></plant-widget-water>
-      <plant-widget-fertilizer></plant-widget-fertilizer>
-      <plant-widget-soil></plant-widget-soil>
+      <plant-widget-water *ngIf="plant.waterFreq || plant.waterLast"></plant-widget-water>
+      <plant-widget-fertilizer *ngIf="plant.fertFreq || plant.fertLast || plant.fertType"></plant-widget-fertilizer>
+      <plant-widget-soil *ngIf="plant.potSize || plant.potType || plant.soil"></plant-widget-soil>
     </div>
 
     <p *ngIf="plant.condition">{{ plantCondition[plant.condition] }}</p>
