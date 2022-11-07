@@ -15,7 +15,7 @@ const create = (req, res, next) => {
       if (field === 'public') {
         data.public = ((req.body.public === true) || (req.body.public === 'true'));
       }
-      else data[field] = req.data[field];
+      else data[field] = req.body[field];
     }
   }
 
@@ -109,7 +109,7 @@ const modify = async (req, res, next) => {
 
 const remove = async (req, res, next) => {
   try {
-    const { hashId, image } = await prisma.photo.delete({
+    const { hashId, images } = await prisma.photo.delete({
       where: {
         id: req.parser.id,
         ownerId: req.auth.userId
@@ -126,7 +126,7 @@ const remove = async (req, res, next) => {
 
     if (references === 0) {
       await prisma.hash.delete({ where: { id: hashId } });
-      await filesystem.removeFile(image);
+      await filesystem.removeFile(images);
     }
 
     res.send({ msg: 'PHOTO_REMOVED' });

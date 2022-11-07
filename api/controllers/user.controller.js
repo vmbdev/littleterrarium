@@ -71,7 +71,7 @@ const find = async (req, res, next) => {
   });
 
   if (user) {
-    if ((!req.params.username) || user.public || (req.auth.userId === req.params.id) || (req.session.role === Role.ADMIN)) {
+    if ((!req.params.username) || user.public || (req.session.role === Role.ADMIN)) {
       res.send(user);
     }
     else next({ error: 'USER_PRIVATE', code: 403 });

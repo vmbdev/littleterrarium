@@ -69,7 +69,7 @@ const create = async (req, res, next) => {
     }
   }
 
-  if (req.body.waterFreq && req.body.waterLast && dayjs(dayjs(req.body.waterFreq).isValid() && +req.body.waterLast)) {
+  if (req.body.waterFreq && req.body.waterLast && dayjs(req.body.waterFreq).isValid() && +req.body.waterLast) {
     data.waterNext = dayjs(req.body.waterLast).add(req.body.waterFreq, 'days').toDate();
   }
 
